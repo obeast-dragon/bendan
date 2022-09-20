@@ -5,5 +5,4 @@ spring:
     active: dev
 
 
-
 comment.avatar: /images/img.png
