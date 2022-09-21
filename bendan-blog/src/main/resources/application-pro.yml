@@ -1,0 +1,60 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/bendan?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT
+    username: root
+    password: mysql1234
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 5 #连接池初始化大小
+      min-idle: 10 #最小空闲连接数
+      max-active: 20 #最大连接数
+      web-stat-filter:
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*" #不统计这些请求数据
+      stat-view-servlet: #访问监控网页的登录用户名和密码
+        login-username: druid
+        login-password: druid
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filters: stat,wall,slf4j
+      maxPoolPreparedStatementPerConnectionSize: 20
+      useGlobalDataSourceStat: true
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+
+#扫描包并打印日志
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package: com.worldintek.common.vo
+
+  configuration:
+    #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    cache-enabled: true
+
+
+
+#指定接口包扫描
+springdoc.packagesToScan: com.obeast.bendan.controller
+#或者指定访问接口路径扫描
+#springdoc.pathsToMatch=/hs/**, /hsType/**
+
+# swagger-ui custom path
+springdoc.swagger-ui.path: /swagger-ui.html
+
+
+#---en delete
+logging:
+  level:
+    root: warn
+    com.obeast: info
+  file:
+    name: log/bendan-pro.log

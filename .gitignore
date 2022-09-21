@@ -37,7 +37,7 @@ build/
 
 ### db ###
 /db
-/src/main/resources/db
+/bendan-blog/src/main/resources/db
 
 
 ### Maven ###
