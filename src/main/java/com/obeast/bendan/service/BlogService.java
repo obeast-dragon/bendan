@@ -1,8 +1,8 @@
 package com.obeast.bendan.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.obeast.bendan.entity.CommentEntity;
-import com.obeast.bendan.excel.CommentExcel;
+import com.obeast.bendan.entity.BlogEntity;
+import com.obeast.bendan.excel.BlogExcel;
 import com.obeast.bendan.common.domain.PageObjects;
 
 import java.util.Map;
@@ -15,7 +15,7 @@ import java.util.List;
  * @version 1.0
  * Description: 
  */
-public interface CommentService extends IService<CommentEntity> {
+public interface BlogService extends IService<BlogEntity> {
 
 
     /**
@@ -23,9 +23,9 @@ public interface CommentService extends IService<CommentEntity> {
      * @author obeast-dragon
      * Date: 2022-09-21 10:03:18
      * @param params 分页参数
-     * @return PageObjects<CommentEntity>
+     * @return PageObjects<BlogEntity>
      */
-    PageObjects<CommentEntity> queryPage(Map<String, Object> params);
+    PageObjects<BlogEntity> queryPage(Map<String, Object> params);
 
 
     /**
@@ -33,9 +33,9 @@ public interface CommentService extends IService<CommentEntity> {
      * @author obeast-dragon
      * Date: 2022-09-21 10:03:18
      * @param id id  of entity
-     * @return CommentEntity
+     * @return BlogEntity
      */
-     CommentEntity queryById(Long id);
+     BlogEntity queryById(Long id);
 
 
 
@@ -43,36 +43,36 @@ public interface CommentService extends IService<CommentEntity> {
      * Description: 查询所有
      * @author obeast-dragon
      * Date: 2022-09-21 10:03:18
-     * @return List<CommentEntity>
+     * @return List<BlogEntity>
      */
-    List<CommentEntity> queryAll();
+    List<BlogEntity> queryAll();
 
 
     /**
      * Description: 根据条件查询
      * @author obeast-dragon
      * Date: 2022-09-21 10:03:18
-     * @return List<CommentEntity>
+     * @return List<BlogEntity>
      */
-    List<CommentEntity> queryByConditions();
+    List<BlogEntity> queryByConditions();
 
 
     /**
      * Description: 根据条件查询Excel
      * @author obeast-dragon
      * Date: 2022-09-21 10:03:18
-     * @return List<CommentExcel>
+     * @return List<BlogExcel>
      */
-    List<CommentExcel> queryExcelByConditions();
+    List<BlogExcel> queryExcelByConditions();
 
     /**
      * Description: 新增
      * @author obeast-dragon
      * Date: 2022-09-21 10:03:18
-     * @param commentEntity entity object
+     * @param blogEntity entity object
      * @return boolean
      */
-    boolean add(CommentEntity commentEntity);
+    boolean add(BlogEntity blogEntity);
 
 
     /**
@@ -82,17 +82,17 @@ public interface CommentService extends IService<CommentEntity> {
      * @param data entity objects
      * @return boolean
      */
-    boolean addList(List<CommentEntity> data);
+    boolean addList(List<BlogEntity> data);
 
 
     /**
      * Description: 更新
      * @author obeast-dragon
      * Date: 2022-09-21 10:03:18
-     * @param commentEntity entity object
+     * @param blogEntity entity object
      * @return boolean
      */
-    boolean replace(CommentEntity commentEntity);
+    boolean replace(BlogEntity blogEntity);
 
 
     /**
@@ -102,7 +102,7 @@ public interface CommentService extends IService<CommentEntity> {
      * @param data entity objects
      * @return boolean
      */
-    boolean replaceList(List<CommentEntity> data);
+    boolean replaceList(List<BlogEntity> data);
 
 
     /**

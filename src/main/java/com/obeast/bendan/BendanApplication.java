@@ -1,8 +1,10 @@
 package com.obeast.bendan;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@MapperScan("com.obeast.bendan.dao")
 @SpringBootApplication
 public class BendanApplication {
 
