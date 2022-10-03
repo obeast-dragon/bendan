@@ -1,4 +1,4 @@
-package com.obeast.blog.excel;
+package com.obeast.admin.excel;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -10,23 +10,23 @@ import java.util.Date;
 
 /**
  * @author obeast-dragon
- * Date 2022-09-21 12:18:12
+ * Date 2022-10-04 00:20:25
  * @version 1.0
- * Description: 
+ * Description: 管理系统用户
  */
 @Data
-public class UserInfoExcel {
+public class AdminUserExcel {
 
     /**
-     * id
+     * 用户id
      */
     @ExcelIgnore
     private Long id;
 
     /**
-     * 账号
+     * 用户名
      */
-    @ExcelProperty(value = "账号")
+    @ExcelProperty(value = "用户名")
     private String username;
 
     /**
@@ -51,13 +51,13 @@ public class UserInfoExcel {
      * 昵称
      */
     @ExcelProperty(value = "昵称")
-    private String nickname;
+    private String nickName;
 
     /**
-     * 角色
+     * 备注信息
      */
-    @ExcelProperty(value = "角色")
-    private Integer type;
+    @ExcelProperty(value = "备注信息")
+    private String note;
 
     /**
      * 创建时间
@@ -70,5 +70,17 @@ public class UserInfoExcel {
      */
     @ExcelProperty(value = "更新时间")
     private Date updateTime;
+
+    /**
+     * 最后登录时间
+     */
+    @ExcelProperty(value = "最后登录时间")
+    private Date loginLastTime;
+
+    /**
+     * 帐号启用状态：0->禁用；1->启用
+     */
+    @ExcelProperty(value = "帐号启用状态：0->禁用；1->启用")
+    private Integer disableStatus;
 
 }

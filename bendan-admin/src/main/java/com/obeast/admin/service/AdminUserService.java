@@ -1,10 +1,8 @@
-package com.obeast.blog.service;
-
-
+package com.obeast.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.obeast.blog.entity.UserInfoEntity;
-import com.obeast.blog.excel.UserInfoExcel;
+import com.obeast.admin.entity.AdminUserEntity;
+import com.obeast.admin.excel.AdminUserExcel;
 import com.obeast.oss.domain.PageObjects;
 
 import java.util.Map;
@@ -13,104 +11,104 @@ import java.util.List;
 
 /**
  * @author obeast-dragon
- * Date 2022-09-21 12:18:12
+ * Date 2022-10-04 00:20:25
  * @version 1.0
- * Description: 
+ * Description: 管理系统用户
  */
-public interface UserInfoService extends IService<UserInfoEntity> {
+public interface AdminUserService extends IService<AdminUserEntity> {
 
 
     /**
      * Description: 分页查询
      * @author obeast-dragon
-     * Date: 2022-09-21 12:18:12
+     * Date: 2022-10-04 00:20:25
      * @param params 分页参数
-     * @return PageObjects<UserInfoEntity>
+     * @return PageObjects<AdminUserEntity>
      */
-    PageObjects<UserInfoEntity> queryPage(Map<String, Object> params);
+    PageObjects<AdminUserEntity> queryPage(Map<String, Object> params);
 
 
     /**
      * Description: 根据Id查询
      * @author obeast-dragon
-     * Date: 2022-09-21 12:18:12
+     * Date: 2022-10-04 00:20:25
      * @param id id  of entity
-     * @return UserInfoEntity
+     * @return AdminUserEntity
      */
-     UserInfoEntity queryById(Long id);
+     AdminUserEntity queryById(Long id);
 
 
 
     /**
      * Description: 查询所有
      * @author obeast-dragon
-     * Date: 2022-09-21 12:18:12
-     * @return List<UserInfoEntity>
+     * Date: 2022-10-04 00:20:25
+     * @return List<AdminUserEntity>
      */
-    List<UserInfoEntity> queryAll();
+    List<AdminUserEntity> queryAll();
 
 
     /**
      * Description: 根据条件查询
      * @author obeast-dragon
-     * Date: 2022-09-21 12:18:12
-     * @return List<UserInfoEntity>
+     * Date: 2022-10-04 00:20:25
+     * @return List<AdminUserEntity>
      */
-    List<UserInfoEntity> queryByConditions();
+    List<AdminUserEntity> queryByConditions();
 
 
     /**
      * Description: 根据条件查询Excel
      * @author obeast-dragon
-     * Date: 2022-09-21 12:18:12
-     * @return List<UserInfoExcel>
+     * Date: 2022-10-04 00:20:25
+     * @return List<AdminUserExcel>
      */
-    List<UserInfoExcel> queryExcelByConditions();
+    List<AdminUserExcel> queryExcelByConditions();
 
     /**
      * Description: 新增
      * @author obeast-dragon
-     * Date: 2022-09-21 12:18:12
-     * @param userInfoEntity entity object
+     * Date: 2022-10-04 00:20:25
+     * @param adminUserEntity entity object
      * @return boolean
      */
-    boolean add(UserInfoEntity userInfoEntity);
+    boolean add(AdminUserEntity adminUserEntity);
 
 
     /**
      * Description: 批量新增
      * @author obeast-dragon
-     * Date: 2022-09-21 12:18:12
+     * Date: 2022-10-04 00:20:25
      * @param data entity objects
      * @return boolean
      */
-    boolean addList(List<UserInfoEntity> data);
+    boolean addList(List<AdminUserEntity> data);
 
 
     /**
      * Description: 更新
      * @author obeast-dragon
-     * Date: 2022-09-21 12:18:12
-     * @param userInfoEntity entity object
+     * Date: 2022-10-04 00:20:25
+     * @param adminUserEntity entity object
      * @return boolean
      */
-    boolean replace(UserInfoEntity userInfoEntity);
+    boolean replace(AdminUserEntity adminUserEntity);
 
 
     /**
      * Description: 批量更新
      * @author obeast-dragon
-     * Date: 2022-09-21 12:18:12
+     * Date: 2022-10-04 00:20:25
      * @param data entity objects
      * @return boolean
      */
-    boolean replaceList(List<UserInfoEntity> data);
+    boolean replaceList(List<AdminUserEntity> data);
 
 
     /**
      * Description: 根据Id删除
      * @author obeast-dragon
-     * Date: 2022-09-21 12:18:12
+     * Date: 2022-10-04 00:20:25
      * @param id id of entity
      * @return boolean
      */
@@ -120,7 +118,7 @@ public interface UserInfoService extends IService<UserInfoEntity> {
     /**
      * Description: 根据Id批量删除
      * @author obeast-dragon
-     * Date: 2022-09-21 12:18:12
+     * Date: 2022-10-04 00:20:25
      * @param ids list of ids
      * @return boolean
      */

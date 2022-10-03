@@ -8,19 +8,20 @@
         <module>bendan-admin</module>
         <module>bendan-blog</module>
         <module>bendan-common</module>
+        <module>bendan-auth</module>
     </modules>
 
     <groupId>com.obeast</groupId>
     <artifactId>bendan</artifactId>
     <version>2.0.0</version>
     <name>bendan</name>
-    <description>个人博客bendan</description>
+    <description>个人博客-bendan(笨丹)</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>2.7.3</spring-boot.version>
+        <spring-boot.version>2.7.4</spring-boot.version>
         <spring-cloud.version>2021.0.4</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.0.1.0</spring-cloud-alibaba.version>
         <mybatis-plus-starter.version>3.5.2</mybatis-plus-starter.version>
@@ -35,11 +36,29 @@
         <okhttp.version>4.10.0</okhttp.version>
         <hutool.version>5.8.5</hutool.version>
         <bendan.version>2.0.0</bendan.version>
+        <netty-all.version>4.1.82.Final</netty-all.version>
+        <nimbus-jose-jwt.version>9.24.3</nimbus-jose-jwt.version>
+        <spring-cloud-starter-oauth2.version>2.2.5.RELEASE</spring-cloud-starter-oauth2.version>
     </properties>
 
     <dependencies>
+        <!-- bootstrap 启动器 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
 
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
     </dependencies>
 
@@ -64,6 +83,8 @@
                 <scope>import</scope>
             </dependency>
 
+
+
             <!-- SpringBoot 依赖配置 -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -73,6 +94,19 @@
                 <scope>import</scope>
             </dependency>
 
+            <!--      jwt 解析包      -->
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${nimbus-jose-jwt.version}</version>
+            </dependency>
+
+            <!-- netty-->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-buffer</artifactId>
+                <version>${netty-all.version}</version>
+            </dependency>
 
 
             <!-- fastjson2 -->

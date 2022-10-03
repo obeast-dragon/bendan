@@ -1,12 +1,15 @@
-
-
 spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: http://127.0.0.1:8848
+      config:
+        server-addr: http://127.0.0.1:8848
+        file-extension: yaml
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/bendan?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT
+    url: jdbc:mysql://10.0.0.43:3306/bendan?serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true
     username: root
-    password: mysql1234
-    type: com.alibaba.druid.pool.DruidDataSource
+    password: wit123456
 
     druid:
       initial-size: 5 #连接池初始化大小
@@ -32,30 +35,19 @@ spring:
       connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
 
 
-#扫描包并打印日志
-mybatis-plus:
-  mapper-locations: classpath:/mapper/bendan/*.xml
 
 
-  configuration:
-    #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    cache-enabled: true
+minio:
+  externalAccess: http://175.178.183.32:42713
+  endpoint: http://175.178.183.32:9000
+  accessKey: admin
+  secretKey: 12345678
+  bucketName: bendan
 
 
-
-#指定接口包扫描
-springdoc.packagesToScan: com.obeast.bendan.controller
-#或者指定访问接口路径扫描
-#springdoc.pathsToMatch=/hs/**, /hsType/**
-
-# swagger-ui custom path
-springdoc.swagger-ui.path: /swagger-ui.html
-
-
-#---en delete
 logging:
   level:
-    root: warn
-    com.obeast: info
-  file:
-    name: log/bendan-pro.log
+    root: info
+    com:
+      worlteink:
+        debug

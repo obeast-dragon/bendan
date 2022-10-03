@@ -1,0 +1,51 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: bendan-gateway
+  cloud:
+    gateway:
+      #配置路由
+      routes:
+        - id: bendan-auth-route
+          uri: lb://bendan-auth
+          predicates:
+            - Path=/bendan-auth/**
+          filters:
+            - StripPrefix=1
+        - id: bendan-blog-route
+          uri: lb://bendan-blog
+          predicates:
+            - Path=/bendan-blog/**
+          filters:
+            - StripPrefix=1
+        - id: bendan-admin-route
+          uri: lb://bendan-admin
+          predicates:
+            - Path=/bendan-admin/**
+          filters:
+            - StripPrefix=1
+        - id: bendan-oss-route
+          uri: lb://bendan-oss
+          predicates:
+            - Path=/bendan-oss/**
+          filters:
+            - StripPrefix=1
+      discovery:
+        locator:
+          #开启从注册中心动态创建路由的功能
+          enabled: true
+          #使用小写服务名，默认是大写
+          lower-case-service-id: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          #配置RSA的公钥访问地址
+          jwk-set-uri:
+
+#配置白名单路径
+secure:
+  ignore:
+    urls:
+      -

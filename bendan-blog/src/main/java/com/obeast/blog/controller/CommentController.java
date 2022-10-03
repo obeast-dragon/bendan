@@ -2,7 +2,7 @@ package com.obeast.blog.controller;
 
 import com.obeast.blog.entity.CommentEntity;
 import com.obeast.blog.excel.CommentExcel;
-import com.obeast.oss.base.R;
+import com.obeast.oss.base.CommonResult;
 import com.obeast.oss.constant.PageConstant;
 import com.obeast.oss.domain.PageObjects;
 import com.obeast.oss.utils.EasyExcelUtils;
@@ -55,12 +55,12 @@ public class CommentController {
             @Parameter(name = PageConstant.ORDER_FIELD, description = "排序字段", in = ParameterIn.QUERY, schema = @Schema(implementation = String.class)),
             @Parameter(name = PageConstant.ORDER, description = "排序方式，可选值(asc、desc)", in = ParameterIn.QUERY, required = true, schema = @Schema(implementation = String.class))
     })
-    public R<PageObjects<CommentEntity>> list(@RequestParam Map<String, Object> params) {
+    public CommonResult<PageObjects<CommentEntity>> list(@RequestParam Map<String, Object> params) {
         if (params.size() == 0) {
-            return R.error("params is null");
+            return CommonResult.error("params is null");
         }
         PageObjects<CommentEntity> page = commentService.queryPage(params);
-        return R.success(page, "page");
+        return CommonResult.success(page, "page");
     }
 
 
@@ -69,9 +69,9 @@ public class CommentController {
      * */
     @GetMapping("/listAll")
     @Operation(summary = "查询所有")
-    public R<List<CommentEntity>> listAll() {
+    public CommonResult<List<CommentEntity>> listAll() {
         List<CommentEntity> data = commentService.queryAll();
-        return R.success(data, "list");
+        return CommonResult.success(data, "list");
     }
 
 
@@ -82,12 +82,12 @@ public class CommentController {
     @GetMapping("/getOneById/{id}")
     @Operation(summary = "根据id查询")
     @Parameter(name = "id", description = "id of the entity", in = ParameterIn.PATH, required = true, schema = @Schema(implementation = Long.class))
-    public R<CommentEntity> getOneById(@PathVariable("id") Long id){
+    public CommonResult<CommentEntity> getOneById(@PathVariable("id") Long id){
         if (id < 0){
-            return R.error("id is null");
+            return CommonResult.error("id is null");
         }
 		CommentEntity comment = commentService.queryById(id);
-        return R.success(comment, "comment");
+        return CommonResult.success(comment, "comment");
     }
 
 
@@ -96,15 +96,15 @@ public class CommentController {
      */
     @PostMapping("/save")
     @Operation(summary = "新增")
-    public R save(@Validated({AddGroup.class, DefaultGroup.class}) @RequestBody CommentEntity commententity){
+    public CommonResult save(@Validated({AddGroup.class, DefaultGroup.class}) @RequestBody CommentEntity commententity){
         if (commententity == null){
-            return R.error("commententity must not be null");
+            return CommonResult.error("commententity must not be null");
         }
         boolean flag = commentService.add(commententity);
         if (flag) {
-            return R.success("add successfully");
+            return CommonResult.success("add successfully");
         }else {
-            return R.error("add failed");
+            return CommonResult.error("add failed");
         }
     }
 
@@ -114,15 +114,15 @@ public class CommentController {
      */
     @PostMapping("/saveList")
     @Operation(summary = "批量新增")
-    public R saveList(@Validated({AddGroup.class, DefaultGroup.class}) @RequestBody List<CommentEntity> data){
+    public CommonResult saveList(@Validated({AddGroup.class, DefaultGroup.class}) @RequestBody List<CommentEntity> data){
         if (data.size() == 0) {
-            return R.error("data must not be null");
+            return CommonResult.error("data must not be null");
         }
         boolean flag = commentService.addList(data);
         if (flag) {
-            return R.success("adds successfully");
+            return CommonResult.success("adds successfully");
         }else {
-            return R.error("adds failed");
+            return CommonResult.error("adds failed");
         }
     }
 
@@ -133,15 +133,15 @@ public class CommentController {
      */
     @PostMapping("/update")
     @Operation(summary = "修改")
-    public R update(@Validated({UpdateGroup.class, DefaultGroup.class}) @RequestBody CommentEntity commententity){
+    public CommonResult update(@Validated({UpdateGroup.class, DefaultGroup.class}) @RequestBody CommentEntity commententity){
         if (commententity == null){
-            return R.error("commententity must not be null");
+            return CommonResult.error("commententity must not be null");
         }
         boolean flag = commentService.replace(commententity);
         if (flag){
-            return R.success("update successfully");
+            return CommonResult.success("update successfully");
         }else {
-            return R.error("Update failed");
+            return CommonResult.error("Update failed");
         }
     }
 
@@ -151,15 +151,15 @@ public class CommentController {
      */
     @PostMapping("/updateList")
     @Operation(summary = "批量修改")
-    public R updateList(@Validated({UpdateGroup.class, DefaultGroup.class}) @RequestBody List<CommentEntity> data) {
+    public CommonResult updateList(@Validated({UpdateGroup.class, DefaultGroup.class}) @RequestBody List<CommentEntity> data) {
         if (data.size() == 0) {
-            return R.error("data must not be null");
+            return CommonResult.error("data must not be null");
         }
         boolean flag = commentService.replaceList(data);
         if (flag){
-            return R.success("updates successfully");
+            return CommonResult.success("updates successfully");
         }else {
-            return R.error("Updates failed");
+            return CommonResult.error("Updates failed");
         }
     }
 
@@ -170,15 +170,15 @@ public class CommentController {
     @Operation(summary = "删除")
     @Parameter(name = "id", description = "id数组", required = true, in = ParameterIn.QUERY)
     @DeleteMapping("/delete")
-    public R delete(@Validated({DeleteGroup.class, DefaultGroup.class}) @RequestParam("id") Long id) {
+    public CommonResult delete(@Validated({DeleteGroup.class, DefaultGroup.class}) @RequestParam("id") Long id) {
         if (id < 0) {
-            return R.error("Delete failed id is null");
+            return CommonResult.error("Delete failed id is null");
         }
         boolean delete = commentService.deleteById(id);
         if (delete){
-            return R.success("Delete successfully");
+            return CommonResult.success("Delete successfully");
         }else {
-            return R.error("Delete failed");
+            return CommonResult.error("Delete failed");
         }
     }
 
@@ -189,15 +189,15 @@ public class CommentController {
     @Operation(summary = "批量删除")
     @Parameter(name = "ids", description = "id数组", required = true, in = ParameterIn.QUERY)
     @DeleteMapping("/deleteList")
-    public R deleteList(@Validated({DeleteGroup.class, DefaultGroup.class}) @RequestParam("ids") List<Long> ids) {
+    public CommonResult deleteList(@Validated({DeleteGroup.class, DefaultGroup.class}) @RequestParam("ids") List<Long> ids) {
         if (ids.size() == 0) {
-            return R.error("Delete failed ids is null");
+            return CommonResult.error("Delete failed ids is null");
         }
         boolean removes = commentService.deleteByIds(ids);
         if (removes){
-            return R.success("Deletes successfully");
+            return CommonResult.success("Deletes successfully");
         }else {
-            return R.error("Deletes failed");
+            return CommonResult.error("Deletes failed");
         }
     }
 
@@ -216,7 +216,7 @@ public class CommentController {
         String fileName = (String) params.get("fileName");
         String sheetName = (String) params.get("sheetName");
         if (!StringUtils.hasText(fileName)) {
-            R.error("请输入 fileName 参数");
+            CommonResult.error("请输入 fileName 参数");
         }
         if (fileName == null) {
             throw new Exception("File name cannot be null");

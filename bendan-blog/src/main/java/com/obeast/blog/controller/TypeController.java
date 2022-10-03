@@ -1,6 +1,16 @@
 package com.obeast.blog.controller;
 
 
+import com.obeast.blog.entity.TypeEntity;
+import com.obeast.blog.excel.TypeExcel;
+import com.obeast.oss.base.CommonResult;
+import com.obeast.oss.constant.PageConstant;
+import com.obeast.oss.domain.PageObjects;
+import com.obeast.oss.utils.EasyExcelUtils;
+import com.obeast.oss.validation.group.AddGroup;
+import com.obeast.oss.validation.group.DefaultGroup;
+import com.obeast.oss.validation.group.DeleteGroup;
+import com.obeast.oss.validation.group.UpdateGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -46,12 +56,12 @@ public class TypeController {
             @Parameter(name = PageConstant.ORDER_FIELD, description = "排序字段", in = ParameterIn.QUERY, schema = @Schema(implementation = String.class)),
             @Parameter(name = PageConstant.ORDER, description = "排序方式，可选值(asc、desc)", in = ParameterIn.QUERY, required = true, schema = @Schema(implementation = String.class))
     })
-    public R<PageObjects<TypeEntity>> list(@RequestParam Map<String, Object> params) {
+    public CommonResult<PageObjects<TypeEntity>> list(@RequestParam Map<String, Object> params) {
         if (params.size() == 0) {
-            return R.error("params is null");
+            return CommonResult.error("params is null");
         }
         PageObjects<TypeEntity> page = typeService.queryPage(params);
-        return R.success(page, "page");
+        return CommonResult.success(page, "page");
     }
 
 
@@ -60,9 +70,9 @@ public class TypeController {
      * */
     @GetMapping("/listAll")
     @Operation(summary = "查询所有")
-    public R<List<TypeEntity>> listAll() {
+    public CommonResult<List<TypeEntity>> listAll() {
         List<TypeEntity> data = typeService.queryAll();
-        return R.success(data, "list");
+        return CommonResult.success(data, "list");
     }
 
 
@@ -73,12 +83,12 @@ public class TypeController {
     @GetMapping("/getOneById/{id}")
     @Operation(summary = "根据id查询")
     @Parameter(name = "id", description = "id of the entity", in = ParameterIn.PATH, required = true, schema = @Schema(implementation = Long.class))
-    public R<TypeEntity> getOneById(@PathVariable("id") Long id){
+    public CommonResult<TypeEntity> getOneById(@PathVariable("id") Long id){
         if (id < 0){
-            return R.error("id is null");
+            return CommonResult.error("id is null");
         }
 		TypeEntity type = typeService.queryById(id);
-        return R.success(type, "type");
+        return CommonResult.success(type, "type");
     }
 
 
@@ -87,15 +97,15 @@ public class TypeController {
      */
     @PostMapping("/save")
     @Operation(summary = "新增")
-    public R save(@Validated({AddGroup.class, DefaultGroup.class}) @RequestBody TypeEntity typeentity){
+    public CommonResult save(@Validated({AddGroup.class, DefaultGroup.class}) @RequestBody TypeEntity typeentity){
         if (typeentity == null){
-            return R.error("typeentity must not be null");
+            return CommonResult.error("typeentity must not be null");
         }
         boolean flag = typeService.add(typeentity);
         if (flag) {
-            return R.success("add successfully");
+            return CommonResult.success("add successfully");
         }else {
-            return R.error("add failed");
+            return CommonResult.error("add failed");
         }
     }
 
@@ -105,15 +115,15 @@ public class TypeController {
      */
     @PostMapping("/saveList")
     @Operation(summary = "批量新增")
-    public R saveList(@Validated({AddGroup.class, DefaultGroup.class}) @RequestBody List<TypeEntity> data){
+    public CommonResult saveList(@Validated({AddGroup.class, DefaultGroup.class}) @RequestBody List<TypeEntity> data){
         if (data.size() == 0) {
-            return R.error("data must not be null");
+            return CommonResult.error("data must not be null");
         }
         boolean flag = typeService.addList(data);
         if (flag) {
-            return R.success("adds successfully");
+            return CommonResult.success("adds successfully");
         }else {
-            return R.error("adds failed");
+            return CommonResult.error("adds failed");
         }
     }
 
@@ -124,15 +134,15 @@ public class TypeController {
      */
     @PostMapping("/update")
     @Operation(summary = "修改")
-    public R update(@Validated({UpdateGroup.class, DefaultGroup.class}) @RequestBody TypeEntity typeentity){
+    public CommonResult update(@Validated({UpdateGroup.class, DefaultGroup.class}) @RequestBody TypeEntity typeentity){
         if (typeentity == null){
-            return R.error("typeentity must not be null");
+            return CommonResult.error("typeentity must not be null");
         }
         boolean flag = typeService.replace(typeentity);
         if (flag){
-            return R.success("update successfully");
+            return CommonResult.success("update successfully");
         }else {
-            return R.error("Update failed");
+            return CommonResult.error("Update failed");
         }
     }
 
@@ -142,15 +152,15 @@ public class TypeController {
      */
     @PostMapping("/updateList")
     @Operation(summary = "批量修改")
-    public R updateList(@Validated({UpdateGroup.class, DefaultGroup.class}) @RequestBody List<TypeEntity> data) {
+    public CommonResult updateList(@Validated({UpdateGroup.class, DefaultGroup.class}) @RequestBody List<TypeEntity> data) {
         if (data.size() == 0) {
-            return R.error("data must not be null");
+            return CommonResult.error("data must not be null");
         }
         boolean flag = typeService.replaceList(data);
         if (flag){
-            return R.success("updates successfully");
+            return CommonResult.success("updates successfully");
         }else {
-            return R.error("Updates failed");
+            return CommonResult.error("Updates failed");
         }
     }
 
@@ -161,15 +171,15 @@ public class TypeController {
     @Operation(summary = "删除")
     @Parameter(name = "id", description = "id数组", required = true, in = ParameterIn.QUERY)
     @DeleteMapping("/delete")
-    public R delete(@Validated({DeleteGroup.class, DefaultGroup.class}) @RequestParam("id") Long id) {
+    public CommonResult delete(@Validated({DeleteGroup.class, DefaultGroup.class}) @RequestParam("id") Long id) {
         if (id < 0) {
-            return R.error("Delete failed id is null");
+            return CommonResult.error("Delete failed id is null");
         }
         boolean delete = typeService.deleteById(id);
         if (delete){
-            return R.success("Delete successfully");
+            return CommonResult.success("Delete successfully");
         }else {
-            return R.error("Delete failed");
+            return CommonResult.error("Delete failed");
         }
     }
 
@@ -180,15 +190,15 @@ public class TypeController {
     @Operation(summary = "批量删除")
     @Parameter(name = "ids", description = "id数组", required = true, in = ParameterIn.QUERY)
     @DeleteMapping("/deleteList")
-    public R deleteList(@Validated({DeleteGroup.class, DefaultGroup.class}) @RequestParam("ids") List<Long> ids) {
+    public CommonResult deleteList(@Validated({DeleteGroup.class, DefaultGroup.class}) @RequestParam("ids") List<Long> ids) {
         if (ids.size() == 0) {
-            return R.error("Delete failed ids is null");
+            return CommonResult.error("Delete failed ids is null");
         }
         boolean removes = typeService.deleteByIds(ids);
         if (removes){
-            return R.success("Deletes successfully");
+            return CommonResult.success("Deletes successfully");
         }else {
-            return R.error("Deletes failed");
+            return CommonResult.error("Deletes failed");
         }
     }
 
@@ -207,7 +217,7 @@ public class TypeController {
         String fileName = (String) params.get("fileName");
         String sheetName = (String) params.get("sheetName");
         if (!StringUtils.hasText(fileName)) {
-            R.error("请输入 fileName 参数");
+            CommonResult.error("请输入 fileName 参数");
         }
         if (fileName == null) {
             throw new Exception("File name cannot be null");
