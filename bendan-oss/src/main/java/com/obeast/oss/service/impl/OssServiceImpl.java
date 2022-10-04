@@ -4,13 +4,11 @@ import cn.hutool.core.util.StrUtil;
 import com.obeast.oss.config.MinioConfig;
 import com.obeast.oss.domain.MergeShardArgs;
 import com.obeast.oss.domain.MinioTemplateResult;
-import com.obeast.oss.domain.PageObjects;
 import com.obeast.oss.domain.ResponseEntry;
 import com.obeast.oss.enumration.ShardFileStatusCode;
 import com.obeast.oss.service.SseEmitterService;
 import com.obeast.oss.template.MinioTemplate;
-import com.obeast.oss.utils.PageQueryUtils;
-import com.obeast.oss.utils.ShardFileUtils;
+import com.obeast.oss.utils.ShardUtils;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,17 +19,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import com.obeast.oss.dao.OssDao;
 import com.obeast.oss.entity.OssEntity;
-import com.obeast.oss.excel.OssExcel;
 import com.obeast.oss.service.OssService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -106,7 +100,7 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
         //分片大小
         long shardSize = 5 * 1024 * 1024L;
         //开始分片
-        List<InputStream> inputStreams = ShardFileUtils.splitMultipartFileInputStreams(file, shardSize);
+        List<InputStream> inputStreams = ShardUtils.splitMultipartFileInputStreams(file,fileName, shardSize);
         long shardCount = inputStreams.size(); //总片数
         //封装合并参数
         MergeShardArgs mergeShardArgs = new MergeShardArgs((int) shardCount, fileName, md5BucketName, fileType, fileSize);
