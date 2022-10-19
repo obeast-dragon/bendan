@@ -39,7 +39,7 @@ class OAuthApplicationTests {
         String password = "admin";
         UserInfoEntity info = new UserInfoEntity();
         info.setPassword(passwordEncoder.encode(password));
-        info.setUsername("test4");
+        info.setUsername("test12");
         info.setNickName("hanbao");
         userInfoService.save(info);
 

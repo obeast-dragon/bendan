@@ -2,6 +2,8 @@ package com.obeast.common.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -12,7 +14,6 @@ import java.util.Date;
  * @version 1.0
  * Description: mybatis-plus自动填充配置
  */
-@Component("FieldFillConfig")
 public class FieldFillConfig implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
