@@ -1,0 +1,8 @@
+2022-10-12 20:26:29.240  INFO 30608 --- [main] com.obeast.admin.AdminApplicationTest    : The following 1 profile is active: "local"
+2022-10-12 20:26:35.081  INFO 30608 --- [main] com.obeast.admin.AdminApplicationTest    : Started AdminApplicationTest in 7.027 seconds (JVM running for 8.516)
+2022-10-12 21:36:03.646  INFO 29672 --- [main] com.obeast.admin.AdminApplicationTest    : The following 1 profile is active: "local"
+2022-10-12 21:36:08.691  INFO 29672 --- [main] com.obeast.admin.AdminApplicationTest    : Started AdminApplicationTest in 6.23 seconds (JVM running for 7.507)
+2022-10-12 21:43:57.799  INFO 28724 --- [main] com.obeast.admin.AdminApplicationTest    : The following 1 profile is active: "local"
+2022-10-12 21:44:02.557  INFO 28724 --- [main] com.obeast.admin.AdminApplicationTest    : Started AdminApplicationTest in 6.001 seconds (JVM running for 7.28)
+2022-10-12 22:05:01.690  INFO 27948 --- [main] com.obeast.admin.AdminApplicationTest    : The following 1 profile is active: "local"
+2022-10-12 22:05:06.482  INFO 27948 --- [main] com.obeast.admin.AdminApplicationTest    : Started AdminApplicationTest in 5.991 seconds (JVM running for 7.312)

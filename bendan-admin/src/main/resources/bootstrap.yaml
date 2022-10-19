@@ -1,0 +1,11 @@
+server:
+  port: 18811
+
+
+spring:
+  profiles:
+    active: local
+  application:
+    name: bendan-admin
+
+

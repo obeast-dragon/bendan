@@ -1,3 +1,7 @@
+server:
+  servlet:
+    context-path:
+  port: 18815
 spring:
   profiles:
     active: dev

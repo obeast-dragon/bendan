@@ -5,7 +5,7 @@ import cn.hutool.http.HttpStatus;
 
 import com.obeast.oss.domain.MessageVo;
 import com.obeast.oss.domain.ResponseEntry;
-import com.obeast.oss.exception.BendanException;
+import com.obeast.common.exception.BendanException;
 import com.obeast.oss.service.SseEmitterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

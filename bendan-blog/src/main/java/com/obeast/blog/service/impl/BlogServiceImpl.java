@@ -1,8 +1,8 @@
 package com.obeast.blog.service.impl;
 
 import com.obeast.blog.excel.BlogExcel;
-import com.obeast.oss.domain.PageObjects;
-import com.obeast.oss.utils.PageQueryUtils;
+import com.obeast.common.domain.PageObjects;
+import com.obeast.common.utils.PageQueryUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

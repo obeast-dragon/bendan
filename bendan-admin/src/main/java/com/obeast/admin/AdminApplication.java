@@ -1,7 +1,9 @@
 package com.obeast.admin;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * @author wxl
@@ -9,6 +11,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @version 1.0
  * Description:
  */
+@EnableDiscoveryClient
+@MapperScan("com.obeast.admin.dao")
 @SpringBootApplication
 public class AdminApplication {
     public static void main(String[] args) {

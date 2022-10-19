@@ -38,7 +38,7 @@
         <bendan.version>2.0.0</bendan.version>
         <netty-all.version>4.1.82.Final</netty-all.version>
         <nimbus-jose-jwt.version>9.24.3</nimbus-jose-jwt.version>
-        <spring-cloud-starter-oauth2.version>2.2.5.RELEASE</spring-cloud-starter-oauth2.version>
+        <oauth2-authorization-server.version>0.3.1</oauth2-authorization-server.version>
     </properties>
 
     <dependencies>
@@ -92,6 +92,14 @@
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+
+            <!--sas-->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-oauth2-authorization-server</artifactId>
+                <version>${oauth2-authorization-server.version}</version>
             </dependency>
 
             <!--      jwt 解析包      -->

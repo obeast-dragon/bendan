@@ -7,6 +7,14 @@ spring:
         server-addr: http://127.0.0.1:8848
         file-extension: yaml
 
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/bendan?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT
+    username: root
+    password: mysql1234
+    type: com.alibaba.druid.pool.DruidDataSource
+
   redis:
     # Redis服务器地址
     host: 175.178.183.32

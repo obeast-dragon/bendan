@@ -1,7 +1,7 @@
 package com.obeast.oss.utils;
 
 import com.obeast.oss.enumration.ShardFileStatusCode;
-import com.obeast.oss.exception.BendanException;
+import com.obeast.common.exception.BendanException;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
