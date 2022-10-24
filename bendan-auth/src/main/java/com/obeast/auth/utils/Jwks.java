@@ -1,4 +1,4 @@
-package com.obeast.auth.authenticate.jose;
+package com.obeast.auth.utils;
 
 import com.nimbusds.jose.jwk.Curve;
 import com.nimbusds.jose.jwk.ECKey;

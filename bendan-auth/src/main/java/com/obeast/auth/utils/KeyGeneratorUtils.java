@@ -1,4 +1,4 @@
-package com.obeast.auth.authenticate.jose;
+package com.obeast.auth.utils;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;

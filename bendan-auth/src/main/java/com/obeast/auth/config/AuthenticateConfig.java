@@ -1,4 +1,4 @@
-package com.obeast.auth.authenticate;
+package com.obeast.auth.config;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
