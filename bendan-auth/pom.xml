@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>bendan-auth</artifactId>
+    <description>授权认证服务</description>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -27,6 +28,12 @@
                     <artifactId>easyexcel</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <!-- 远程调用       -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 
         <!--    Nacos服务的发现    -->
@@ -65,11 +72,6 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-authorization-server</artifactId>
             <version>0.3.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
         <dependency>
