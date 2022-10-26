@@ -70,9 +70,9 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
 //    private final MessageSourceAccessor messages;
 
     public OAuth2BaseAuthenticationProvider(
+            AuthenticationManager authenticationManager,
             OAuth2AuthorizationService authorizationService,
-            OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator,
-            AuthenticationManager authenticationManager
+            OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator
 //            , MessageSourceAccessor messages
     ) {
         Assert.notNull(authorizationService, "authorizationService cannot be null");
@@ -258,7 +258,7 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
         return switch (ex){
             case UsernameNotFoundException ignored -> new OAuth2AuthenticationException(
                     new OAuth2Error(OAuth2ErrorConstant.USERNAME_NOT_FOUND,
-                        "username  not found",
+                        "username not found",
                          ""));
 
             case BadCredentialsException ignored -> new OAuth2AuthenticationException(

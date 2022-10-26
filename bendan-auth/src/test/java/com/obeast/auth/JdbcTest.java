@@ -29,12 +29,7 @@ import java.util.UUID;
 public class JdbcTest {
 
 
-    /**
-     * 初始化客户端信息
-     */
-    @Autowired
-    private UserDetailsManager userDetailsManager;
-
+    //
     @Autowired
     private RegisteredClientRepository registeredClientRepository;
 
@@ -77,27 +72,32 @@ public class JdbcTest {
                 .scope("message.write")
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();
+
+        RegisteredClient pASSWORD = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId("messaging-client3")
+                .clientSecret("{noop}secret")
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.PASSWORD)
+                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                .redirectUri("http://127.0.0.1:18812/authorized")
+                .scope(OidcScopes.OPENID)
+                .scope("message.read")
+                .scope("message.write")
+                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+                .build();
 //        注意client_id的变化
         //请求头
 //        http://127.0.0.1:18812/oauth2/authorize?response_type=code&client_id=messaging-client&scope=message.read&redirect_uri=http://127.0.0.1:18812/authorized
-        registeredClientRepository.save(cLIENT_SECRET_BASIC);
+//        registeredClientRepository.save(cLIENT_SECRET_BASIC);
 
 //         请求体
 //        http://127.0.0.1:18812/oauth2/authorize?response_type=code&client_id=messaging-client2&scope=message.read&redirect_uri=http://127.0.0.1:18812/authorized
-        registeredClientRepository.save(cLIENT_SECRET_POST);
+//        registeredClientRepository.save(cLIENT_SECRET_POST);
+
+
+        registeredClientRepository.save(pASSWORD);
 
     }
 
-    /**
-     * 创建用户信息
-     */
-    @Test
-    void testSaveUser() {
-        UserDetails userDetails = User.builder().passwordEncoder(s -> "{bcrypt}" + new BCryptPasswordEncoder().encode(s))
-                .username("user")
-                .password("password")
-                .roles("ADMIN")
-                .build();
-        userDetailsManager.createUser(userDetails);
-    }
 }

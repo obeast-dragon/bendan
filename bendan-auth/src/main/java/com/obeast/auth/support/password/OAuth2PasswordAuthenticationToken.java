@@ -1,10 +1,12 @@
 package com.obeast.auth.support.password;
 
 import com.obeast.auth.support.base.OAuth2BaseAuthenticationToken;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 
-import javax.security.auth.Subject;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,8 +20,9 @@ public class OAuth2PasswordAuthenticationToken extends OAuth2BaseAuthenticationT
 
     public OAuth2PasswordAuthenticationToken(
             AuthorizationGrantType authorizationGrantType,
-            Authentication clientPrincipal, Set<String> scopes, Map<String,
-            Object> additionalParameters
+            Authentication clientPrincipal,
+            @Nullable Set<String> scopes,
+            @Nullable Map<String, Object> additionalParameters
     ) {
         super(authorizationGrantType, clientPrincipal, scopes, additionalParameters);
     }
