@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.core.*;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization.Builder;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.jackson2.OAuth2AuthorizationServerJackson2Module;
@@ -37,7 +38,7 @@ public class OAuth2AuthorizationConvertor {
         this.objectMapper.registerModule(new OAuth2AuthorizationServerJackson2Module());
     }
 
-    public BendanOAuth2Authorization from(org.springframework.security.oauth2.server.authorization.OAuth2Authorization authorization){
+    public BendanOAuth2Authorization from(OAuth2Authorization authorization){
         if(authorization == null){
             return null;
         }
@@ -126,7 +127,7 @@ public class OAuth2AuthorizationConvertor {
         private String metadata;
     }
 
-    public org.springframework.security.oauth2.server.authorization.OAuth2Authorization to(BendanOAuth2Authorization oAuth2Authorization){
+    public OAuth2Authorization to(BendanOAuth2Authorization oAuth2Authorization){
         if(oAuth2Authorization == null){
             return null;
         }

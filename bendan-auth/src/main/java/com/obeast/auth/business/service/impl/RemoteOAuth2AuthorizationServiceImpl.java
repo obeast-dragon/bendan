@@ -4,6 +4,7 @@ import com.obeast.auth.business.dao.BendanOAuth2AuthorizationDao;
 import com.obeast.auth.business.service.OAuth2AuthorizationConvertor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.core.OAuth2TokenType;
+import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.stereotype.Component;
@@ -53,18 +54,18 @@ public class RemoteOAuth2AuthorizationServiceImpl implements OAuth2Authorization
 
     @Override
     public OAuth2Authorization findByToken(String token, OAuth2TokenType tokenType) {
-//        Assert.hasText(token, "token cannot be empty");
-//        if (tokenType == null) {
-//            return oAuth2AuthorizationConvertor.to(bendanOAuth2AuthorizationDao.findByUnknownTokenType(token));
-//        } else if (OAuth2ParameterNames.STATE.equals(tokenType.getValue())) {
-//            return oAuth2AuthorizationConvertor.to(bendanOAuth2AuthorizationDao.findByState(token));
-//        } else if (OAuth2ParameterNames.CODE.equals(tokenType.getValue())) {
-//            return oAuth2AuthorizationConvertor.to(bendanOAuth2AuthorizationDao.findByAuthorizationCode(token));
-//        } else if (OAuth2TokenType.ACCESS_TOKEN.equals(tokenType)) {
-//            return oAuth2AuthorizationConvertor.to(bendanOAuth2AuthorizationDao.findByAccessToken(token));
-//        } else if (OAuth2TokenType.REFRESH_TOKEN.equals(tokenType)) {
-//            return oAuth2AuthorizationConvertor.to(bendanOAuth2AuthorizationDao.findByRefreshToken(token));
-//        }
+        Assert.hasText(token, "token cannot be empty");
+        if (tokenType == null) {
+            return oAuth2AuthorizationConvertor.to(bendanOAuth2AuthorizationDao.findByUnknownTokenType(token));
+        } else if (OAuth2ParameterNames.STATE.equals(tokenType.getValue())) {
+            return oAuth2AuthorizationConvertor.to(bendanOAuth2AuthorizationDao.findByState(token));
+        } else if (OAuth2ParameterNames.CODE.equals(tokenType.getValue())) {
+            return oAuth2AuthorizationConvertor.to(bendanOAuth2AuthorizationDao.findByAuthorizationCode(token));
+        } else if (OAuth2TokenType.ACCESS_TOKEN.equals(tokenType)) {
+            return oAuth2AuthorizationConvertor.to(bendanOAuth2AuthorizationDao.findByAccessToken(token));
+        } else if (OAuth2TokenType.REFRESH_TOKEN.equals(tokenType)) {
+            return oAuth2AuthorizationConvertor.to(bendanOAuth2AuthorizationDao.findByRefreshToken(token));
+        }
         return null;
     }
 }
