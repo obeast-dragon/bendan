@@ -6,6 +6,7 @@ import com.obeast.auth.support.base.OAuth2BaseAuthenticationToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -16,6 +17,7 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
+import org.springframework.util.StringUtils;
 
 
 import java.util.Map;
@@ -52,6 +54,10 @@ public class OAuth2PasswordAuthenticationProvider extends
     public UsernamePasswordAuthenticationToken buildCustomizeToken(Map<String, Object> reqParams) {
         String username = (String) reqParams.get(OAuth2ParameterNames.USERNAME);
         String password = (String) reqParams.get(OAuth2ParameterNames.PASSWORD);
+        if (!StringUtils.hasText(password) || !StringUtils.hasText(username)) {
+            log.error("密码或者用户名不能为空");
+            throw new BadCredentialsException("username or password are must be not null");
+        }
         return new UsernamePasswordAuthenticationToken(username, password);
     }
 

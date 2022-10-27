@@ -1,6 +1,5 @@
 package com.obeast.auth.config;
 
-import com.google.common.collect.Lists;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
@@ -15,11 +14,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.authorization.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.core.Authentication;
@@ -38,7 +35,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -76,7 +72,8 @@ public class AuthorizationServerConfig {
 //                todo 成功处理器 失败处理器
         );
 
-//        authorizationServerConfigurer.authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint.consentPage(CUSTOM_CONSENT_PAGE_URI));
+//        authorizationServerConfigurer.authorizationEndpoint(authorizationEndpoint ->
+//                authorizationEndpoint.consentPage(CUSTOM_CONSENT_PAGE_URI));
         RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
         http
                 .requestMatcher(endpointsMatcher)
@@ -158,10 +155,9 @@ public class AuthorizationServerConfig {
         OAuth2AuthorizationService authorizationService = httpSecurity.getSharedObject(OAuth2AuthorizationService.class);
         OAuth2PasswordCredentialsAuthenticationProvider provider =
                 new OAuth2PasswordCredentialsAuthenticationProvider(
-                        OAuth2ConfigurerUtils.getTokenGenerator(httpSecurity));
+                        OAuth2ConfigurerUtils.getTokenGenerator(httpSecurity),authorizationService);
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
-        provider.setAuthorizationService(authorizationService);
         return provider;
     }
 

@@ -60,9 +60,10 @@ public class JdbcTest {
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();
         RegisteredClient cLIENT_SECRET_POST = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("messaging-client2")
+                .clientId("messaging-client")
                 .clientSecret("{noop}secret")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
+                .authorizationGrantType(AuthorizationGrantType.PASSWORD)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
@@ -73,19 +74,6 @@ public class JdbcTest {
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();
 
-        RegisteredClient pASSWORD = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("messaging-client3")
-                .clientSecret("{noop}secret")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .authorizationGrantType(AuthorizationGrantType.PASSWORD)
-                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                .redirectUri("http://127.0.0.1:18812/authorized")
-                .scope(OidcScopes.OPENID)
-                .scope("message.read")
-                .scope("message.write")
-                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
-                .build();
 //        注意client_id的变化
         //请求头
 //        http://127.0.0.1:18812/oauth2/authorize?response_type=code&client_id=messaging-client&scope=message.read&redirect_uri=http://127.0.0.1:18812/authorized
@@ -96,7 +84,7 @@ public class JdbcTest {
 //        registeredClientRepository.save(cLIENT_SECRET_POST);
 
 
-        registeredClientRepository.save(pASSWORD);
+        registeredClientRepository.save(cLIENT_SECRET_POST);
 
     }
 

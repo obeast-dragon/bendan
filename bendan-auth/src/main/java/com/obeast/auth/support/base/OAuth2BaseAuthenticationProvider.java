@@ -1,14 +1,20 @@
 package com.obeast.auth.support.base;
 
-import com.obeast.auth.constant.OAuth2ErrorConstant;
+import com.obeast.auth.constant.BendanOAuth2ErrorConstant;
 import com.obeast.auth.exception.OAuth2ScopeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.SpringSecurityMessageSource;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.core.*;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.OidcScopes;
+import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2AccessTokenAuthenticationToken;
@@ -36,51 +42,43 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
         implements AuthenticationProvider {
     private static final Logger log = LoggerFactory.getLogger(OAuth2BaseAuthenticationProvider.class);
 
+    private static final OAuth2TokenType ID_TOKEN_TOKEN_TYPE = new OAuth2TokenType(OidcParameterNames.ID_TOKEN);
+
     private static final String ERROR_URI = "https://datatracker.ietf.org/doc/html/rfc6749#section-5.2";
 
 
     /**
      * OAuth2AuthorizationService 方法引入
-     * */
+     */
     private final OAuth2AuthorizationService authorizationService;
 
     /**
      * token生成
-     * */
+     */
     private final OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator;
 
     /**
      * 认证 Manager
-     * */
+     */
     private final AuthenticationManager authenticationManager;
 
 
-    @Deprecated
-    private Supplier<String> refreshTokenGenerator;
-
-    @Deprecated
-    public void setRefreshTokenGenerator(Supplier<String> refreshTokenGenerator) {
-        Assert.notNull(refreshTokenGenerator, "refreshTokenGenerator cannot be null");
-        this.refreshTokenGenerator = refreshTokenGenerator;
-    }
-
-//    /**
-//     * 国际化
-//     * */
-//    private final MessageSourceAccessor messages;
+    /**
+     * 国际化
+     */
+    private final MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 
     public OAuth2BaseAuthenticationProvider(
             AuthenticationManager authenticationManager,
             OAuth2AuthorizationService authorizationService,
             OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator
-//            , MessageSourceAccessor messages
     ) {
         Assert.notNull(authorizationService, "authorizationService cannot be null");
         Assert.notNull(tokenGenerator, "tokenGenerator cannot be null");
         this.authorizationService = authorizationService;
+//        父类构造 子类就不用再次引入这个成员变量了
         this.tokenGenerator = tokenGenerator;
         this.authenticationManager = authenticationManager;
-//        this.messages = new MessageSourceAccessor(SpringUtil.getBean("securityMessageSource"), Locale.CHINA);
     }
 
 //------------------------- abstract ---------------------------------------
@@ -88,40 +86,43 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
 
     /**
      * Description: 当provider是否支持当前Token
-     * @author wxl
-     * Date: 2022/10/24 14:31
+     *
      * @param authentication the authenticated
      * @return boolean
+     * @author wxl
+     * Date: 2022/10/24 14:31
      */
     @Override
     public abstract boolean supports(Class<?> authentication);
 
     /**
      * Description: 从请求参数中创建token
-     * @author wxl
-     * Date: 2022/10/24 14:51
+     *
      * @param reqParams the request parameters
      * @return org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+     * @author wxl
+     * Date: 2022/10/24 14:51
      */
     public abstract UsernamePasswordAuthenticationToken buildCustomizeToken(Map<String, Object> reqParams);
 
 
     /**
      * Description: 判断当前用户是否支持当前客户端
+     *
+     * @param registeredClient the registeredClient
      * @author wxl
      * Date: 2022/10/24 14:53
-     * @param registeredClient the registeredClient
      */
-    public abstract void supportClient(RegisteredClient registeredClient) ;
-
+    public abstract void supportClient(RegisteredClient registeredClient);
 
 
     @SuppressWarnings("unchecked")
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        T customizeBaseAuthentication  = (T) authentication;
-        OAuth2ClientAuthenticationToken oAuth2ClientAuthentication = getOAuth2ClientAuthentication(
-                customizeBaseAuthentication);
+        //向下转行
+        T passwordCredentialsAuthenticationToken = (T) authentication;
+        OAuth2ClientAuthenticationToken oAuth2ClientAuthentication = getAuthenticatedClientElseThrowInvalidClient(
+                passwordCredentialsAuthenticationToken);
 
         RegisteredClient registeredClient = oAuth2ClientAuthentication.getRegisteredClient();
 
@@ -131,21 +132,22 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
 
         //----scope----
         Set<String> scopes;
-        if (!CollectionUtils.isEmpty(scopes = customizeBaseAuthentication.getScopes())){
-            for (String requestedScope : scopes) {
-                if (!registeredClient.getScopes().contains(requestedScope)){
+        // Default to configured scopes
+        if (!CollectionUtils.isEmpty(passwordCredentialsAuthenticationToken.getScopes())) {
+            for (String requestedScope : passwordCredentialsAuthenticationToken.getScopes()) {
+                if (!registeredClient.getScopes().contains(requestedScope)) {
                     throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_SCOPE);
                 }
             }
-            scopes = new LinkedHashSet<>(scopes);
-        }
-        else {
-            throw new OAuth2ScopeException(OAuth2ErrorConstant.SCOPE_IS_EMPTY);
+            scopes = new LinkedHashSet<>(passwordCredentialsAuthenticationToken.getScopes());
+        } else {
+            throw new OAuth2ScopeException(BendanOAuth2ErrorConstant.SCOPE_IS_EMPTY);
         }
 
-        Map<String, Object> additionalParameters = customizeBaseAuthentication.getAdditionalParameters();
+        Map<String, Object> additionalParameters = passwordCredentialsAuthenticationToken.getAdditionalParameters();
         try {
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = buildCustomizeToken(additionalParameters);
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                    buildCustomizeToken(additionalParameters);
 
             log.debug("got usernamePasswordAuthenticationToken:  " + usernamePasswordAuthenticationToken);
 
@@ -160,7 +162,7 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
                     .providerContext(ProviderContextHolder.getProviderContext())
                     .authorizedScopes(scopes)
                     .authorizationGrantType(AuthorizationGrantType.PASSWORD)
-                    .authorizationGrant(customizeBaseAuthentication);
+                    .authorizationGrant(passwordCredentialsAuthenticationToken);
             // @formatter:on
 
 
@@ -190,18 +192,13 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
                     tokenContext.getAuthorizedScopes()
             );
             if (generatedAccessToken instanceof ClaimAccessor) {
-                authorizationBuilder
-                        .id(accessToken.getTokenValue())
-                        .token(accessToken, (metadata) ->
-                                metadata.put(OAuth2Authorization.Token.CLAIMS_METADATA_NAME,
-                                ((ClaimAccessor) generatedAccessToken).getClaims())
-                        )
-                        .attribute(OAuth2Authorization.AUTHORIZED_SCOPE_ATTRIBUTE_NAME, scopes)
-                        .attribute(Principal.class.getName(), usernamePasswordAuthentication);
+                authorizationBuilder.token(accessToken, (metadata) ->
+                        metadata.put(OAuth2Authorization.Token.CLAIMS_METADATA_NAME,
+                                ((ClaimAccessor) generatedAccessToken).getClaims()));
+            } else {
+                authorizationBuilder.accessToken(accessToken);
             }
-            else {
-                authorizationBuilder.id(accessToken.getTokenValue()).accessToken(accessToken);
-            }
+
 
             // ----- Refresh token -----
             OAuth2RefreshToken refreshToken = null;
@@ -209,22 +206,43 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
                     // Do not issue refresh token to public client
                     !oAuth2ClientAuthentication.getClientAuthenticationMethod().equals(ClientAuthenticationMethod.NONE)) {
 
-                if (this.refreshTokenGenerator != null) {
-                    Instant issuedAt = Instant.now();
-                    Instant expiresAt = issuedAt.plus(registeredClient.getTokenSettings().getRefreshTokenTimeToLive());
-                    refreshToken = new OAuth2RefreshToken(this.refreshTokenGenerator.get(), issuedAt, expiresAt);
+                tokenContext = tokenContextBuilder.tokenType(OAuth2TokenType.REFRESH_TOKEN).build();
+                OAuth2Token generatedRefreshToken = this.tokenGenerator.generate(tokenContext);
+                if (!(generatedRefreshToken instanceof OAuth2RefreshToken)) {
+                    OAuth2Error error = new OAuth2Error(OAuth2ErrorCodes.SERVER_ERROR,
+                            "The token generator failed to generate the refresh token.", ERROR_URI);
+                    throw new OAuth2AuthenticationException(error);
                 }
-                else {
-                    tokenContext = tokenContextBuilder.tokenType(OAuth2TokenType.REFRESH_TOKEN).build();
-                    OAuth2Token generatedRefreshToken = this.tokenGenerator.generate(tokenContext);
-                    if (!(generatedRefreshToken instanceof OAuth2RefreshToken)) {
-                        OAuth2Error error = new OAuth2Error(OAuth2ErrorCodes.SERVER_ERROR,
-                                "The token generator failed to generate the refresh token.", ERROR_URI);
-                        throw new OAuth2AuthenticationException(error);
-                    }
-                    refreshToken = (OAuth2RefreshToken) generatedRefreshToken;
-                }
+                refreshToken = (OAuth2RefreshToken) generatedRefreshToken;
                 authorizationBuilder.refreshToken(refreshToken);
+            }
+
+            // ----- ID token -----
+            OidcIdToken idToken;
+            if (scopes.contains(OidcScopes.OPENID)) {
+                // @formatter:off
+                tokenContext = tokenContextBuilder
+                        .tokenType(ID_TOKEN_TOKEN_TYPE)
+                        .authorization(authorizationBuilder.build())    // ID token customizer may need access to the access token and/or refresh token
+                        .build();
+                // @formatter:on
+                OAuth2Token generatedIdToken = this.tokenGenerator.generate(tokenContext);
+                if (!(generatedIdToken instanceof Jwt)) {
+                    OAuth2Error error = new OAuth2Error(OAuth2ErrorCodes.SERVER_ERROR,
+                            "The token generator failed to generate the ID token.", ERROR_URI);
+                    throw new OAuth2AuthenticationException(error);
+                }
+                idToken = new OidcIdToken(generatedIdToken.getTokenValue(), generatedIdToken.getIssuedAt(),
+                        generatedIdToken.getExpiresAt(), ((Jwt) generatedIdToken).getClaims());
+                authorizationBuilder.token(idToken, (metadata) ->
+                        metadata.put(OAuth2Authorization.Token.CLAIMS_METADATA_NAME, idToken.getClaims()));
+            } else {
+                idToken = null;
+            }
+            Map<String, Object> add = new HashMap<>();
+            if (idToken != null) {
+                add = new HashMap<>();
+                add.put(OidcParameterNames.ID_TOKEN, idToken.getTokenValue());
             }
 
             OAuth2Authorization authorization = authorizationBuilder.build();
@@ -233,81 +251,95 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
 
             log.debug("returning OAuth2AccessTokenAuthenticationToken");
 
-            return new OAuth2AccessTokenAuthenticationToken(registeredClient, oAuth2ClientAuthentication, accessToken,
-                    refreshToken, Objects.requireNonNull(authorization.getAccessToken().getClaims()));
+            return new OAuth2AccessTokenAuthenticationToken(
+                    registeredClient,
+                    oAuth2ClientAuthentication,
+                    accessToken,
+                    refreshToken,
+                    add);
 
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             log.error("the exception maybe in authenticate:  ", ex);
-            throw throwOAuth2AuthenticationException(authentication, (AuthenticationException) ex);
+            throw throwOAuth2AuthenticationException((AuthenticationException) ex);
         }
 
     }
 
 
-
     /**
      * Description: 匹配抛出异常
+     *
+     * @param ex             exception
+     * @return org.springframework.security.core.AuthenticationException
      * @author wxl
      * Date: 2022/10/24 16:06
-     * @param authentication the authentication
-     * @param ex exception
-     * @return org.springframework.security.core.AuthenticationException
      */
-    private AuthenticationException throwOAuth2AuthenticationException(Authentication authentication,
-                                                                       AuthenticationException ex) {
-        return switch (ex){
+    private AuthenticationException throwOAuth2AuthenticationException(AuthenticationException ex) {
+        return switch (ex) {
             case UsernameNotFoundException ignored -> new OAuth2AuthenticationException(
-                    new OAuth2Error(OAuth2ErrorConstant.USERNAME_NOT_FOUND,
-                        "username not found",
-                         ""));
+                    new OAuth2Error(BendanOAuth2ErrorConstant.USERNAME_NOT_FOUND,
+                            this.messages.getMessage("JdbcDaoImpl.notFound",
+                                    "Username not found"),
+                            ""));
 
             case BadCredentialsException ignored -> new OAuth2AuthenticationException(
-                    new OAuth2Error(OAuth2ErrorConstant.BAD_CREDENTIALS,
-                            "Bad credentials",
-                            ""));
+                    new OAuth2Error(BendanOAuth2ErrorConstant.BAD_CREDENTIALS, this.messages.getMessage(
+                            "AbstractUserDetailsAuthenticationProvider.badCredentials",
+                            "Bad credentials"), ""));
+
             case LockedException ignored -> new OAuth2AuthenticationException(
-                    new OAuth2Error(OAuth2ErrorConstant.USER_LOCKED,
-                             "User account is locked",
-                            ""));
+                    new OAuth2Error(BendanOAuth2ErrorConstant.USER_LOCKED, this.messages
+                            .getMessage("AbstractUserDetailsAuthenticationProvider.locked",
+                                    "User account is locked"), ""));
+
             case DisabledException ignored -> new OAuth2AuthenticationException(
-                    new OAuth2Error(OAuth2ErrorConstant.USER_DISABLE,
-                    "User is disabled",
-                    ""));
+                    new OAuth2Error(BendanOAuth2ErrorConstant.USER_DISABLE,
+                            this.messages.getMessage("AbstractUserDetailsAuthenticationProvider.disabled", "User is disabled"),
+                            ""));
+
             case AccountExpiredException ignored -> new OAuth2AuthenticationException(
-                    new OAuth2Error(OAuth2ErrorConstant.USER_EXPIRED,
-                            "User account has expired",
-                            ""));
+                    new OAuth2Error(BendanOAuth2ErrorConstant.USER_EXPIRED, this.messages
+                            .getMessage("AbstractUserDetailsAuthenticationProvider.expired",
+                                    "User account has expired"), ""));
+
             case CredentialsExpiredException ignored -> new OAuth2AuthenticationException(
-                    new OAuth2Error(OAuth2ErrorConstant.CREDENTIALS_EXPIRED,
-                            "User credentials have expired",
+                    new OAuth2Error(BendanOAuth2ErrorConstant.CREDENTIALS_EXPIRED,
+                            this.messages.getMessage("AbstractUserDetailsAuthenticationProvider.credentialsExpired",
+                                    "User credentials have expired"),
                             ""));
+
             case OAuth2ScopeException ignored -> new OAuth2AuthenticationException(
-                    new OAuth2Error(OAuth2ErrorCodes.INVALID_SCOPE,
-                            "invalid_scope",
+                    new OAuth2Error(BendanOAuth2ErrorConstant.INVALID_SCOPE,
+                            this.messages.getMessage("AbstractAccessDecisionManager.accessDenied",
+                                    "invalid_scope"), ""));
+
+            case InternalAuthenticationServiceException ignored -> new OAuth2AuthenticationException(
+                    new OAuth2Error(BendanOAuth2ErrorConstant.BAD_PASSWORD,
+                            "bad_password",
                             ""));
-            default -> new OAuth2AuthenticationException(OAuth2ErrorConstant.UN_KNOW_LOGIN_ERROR);
+
+            default -> new OAuth2AuthenticationException(BendanOAuth2ErrorConstant.UN_KNOW_LOGIN_ERROR);
         };
     }
 
 
-
-
     /**
      * Description: 获取OAuth2ClientAuthenticationToken
-     * @author wxl
-     * Date: 2022/10/24 16:06
+     *
      * @param authentication the authenticated
      * @return org.springframework.security.oauth2.server.authorization.authentication.OAuth2ClientAuthenticationToken
+     * @author wxl
+     * Date: 2022/10/24 16:06
      */
-    private OAuth2ClientAuthenticationToken getOAuth2ClientAuthentication
-            (Authentication authentication) {
+    private OAuth2ClientAuthenticationToken getAuthenticatedClientElseThrowInvalidClient
+    (Authentication authentication) {
 
         OAuth2ClientAuthenticationToken clientAuthenticationToken = null;
         Object principal = authentication.getPrincipal();
 
         //判断传入客户端是否实现或者与本类相同
-        if (OAuth2ClientAuthenticationToken.class.isAssignableFrom(principal.getClass())){
-            clientAuthenticationToken = (OAuth2ClientAuthenticationToken)principal;
+        if (OAuth2ClientAuthenticationToken.class.isAssignableFrom(principal.getClass())) {
+            clientAuthenticationToken = (OAuth2ClientAuthenticationToken) principal;
         }
 
         if (clientAuthenticationToken != null && clientAuthenticationToken.isAuthenticated()) {

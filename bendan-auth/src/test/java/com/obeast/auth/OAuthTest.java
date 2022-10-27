@@ -14,6 +14,10 @@ import org.apache.http.util.EntityUtils;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
@@ -40,6 +44,8 @@ public class OAuthTest {
     private static final String REVOKE_TOKEN_ENDPOINT =ENDPOINT +"/oauth2/revoke";
 
     private Gson gson = new Gson();
+
+
 
     private HttpPost createHttpPost(){
         String clientId = "messaging-client3";

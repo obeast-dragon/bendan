@@ -1,12 +1,14 @@
 package com.obeast.auth.constant;
 
+import org.springframework.security.oauth2.core.OAuth2ErrorCodes;
+
 /**
  * @author wxl
  * Date 2022/10/21 11:55
  * @version 1.0
  * Description: OAuth2异常通用常量
  */
-public interface OAuth2ErrorConstant {
+public interface BendanOAuth2ErrorConstant extends OAuth2ErrorCodes {
 
     /** 用户名未找到 */
     String USERNAME_NOT_FOUND = "username_not_found";
@@ -41,4 +43,9 @@ public interface OAuth2ErrorConstant {
      * 不合法的Token
      */
     String INVALID_BEARER_TOKEN = "invalid_bearer_token";
+
+    /**
+     * password错误
+     * */
+    String BAD_PASSWORD = "bad_password";
 }

@@ -27,7 +27,7 @@ public class OAuth2PasswordAuthenticationConverter extends OAuth2BaseAuthenticat
     }
 
     /**
-     * Description: TODO
+     * Description: 检查密码模式的参数
      * @author wxl
      * Date: 2022/10/24 18:09
      * @param request
