@@ -14,10 +14,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  */
 @EnableFeignClients
 @EnableDiscoveryClient
-@MapperScan("com.obeast.admin.dao")
+@MapperScan("com.obeast.admin.business.dao")
 @SpringBootApplication
-public class AdminApplication {
+public class BendanAdminApplication {
     public static void main(String[] args) {
-        SpringApplication.run(AdminApplication.class, args);
+        SpringApplication.run(BendanAdminApplication.class, args);
     }
 }

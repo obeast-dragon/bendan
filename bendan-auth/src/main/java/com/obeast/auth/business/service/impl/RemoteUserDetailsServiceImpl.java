@@ -1,35 +1,54 @@
 package com.obeast.auth.business.service.impl;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.obeast.auth.business.domain.AuthUser;
+import com.obeast.auth.business.service.remote.BendanAdminUserInfoService;
+import com.obeast.common.to.UserInfoDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 
 
 @Component
 public class RemoteUserDetailsServiceImpl implements UserDetailsService {
-    private final Map<String, UserDetails> userMap = Maps.newHashMap();
-    @Resource
-    private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private BendanAdminUserInfoService bendanAdminUserInfoService;
+
+
+    @Autowired
+    private HttpServletRequest request;
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        String clientId = request.getParameter("client_id");
+//        if (clientId.equals("messaging-client")){
+            UserInfoDto userInfoDto = bendanAdminUserInfoService.loadUserByUsername(username);
+            if (userInfoDto == null) {
+                throw new UsernameNotFoundException("用户不存在");
+            }
+            userInfoDto.setClientId(clientId);
+
+            return buildUser(userInfoDto);
+//        }
+//        return null;
+    }
+
+    private UserDetails buildUser(UserInfoDto userInfoDto) {
+        //todo 权限
         List<GrantedAuthority> authorities = Lists.newArrayList(new SimpleGrantedAuthority("USER"));
-        AuthUser user = new AuthUser("user1",passwordEncoder.encode("password"),authorities);
-        user.setUserId(123L);
-        userMap.put(user.getUsername(),user);
-        return userMap.get(username);
+        return User.builder()
+                .username(userInfoDto.getUsername())
+                .password(userInfoDto.getPassword())
+                .authorities(authorities)
+                .build();
     }
 }

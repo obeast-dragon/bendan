@@ -1,4 +1,4 @@
-package com.obeast.auth.support.password.another;
+package com.obeast.auth.support.password;
 
 import com.obeast.auth.constant.BendanOAuth2ErrorConstant;
 import com.obeast.auth.exception.OAuth2ScopeException;
@@ -259,7 +259,8 @@ public class OAuth2PasswordCredentialsAuthenticationProvider implements Authenti
             throw new AccountExpiredException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.expired", "User account has expired"));
         }
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-            log.error("密码不匹配: {}", username);
+            log.error("密码不匹配: {}", password);
+            log.error("密码不匹配: {}", userDetails.getPassword());
             throw new BadCredentialsException("Bad credentials");
         }
         return userDetails;

@@ -1,21 +1,18 @@
 package com.obeast.auth;
 
+import com.obeast.auth.business.service.remote.BendanAdminUserInfoService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
-import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
-import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.ClientSettings;
-import org.springframework.security.provisioning.UserDetailsManager;
 
 import java.util.UUID;
 
@@ -32,6 +29,25 @@ public class JdbcTest {
     //
     @Autowired
     private RegisteredClientRepository registeredClientRepository;
+
+
+    @Autowired
+    BendanAdminUserInfoService bendanAdminUserInfoService;
+
+    public static void main(String[] args) {
+        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        String password  = "{bcrypt}$2a$10$ROWGidQi1gte/6xRlLP3xeeSeiDLCuT.BuGMYEkmulygTKF4RjvEG";
+        System.out.println(passwordEncoder.matches("password", password));
+        System.out.println(passwordEncoder.encode("password"));
+    }
+
+    void encode(){
+
+    }
+    @Test
+    void getUser() {
+        System.out.println(bendanAdminUserInfoService.loadUserByUsername("user"));
+    }
 
 
     @Test

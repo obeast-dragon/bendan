@@ -4,9 +4,8 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import com.obeast.auth.business.domain.AuthUser;
-import com.obeast.auth.support.password.another.OAuth2PasswordCredentialsAuthenticationConverter;
-import com.obeast.auth.support.password.another.OAuth2PasswordCredentialsAuthenticationProvider;
+import com.obeast.auth.support.password.OAuth2PasswordCredentialsAuthenticationConverter;
+import com.obeast.auth.support.password.OAuth2PasswordCredentialsAuthenticationProvider;
 import com.obeast.auth.utils.Jwks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,30 +13,24 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.authorization.OAuth2AuthorizationServerConfigurer;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.ProviderSettings;
-import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
-import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.oauth2.server.authorization.web.authentication.*;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 /**
  * @author Joe Grandja
@@ -77,26 +70,10 @@ public class AuthorizationServerConfig {
         RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
         http
                 .requestMatcher(endpointsMatcher)
-                .authorizeRequests(authorizeRequests -> {
-                    //设置不需要权限拦截的url
-                    List<String> ignores = List.of(
-                           //swagger 相关
-                            "/v3/api-docs",
-                            "/swagger-ui/**",
-                            "/swagger-resources/**",
-                            //登录、图形验证码，站点图标
-                            "/login*",
-                            "/favicon.ico",
-                            "/common/**",
-                            "/login_sms"
-                    );
-
-                    authorizeRequests.antMatchers(ignores.toArray(new String[0])).permitAll();
-
-                    authorizeRequests.anyRequest().authenticated();
-                })
                 .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
-                .apply(authorizationServerConfigurer);
+                .apply(authorizationServerConfigurer)
+
+        ;
 
 
 
@@ -125,6 +102,24 @@ public class AuthorizationServerConfig {
         );
 
     }
+
+    @Bean
+    WebSecurityCustomizer webSecurityCustomizer() {
+        String[] ignores = new String[]{
+                //swagger 相关
+                "/v3/api-docs",
+                "/swagger-ui/**",
+                "/swagger-resources/**",
+                //登录、图形验证码，站点图标
+                "/login*",
+                "/favicon.ico",
+                "/hello/**"
+        };
+        return web -> web.ignoring()
+                .antMatchers(ignores);
+
+    }
+
 
     @Bean
     public JWKSource<SecurityContext> jwkSource() {
@@ -171,24 +166,26 @@ public class AuthorizationServerConfig {
     }
 
 
-    /**
-     * This is a bit a hack, but as we do not know how we integrate the HealthPlattform this is a very easy way to solve the Problem for the moment.
-     */
-    @Bean
-    public OAuth2TokenCustomizer<JwtEncodingContext> tokenCustomizer() {
-        return context -> {
-            Authentication principal = context.getPrincipal();
-            if (Objects.equals(context.getTokenType(), OAuth2TokenType.ACCESS_TOKEN) && principal instanceof UsernamePasswordAuthenticationToken) {
-                Optional.ofNullable(principal.getPrincipal()).ifPresent(p ->{
-                    if(p instanceof AuthUser){
-                        AuthUser user = (AuthUser)p;
-                        context.getClaims()
-                                .claim("user_id", String.valueOf(user.getUserId()));
-                    }
-                });
-            }
-        };
-    }
+
+
+//    /**
+//     * This is a bit a hack, but as we do not know how we integrate the HealthPlattform this is a very easy way to solve the Problem for the moment.
+//     */
+//    @Bean
+//    public OAuth2TokenCustomizer<JwtEncodingContext> tokenCustomizer() {
+//        return context -> {
+//            Authentication principal = context.getPrincipal();
+//            if (Objects.equals(context.getTokenType(), OAuth2TokenType.ACCESS_TOKEN) && principal instanceof UsernamePasswordAuthenticationToken) {
+//                Optional.ofNullable(principal.getPrincipal()).ifPresent(p ->{
+//                    if(p instanceof AuthUser){
+//                        AuthUser user = (AuthUser)p;
+//                        context.getClaims()
+//                                .claim("user_id", String.valueOf(user.getUserId()));
+//                    }
+//                });
+//            }
+//        };
+//    }
 
 
 }

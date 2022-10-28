@@ -160,7 +160,7 @@ public class CommonResult<T> {
     }
 
     public long getCode() {
-        return code;
+        return code == null ? 200 : code;
     }
 
     public void setCode(Integer code) {

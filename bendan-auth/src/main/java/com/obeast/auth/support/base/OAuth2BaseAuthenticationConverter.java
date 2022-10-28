@@ -26,7 +26,7 @@ public abstract class OAuth2BaseAuthenticationConverter<T extends OAuth2BaseAuth
         implements AuthenticationConverter {
 
     /**
-     * Description: 是否支持当前使用的converter
+     * Description: 判断是否grantType
      * @author wxl
      * Date: 2022/10/24 11:49
      * @param grantType the type of grant

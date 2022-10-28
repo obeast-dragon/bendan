@@ -1,15 +1,17 @@
 package com.obeast.admin.business.service.impl;
 
-import com.obeast.admin.business.remote.AuthRemote;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.obeast.admin.business.service.remote.OAuth2Remote;
 import com.obeast.admin.business.service.UserInfoService;
 import com.obeast.common.base.CommonResult;
-import com.obeast.common.constant.AuthConstant;
+import com.obeast.common.constant.OAuth2Constant;
 import com.obeast.common.domain.PageObjects;
 
+import com.obeast.common.to.UserInfoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,22 +34,44 @@ import com.obeast.admin.business.entity.UserInfoEntity;
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfoEntity> implements UserInfoService {
 
     @Autowired
-    private AuthRemote authRemote;
+    private OAuth2Remote OAuth2Remote;
 
     @Override
     public CommonResult<?> login(String username, String password) {
-        Map<String, String> param = Map.of(
-                AuthConstant.RequestTokenParam.CLIENT_ID.getName(), AuthConstant.Type.WEB_BROWSER.getName(),
-                AuthConstant.RequestTokenParam.CLIENT_SECRET.getName(), "123456",
-                AuthConstant.RequestTokenParam.GRANT_TYPE.getName(), AuthConstant.GrantType.PASSWORD.getName(),
-                AuthConstant.RequestTokenParam.USERNAME.getName(), username,
-                AuthConstant.RequestTokenParam.PASSWORD.getName(), password
-        );
-        authRemote.getAccessToken(param);
+//        Map<String, String> param = Map.of(
+//                OAuth2Constant.RequestTokenParam.CLIENT_ID.getName(), "messaging-client",
+//                OAuth2Constant.RequestTokenParam.CLIENT_SECRET.getName(), "secret",
+//                OAuth2Constant.RequestTokenParam.GRANT_TYPE.getName(), OAuth2Constant.GrantType.PASSWORD.getName(),
+//                OAuth2Constant.RequestTokenParam.USERNAME.getName(), username,
+//                OAuth2Constant.RequestTokenParam.PASSWORD.getName(), password
+//        );
+        Map<String, String> params = new HashMap<>();
+        params.put("client_id", "messaging-client" );
+        params.put("client_secret","secret");
+        params.put("grant_type","password");
+        params.put("username",username);
+        params.put("password",password);
+//        return OAuth2Remote.getAccessToken(null);
         return null;
     }
 
 
+    @Override
+    public UserInfoDto loadUserByUsername(String username) {
+        UserInfoEntity userInfoEntity = this.getOne(
+                getLambdaQueryWrapper().eq(UserInfoEntity::getUsername, username)
+        );
+        if (userInfoEntity != null) {
+            UserInfoDto userInfoDto = new UserInfoDto();
+            userInfoDto.setId(userInfoEntity.getUserId());
+            userInfoDto.setUsername(username);
+            userInfoDto.setPassword(userInfoEntity.getPassword());
+            userInfoDto.setStatus(userInfoEntity.getUseStatus());
+            userInfoDto.setClientId(null);
+            return userInfoDto;
+        }
+        return null;
+    }
 
     @Override
     public PageObjects<UserInfoEntity> queryPage(Map<String, Object> params) {
@@ -120,6 +144,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfoEntity
      */
     private QueryWrapper<UserInfoEntity> getWrapper() {
         return new QueryWrapper<>();
+    }
+
+
+    private LambdaQueryWrapper<UserInfoEntity> getLambdaQueryWrapper() {
+        return new LambdaQueryWrapper<UserInfoEntity>();
     }
 
 

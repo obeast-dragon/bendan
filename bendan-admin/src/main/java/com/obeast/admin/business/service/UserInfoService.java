@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.obeast.admin.business.entity.UserInfoEntity;
 import com.obeast.common.base.CommonResult;
 import com.obeast.common.domain.PageObjects;
+import com.obeast.common.to.UserInfoDto;
 
 import java.util.Map;
 import java.util.List;
@@ -16,6 +17,24 @@ import java.util.List;
  * Description: 
  */
 public interface UserInfoService extends IService<UserInfoEntity> {
+
+
+    /**
+     * 注册功能
+     */
+//     register();
+
+    /**
+     * 登录功能
+     * @param username 用户名
+     * @param password 密码
+     * @return 调用认证中心返回结果
+     */
+    CommonResult<?> login(String username, String password);
+
+
+
+    UserInfoDto loadUserByUsername(String username);
 
 
     /**
@@ -118,6 +137,6 @@ public interface UserInfoService extends IService<UserInfoEntity> {
      */
     boolean deleteByIds(List<Long> ids);
 
-    CommonResult<?> login(String username, String password);
+
 }
 

@@ -132,7 +132,7 @@ public class OAuth2AuthorizationConvertor {
             return null;
         }
 
-        Builder builder = org.springframework.security.oauth2.server.authorization.OAuth2Authorization.withRegisteredClient(Objects.requireNonNull(registeredClientRepository.findById(oAuth2Authorization.getRegisteredClientId())));
+        Builder builder = OAuth2Authorization.withRegisteredClient(Objects.requireNonNull(registeredClientRepository.findById(oAuth2Authorization.getRegisteredClientId())));
         builder.id(oAuth2Authorization.getId());
         builder.authorizationGrantType(new AuthorizationGrantType(oAuth2Authorization.getAuthorizationGrantType()));
         builder.principalName(oAuth2Authorization.getPrincipalName());

@@ -13,7 +13,7 @@ import java.util.List;
  * @author wxl
  * Date 2022/10/25 13:34
  * @version 1.0
- * Description:
+ * Description: BendanOAuth2AuthorizationDao
  */
 @Mapper
 public interface BendanOAuth2AuthorizationDao extends BaseDao<BendanOAuth2Authorization> {

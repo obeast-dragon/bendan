@@ -1,4 +1,4 @@
-package com.obeast.auth.support.password.another;
+package com.obeast.auth.support.password;
 
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;

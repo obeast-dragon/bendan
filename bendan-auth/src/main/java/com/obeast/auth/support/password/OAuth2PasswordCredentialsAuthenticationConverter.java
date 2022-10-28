@@ -1,4 +1,4 @@
-package com.obeast.auth.support.password.another;
+package com.obeast.auth.support.password;
 
 import com.obeast.auth.utils.OAuth2EndpointUtils;
 import org.springframework.security.core.Authentication;
@@ -28,8 +28,6 @@ public class OAuth2PasswordCredentialsAuthenticationConverter implements Authent
         if (!AuthorizationGrantType.PASSWORD.getValue().equals(grantType)) {
             return null;
         }
-
-        Authentication clientPrincipal = SecurityContextHolder.getContext().getAuthentication();
 
         MultiValueMap<String, String> parameters = OAuth2EndpointUtils.getParameters(request);
 
@@ -75,6 +73,12 @@ public class OAuth2PasswordCredentialsAuthenticationConverter implements Authent
             }
         });
 
+        // 获取当前已经认证的客户端信息
+        Authentication clientPrincipal = SecurityContextHolder.getContext().getAuthentication();
+        if (clientPrincipal == null) {
+            OAuth2EndpointUtils.throwError(OAuth2ErrorCodes.INVALID_REQUEST, OAuth2ErrorCodes.INVALID_CLIENT,
+                    OAuth2EndpointUtils.ACCESS_TOKEN_REQUEST_ERROR_URI);
+        }
 
         return new OAuth2PasswordCredentialsAuthenticationToken(
                 clientPrincipal,

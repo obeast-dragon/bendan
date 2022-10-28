@@ -1,0 +1,15 @@
+
+spring:
+  mail:
+    default-encoding: UTF-8
+    host: smtp.qq.com
+    port: 587
+    username: 1468258057@qq.com
+    password: sqessmvkohknfhab
+
+
+
+project:
+  name: Bendan
+  author: obeast
+

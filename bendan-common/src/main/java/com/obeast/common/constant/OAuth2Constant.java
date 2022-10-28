@@ -6,7 +6,7 @@ package com.obeast.common.constant;
  * @version 1.0
  * Description: 客户端常量
  */
-public interface AuthConstant {
+public interface OAuth2Constant {
 
     enum Type {
         MIN_APP("min-app"),

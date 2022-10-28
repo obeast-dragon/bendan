@@ -6,6 +6,7 @@ import com.obeast.admin.business.vo.UserInfoLoginParam;
 import com.obeast.common.base.CommonResult;
 import com.obeast.common.constant.PageConstant;
 import com.obeast.common.domain.PageObjects;
+import com.obeast.common.to.UserInfoDto;
 import com.obeast.common.validation.group.AddGroup;
 import com.obeast.common.validation.group.DefaultGroup;
 import com.obeast.common.validation.group.UpdateGroup;
@@ -20,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,9 +39,16 @@ public class UserInfoController {
     @Autowired
     private UserInfoService userInfoService;
 
+
     @PostMapping("/login")
     public CommonResult<?> login(@RequestBody UserInfoLoginParam userInfoLoginParam){
         return userInfoService.login(userInfoLoginParam.getUsername(), userInfoLoginParam.getPassword());
+    }
+
+    @Operation(summary = "根据用户名获取通用用户信息")
+    @GetMapping("/loadByUsername")
+    public UserInfoDto loadByUsername(@RequestParam String username){
+        return userInfoService.loadUserByUsername(username);
     }
 
     /**
