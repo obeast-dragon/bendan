@@ -2,14 +2,18 @@ package com.obeast.auth.support.base;
 
 import com.obeast.auth.constant.BendanOAuth2ErrorConstant;
 import com.obeast.auth.exception.OAuth2ScopeException;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.SpringSecurityMessageSource;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.*;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
@@ -27,6 +31,7 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.security.Principal;
 import java.time.Instant;
 import java.util.*;
@@ -50,17 +55,13 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
     /**
      * OAuth2AuthorizationService 方法引入
      */
-    private final OAuth2AuthorizationService authorizationService;
+    @Autowired
+    private  OAuth2AuthorizationService authorizationService;
 
     /**
      * token生成
      */
     private final OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator;
-
-    /**
-     * 认证 Manager
-     */
-    private final AuthenticationManager authenticationManager;
 
 
     /**
@@ -69,7 +70,6 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
     private final MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 
     public OAuth2BaseAuthenticationProvider(
-            AuthenticationManager authenticationManager,
             OAuth2AuthorizationService authorizationService,
             OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator
     ) {
@@ -78,7 +78,6 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
         this.authorizationService = authorizationService;
 //        父类构造 子类就不用再次引入这个成员变量了
         this.tokenGenerator = tokenGenerator;
-        this.authenticationManager = authenticationManager;
     }
 
 //------------------------- abstract ---------------------------------------
@@ -103,7 +102,7 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
      * @author wxl
      * Date: 2022/10/24 14:51
      */
-    public abstract UsernamePasswordAuthenticationToken buildCustomizeToken(Map<String, Object> reqParams);
+    public abstract UsernamePasswordAuthenticationToken buildAndAuthenticateUsernamePasswordToken(Map<String, Object> reqParams);
 
 
     /**
@@ -125,6 +124,7 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
                 passwordCredentialsAuthenticationToken);
 
         RegisteredClient registeredClient = oAuth2ClientAuthentication.getRegisteredClient();
+        assert registeredClient != null;
 
         // 检验客户端
         supportClient(registeredClient);
@@ -146,19 +146,19 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
 
         Map<String, Object> additionalParameters = passwordCredentialsAuthenticationToken.getAdditionalParameters();
         try {
+            //-------UsernamePasswordAuthenticationToken------------
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                    buildCustomizeToken(additionalParameters);
+                    buildAndAuthenticateUsernamePasswordToken(additionalParameters);
 
             log.debug("got usernamePasswordAuthenticationToken:  " + usernamePasswordAuthenticationToken);
 
-            Authentication usernamePasswordAuthentication = authenticationManager
-                    .authenticate(usernamePasswordAuthenticationToken);
+
 
             //----DefaultOAuth2TokenContext 构建----
             // @formatter:off
             DefaultOAuth2TokenContext.Builder tokenContextBuilder = DefaultOAuth2TokenContext.builder()
                     .registeredClient(registeredClient)
-                    .principal(usernamePasswordAuthentication)
+                    .principal(usernamePasswordAuthenticationToken)
                     .providerContext(ProviderContextHolder.getProviderContext())
                     .authorizedScopes(scopes)
                     .authorizationGrantType(AuthorizationGrantType.PASSWORD)
@@ -167,11 +167,12 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
 
 
             //-------OAuth2Authorization 构建------
-            OAuth2Authorization.Builder authorizationBuilder = OAuth2Authorization
-                    .withRegisteredClient(registeredClient)
-                    .principalName(usernamePasswordAuthentication.getName())
-                    .authorizationGrantType(AuthorizationGrantType.PASSWORD)
-                    .attribute(OAuth2Authorization.AUTHORIZED_SCOPE_ATTRIBUTE_NAME, scopes);
+            OAuth2Authorization.Builder authorizationBuilder =
+                    OAuth2Authorization.withRegisteredClient(registeredClient)
+                            .principalName(usernamePasswordAuthenticationToken.getName())
+                            .authorizationGrantType(AuthorizationGrantType.PASSWORD)
+                            .attribute(OAuth2Authorization.AUTHORIZED_SCOPE_ATTRIBUTE_NAME, scopes)
+                            .attribute(Principal.class.getName(), usernamePasswordAuthenticationToken);
 
 
             // ----- Access token -----
@@ -239,17 +240,16 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
             } else {
                 idToken = null;
             }
-            Map<String, Object> add = new HashMap<>();
+            Map<String, Object> add = Collections.emptyMap();
             if (idToken != null) {
                 add = new HashMap<>();
                 add.put(OidcParameterNames.ID_TOKEN, idToken.getTokenValue());
             }
 
+            //todo 取消authorizationService保存
             OAuth2Authorization authorization = authorizationBuilder.build();
-
             this.authorizationService.save(authorization);
-
-            log.debug("returning OAuth2AccessTokenAuthenticationToken");
+            log.debug("Password OAuth2Authorization saved successfully");
 
             return new OAuth2AccessTokenAuthenticationToken(
                     registeredClient,
@@ -257,7 +257,6 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
                     accessToken,
                     refreshToken,
                     add);
-
         } catch (Exception ex) {
             log.error("the exception maybe in authenticate:  ", ex);
             throw throwOAuth2AuthenticationException((AuthenticationException) ex);

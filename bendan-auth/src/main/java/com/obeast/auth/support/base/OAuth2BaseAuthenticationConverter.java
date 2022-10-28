@@ -39,9 +39,9 @@ public abstract class OAuth2BaseAuthenticationConverter<T extends OAuth2BaseAuth
      * Description: 校验参数
      * @author wxl
      * Date: 2022/10/24 17:49
-     * @param request 请求
+     * @param parameters the parameters
      */
-    public abstract void checkRequestParams(HttpServletRequest request);
+    public abstract void checkRequestParams(MultiValueMap<String, String> parameters );
 
     /**
      * Description: 构建具体类型的token
@@ -80,7 +80,8 @@ public abstract class OAuth2BaseAuthenticationConverter<T extends OAuth2BaseAuth
         }
 
         // 校验个性化参数
-        checkRequestParams(request);
+        checkRequestParams(parameters);
+
 
         // 获取当前已经认证的客户端信息
         Authentication clientPrincipal = SecurityContextHolder.getContext().getAuthentication();

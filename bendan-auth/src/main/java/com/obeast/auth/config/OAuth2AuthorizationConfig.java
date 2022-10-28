@@ -4,9 +4,11 @@ package com.obeast.auth.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 
 
@@ -22,13 +24,18 @@ public class OAuth2AuthorizationConfig {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    RegisteredClientRepository registeredClientRepository;
+
 
     @Bean
     public OAuth2AuthorizationService getOAuth2AuthorizationService(){
-        JdbcOAuth2AuthorizationService jdbcOAuth2AuthorizationService = new JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository);
+        JdbcOAuth2AuthorizationService jdbcOAuth2AuthorizationService = new JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository() );
         return jdbcOAuth2AuthorizationService;
 
+    }
+
+
+    @Bean
+    public RegisteredClientRepository registeredClientRepository() {
+        return new JdbcRegisteredClientRepository(jdbcTemplate);
     }
 }

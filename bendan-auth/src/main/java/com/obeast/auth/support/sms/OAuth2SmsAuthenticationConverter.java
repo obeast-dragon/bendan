@@ -3,6 +3,7 @@ package com.obeast.auth.support.sms;
 import com.obeast.auth.support.base.OAuth2BaseAuthenticationConverter;
 import com.obeast.auth.support.base.OAuth2BaseAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.util.MultiValueMap;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class OAuth2SmsAuthenticationConverter
     }
 
     @Override
-    public void checkRequestParams(HttpServletRequest request) {
+    public void checkRequestParams(MultiValueMap<String, String> parameters) {
 
     }
 

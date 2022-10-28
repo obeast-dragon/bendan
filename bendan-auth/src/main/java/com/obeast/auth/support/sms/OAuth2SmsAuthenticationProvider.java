@@ -18,8 +18,8 @@ import java.util.Map;
  */
 public class OAuth2SmsAuthenticationProvider extends OAuth2BaseAuthenticationProvider<OAuth2SmsAuthenticationToken> {
 
-    public OAuth2SmsAuthenticationProvider(AuthenticationManager authenticationManager, OAuth2AuthorizationService authorizationService, OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator) {
-        super(authenticationManager, authorizationService, tokenGenerator);
+    public OAuth2SmsAuthenticationProvider( OAuth2AuthorizationService authorizationService, OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator) {
+        super( authorizationService, tokenGenerator);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class OAuth2SmsAuthenticationProvider extends OAuth2BaseAuthenticationPro
     }
 
     @Override
-    public UsernamePasswordAuthenticationToken buildCustomizeToken(Map<String, Object> reqParams) {
+    public UsernamePasswordAuthenticationToken buildAndAuthenticateUsernamePasswordToken(Map<String, Object> reqParams) {
         return null;
     }
 
