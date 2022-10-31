@@ -1,17 +1,16 @@
 package com.obeast.admin.business.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.obeast.admin.business.OAuth2Params;
 import com.obeast.admin.business.service.remote.OAuth2Remote;
 import com.obeast.admin.business.service.UserInfoService;
 import com.obeast.common.base.CommonResult;
-import com.obeast.common.constant.OAuth2Constant;
 import com.obeast.common.domain.PageObjects;
 
-import com.obeast.common.to.UserInfoDto;
+import com.obeast.common.dto.UserInfoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,21 +37,13 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfoEntity
 
     @Override
     public CommonResult<?> login(String username, String password) {
-//        Map<String, String> param = Map.of(
-//                OAuth2Constant.RequestTokenParam.CLIENT_ID.getName(), "messaging-client",
-//                OAuth2Constant.RequestTokenParam.CLIENT_SECRET.getName(), "secret",
-//                OAuth2Constant.RequestTokenParam.GRANT_TYPE.getName(), OAuth2Constant.GrantType.PASSWORD.getName(),
-//                OAuth2Constant.RequestTokenParam.USERNAME.getName(), username,
-//                OAuth2Constant.RequestTokenParam.PASSWORD.getName(), password
-//        );
-        Map<String, String> params = new HashMap<>();
-        params.put("client_id", "messaging-client" );
-        params.put("client_secret","secret");
-        params.put("grant_type","password");
-        params.put("username",username);
-        params.put("password",password);
-//        return OAuth2Remote.getAccessToken(null);
-        return null;
+        OAuth2Params oAuth2Params = new OAuth2Params();
+        oAuth2Params.setClient_id("messaging-client");
+        oAuth2Params.setClient_secret("secret");
+        oAuth2Params.setGrant_type("password");
+        oAuth2Params.setUsername(username);
+        oAuth2Params.setPassword(password);
+        return OAuth2Remote.getAccessToken(oAuth2Params);
     }
 
 

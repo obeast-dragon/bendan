@@ -1,7 +1,6 @@
-package com.obeast.common.to;
+package com.obeast.common.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 

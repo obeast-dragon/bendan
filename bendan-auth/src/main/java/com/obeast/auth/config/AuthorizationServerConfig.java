@@ -4,6 +4,8 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import com.obeast.auth.support.handler.result.failure.CustomizeAuthenticationFailureHandler;
+import com.obeast.auth.support.handler.result.success.CustomizeAuthenticationSuccessHandler;
 import com.obeast.auth.support.password.OAuth2PasswordAuthenticationConverter;
 import com.obeast.auth.support.password.OAuth2PasswordAuthenticationProvider;
 import com.obeast.auth.support.password.OAuth2PasswordCredentialsAuthenticationConverter;
@@ -42,7 +44,6 @@ public class AuthorizationServerConfig {
     private static final String CUSTOM_CONSENT_PAGE_URI = "/oauth2/consent";
 
 
-
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain authorizationServerSecurityFilterChain(
@@ -51,21 +52,38 @@ public class AuthorizationServerConfig {
             DaoAuthenticationProvider daoAuthenticationProvider) throws Exception {
         OAuth2AuthorizationServerConfigurer<HttpSecurity> authorizationServerConfigurer =
                 new OAuth2AuthorizationServerConfigurer<>();
-        http.apply(authorizationServerConfigurer.tokenEndpoint((tokenEndpoint) ->
-                tokenEndpoint.accessTokenRequestConverter(createCustomizeConverter()))
-//                todo 成功处理器 失败处理器
-        );
+        http.apply(authorizationServerConfigurer.tokenEndpoint(tokenEndpoint -> {
+            tokenEndpoint.accessTokenRequestConverter(createCustomizeConverter());
+            tokenEndpoint.accessTokenResponseHandler(customizeAuthenticationSuccessHandler());
+            tokenEndpoint.errorResponseHandler(customizeAuthenticationFailureHandler());
+            //                todo 成功处理器 失败处理器
+        }));
 
 //        authorizationServerConfigurer.authorizationEndpoint(authorizationEndpoint ->
 //                authorizationEndpoint.consentPage(CUSTOM_CONSENT_PAGE_URI));
         RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
         http
                 .requestMatcher(endpointsMatcher)
+                .authorizeRequests(authorizeRequests -> {
+                    //设置不需要权限拦截的url
+                    List<String> ignores = List.of(
+                            //swagger 相关
+                            "/v3/api-docs",
+                            "/swagger-ui/**",
+                            "/swagger-resources/**",
+                            //登录、图形验证码，站点图标
+                            "/login*",
+                            "/favicon.ico",
+                            "/common/**",
+                            "/login_sms"
+                    );
+
+                    authorizeRequests.antMatchers(ignores.toArray(new String[0])).permitAll();
+
+                    authorizeRequests.anyRequest().authenticated();
+                })
                 .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
-                .apply(authorizationServerConfigurer)
-
-        ;
-
+                .apply(authorizationServerConfigurer);
 
 
         SecurityFilterChain securityFilterChain = http.formLogin(Customizer.withDefaults()).build();
@@ -76,14 +94,14 @@ public class AuthorizationServerConfig {
     }
 
 
-
     /**
      * Description:
+     *
+     * @return org.springframework.security.web.authentication.AuthenticationConverter
      * @author wxl
      * Date: 2022/10/26 9:42
-     * @return org.springframework.security.web.authentication.AuthenticationConverter
      */
-    private AuthenticationConverter createCustomizeConverter(){
+    private AuthenticationConverter createCustomizeConverter() {
         return new DelegatingAuthenticationConverter(List.of(
                 new OAuth2RefreshTokenAuthenticationConverter(),
                 new OAuth2ClientCredentialsAuthenticationConverter(),
@@ -94,22 +112,21 @@ public class AuthorizationServerConfig {
 
     }
 
-    @Bean
-    WebSecurityCustomizer webSecurityCustomizer() {
-        String[] ignores = new String[]{
-                //swagger 相关
-                "/v3/api-docs",
-                "/swagger-ui/**",
-                "/swagger-resources/**",
-                //登录、图形验证码，站点图标
-                "/login*",
-                "/favicon.ico",
-                "/hello/**"
-        };
-        return web -> web.ignoring()
-                .antMatchers(ignores);
-
-    }
+//    @Bean
+//    WebSecurityCustomizer webSecurityCustomizer() {
+//        String[] ignores = new String[]{
+//                //swagger 相关
+//                "/v3/api-docs",
+//                "/swagger-ui/**",
+//                "/swagger-resources/**",
+//                //登录、图形验证码，站点图标
+//                "/favicon.ico",
+//                "/hello/**"
+//        };
+//        return web -> web.ignoring()
+//                .antMatchers(ignores);
+//
+//    }
 
 
     @Bean
@@ -125,23 +142,24 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     /**
      * password认证模式
+     *
      * @return
      */
     @Bean
     public OAuth2PasswordCredentialsAuthenticationProvider oAuth2PasswordCredentialsAuthenticationProvider
     (PasswordEncoder passwordEncoder,
      UserDetailsService userDetailsService,
-     HttpSecurity httpSecurity){
+     HttpSecurity httpSecurity) {
         OAuth2AuthorizationService authorizationService = httpSecurity.getSharedObject(OAuth2AuthorizationService.class);
         OAuth2PasswordCredentialsAuthenticationProvider provider =
                 new OAuth2PasswordCredentialsAuthenticationProvider(
-                        OAuth2ConfigurerUtils.getTokenGenerator(httpSecurity),authorizationService);
+                        OAuth2ConfigurerUtils.getTokenGenerator(httpSecurity), authorizationService);
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
         return provider;
@@ -149,34 +167,33 @@ public class AuthorizationServerConfig {
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(
-            PasswordEncoder passwordEncoder, UserDetailsService userDetailsService){
+            PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
         return daoAuthenticationProvider;
     }
 
+    /**
+     * Description: 创建自定义CustomizeAuthenticationSuccessHandler
+     * @author wxl
+     * Date: 2022/10/31 9:42
+     * @return com.obeast.auth.support.handler.result.success.CustomizeAuthenticationSuccessHandler
+     */
+    private CustomizeAuthenticationSuccessHandler customizeAuthenticationSuccessHandler(){
+        return new CustomizeAuthenticationSuccessHandler();
+    }
 
 
-
-//    /**
-//     * This is a bit a hack, but as we do not know how we integrate the HealthPlattform this is a very easy way to solve the Problem for the moment.
-//     */
-//    @Bean
-//    public OAuth2TokenCustomizer<JwtEncodingContext> tokenCustomizer() {
-//        return context -> {
-//            Authentication principal = context.getPrincipal();
-//            if (Objects.equals(context.getTokenType(), OAuth2TokenType.ACCESS_TOKEN) && principal instanceof UsernamePasswordAuthenticationToken) {
-//                Optional.ofNullable(principal.getPrincipal()).ifPresent(p ->{
-//                    if(p instanceof AuthUser){
-//                        AuthUser user = (AuthUser)p;
-//                        context.getClaims()
-//                                .claim("user_id", String.valueOf(user.getUserId()));
-//                    }
-//                });
-//            }
-//        };
-//    }
+    /**
+     * Description: 创建自定义CustomizeAuthenticationSuccessHandler
+     * @author wxl
+     * Date: 2022/10/31 9:42
+     * @return com.obeast.auth.support.handler.result.success.CustomizeAuthenticationFailureHandler
+     */
+    private CustomizeAuthenticationFailureHandler customizeAuthenticationFailureHandler(){
+        return new CustomizeAuthenticationFailureHandler();
+    }
 
 
 }

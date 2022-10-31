@@ -105,7 +105,7 @@ public class CommonResult<T> {
      * @param data 返回数据
      */
     public static <T> CommonResult<T> error(String message, T data) {
-        return new CommonResult<>(ResultCode.FAILED.getCode(), message, data, false);
+        return new CommonResult<>(ResultCode.FAILURE.getCode(), message, data, false);
     }
 
     /**
@@ -113,21 +113,21 @@ public class CommonResult<T> {
      * @param message 提示信息
      */
     public static <T> CommonResult<T> error(String message) {
-        return new CommonResult<>(ResultCode.FAILED.getCode(), message, null, false);
+        return new CommonResult<>(ResultCode.FAILURE.getCode(), message, null, false);
     }
 
     /**
      * 失败返回结果
      */
     public static <T> CommonResult<T> error() {
-        return error(ResultCode.FAILED);
+        return error(ResultCode.FAILURE);
     }
 
     /**
      * 参数验证失败返回结果
      */
     public static <T> CommonResult<T> validateFailed() {
-        return error(ResultCode.VALIDATE_FAILED);
+        return error(ResultCode.VALID_CODE_ERROR);
     }
 
     /**
@@ -135,28 +135,28 @@ public class CommonResult<T> {
      * @param message 提示信息
      */
     public static <T> CommonResult<T> validateFailed(String message) {
-        return new CommonResult<T>(ResultCode.VALIDATE_FAILED.getCode(), message, null, false);
+        return new CommonResult<T>(ResultCode.VALID_CODE_ERROR.getCode(), message, null, false);
     }
 
     /**
      * 未登录返回结果
      */
     public static <T> CommonResult<T> unauthorized(T data) {
-        return new CommonResult<>(ResultCode.UNAUTHORIZED.getCode(), ResultCode.UNAUTHORIZED.getMessage(), data, false);
+        return new CommonResult<>(ResultCode.UN_AUTHORIZED.getCode(), ResultCode.UN_AUTHORIZED.getMessage(), data, false);
     }
 
     /**
      * 未登录返回结果
      */
     public static <T> CommonResult<T> unauthorized(String message) {
-        return new CommonResult<>(ResultCode.UNAUTHORIZED.getCode(), message, null, false);
+        return new CommonResult<>(ResultCode.UN_AUTHORIZED.getCode(), message, null, false);
     }
 
     /**
      * 未授权返回结果
      */
     public static <T> CommonResult<T> forbidden(T data) {
-        return new CommonResult<>(ResultCode.FORBIDDEN.getCode(), ResultCode.FORBIDDEN.getMessage(), data, false);
+        return new CommonResult<>(ResultCode.REQ_REJECT.getCode(), ResultCode.REQ_REJECT.getMessage(), data, false);
     }
 
     public long getCode() {

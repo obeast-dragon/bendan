@@ -1,32 +1,134 @@
 package com.obeast.common.base;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+import javax.servlet.http.HttpServletResponse;
+
+
+/**
+ * @author wxl
+ * Date 2022/10/31 9:57
+ * @version 1.0
+ * Description: 定义基本的错误码
+ */
+@Getter
 public enum ResultCode implements IErrorCode {
-    SUCCESS(200, "操作成功"),
-    FAILED(500, "操作失败"),
-    ARGS_IS_NULL(5005, "参数为空请检测或者参数是无效值"),
-    UNAUTHORIZED(401, "暂未登录或token已经过期"),
-    VALIDATE_FAILED(402, "参数检验失败"),
-    FORBIDDEN(403, "没有相关权限"),
-    RESPONSE_PACK_ERROR(501, "Json打包失败"),
-    INITIAL_PWD(502, "请修改默认密码"),
-    NO_SUCH_WX_USER(503, "无此微信用户");
 
-    private final Integer code;
-    private final String message;
+    /**
+     * 操作成功 200
+     */
+    SUCCESS(HttpServletResponse.SC_OK, "操作成功", "Success"),
 
-    ResultCode(Integer code, String message) {
+    /**
+     * 业务异常 400
+     */
+    FAILURE(HttpServletResponse.SC_BAD_REQUEST, "业务异常", "Failure"),
+
+    /**
+     * 消息不能读取 400
+     */
+    MSG_NOT_READABLE(HttpServletResponse.SC_BAD_REQUEST, "消息不能读取", "Not readable"),
+
+    /**
+     * 缺少必要请求参数 400
+     */
+    PARAM_MISS(HttpServletResponse.SC_BAD_REQUEST, "缺少必要的请求参数", "Params bad request"),
+
+
+    /**
+     * 请求参数类型错误 400
+     */
+    PARAM_TYPE_ERROR(HttpServletResponse.SC_BAD_REQUEST, "请求参数类型错误", "Params bad request"),
+
+    /**
+     * 请求参数绑定错误 400
+     */
+    PARAM_BIND_ERROR(HttpServletResponse.SC_BAD_REQUEST, "请求参数绑定错误", "Params bind request"),
+
+
+    /**
+     * 参数校验失败 400
+     */
+    PARAM_VALID_ERROR(HttpServletResponse.SC_BAD_REQUEST, "参数校验失败", "Params valid fail"),
+
+    /**
+     * 参数校验失败 400
+     */
+    VALID_CODE_ERROR(HttpServletResponse.SC_BAD_REQUEST, "验证码错误", "Params valid fail"),
+
+    /**
+     * 请求未授权 401
+     */
+    UN_AUTHORIZED(HttpServletResponse.SC_UNAUTHORIZED, "未授权", "unauthorized"),
+
+    /**
+     * 请求被拒绝 403
+     */
+    REQ_REJECT(HttpServletResponse.SC_FORBIDDEN, "请求被拒绝或没有相关权限", "Request forbidden"),
+
+
+    /**
+     * 404 没找到请求
+     */
+    NOT_FOUND(HttpServletResponse.SC_NOT_FOUND, "404 没找到请求", "Not found"),
+
+
+    /**
+     * 不支持当前请求方法 405
+     */
+    METHOD_NOT_SUPPORTED(HttpServletResponse.SC_METHOD_NOT_ALLOWED, "不支持当前请求方法", "Not supported"),
+
+    /**
+     * 不支持当前媒体类型 415
+     */
+    MEDIA_TYPE_NOT_SUPPORTED(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "不支持当前媒体类型", "Media type not supported"),
+
+
+    /**
+     * 服务器异常 500
+     */
+    INTERNAL_SERVER_ERROR(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "数据操作错误, 请联系管理员", "Operation fail, please contact the admin"),
+
+
+    /**
+     * 数据重复保存 600
+     */
+    DUPLICATE_KEY_ERROR(600, "数据重复保存", "Data duplicate"),
+
+    /**
+     * 远程请求错误 601
+     */
+    FEIGN_ERROR(601, "远程请求错误", "remote request fail"),
+    ;
+
+
+    ResultCode(int code, String message) {
         this.code = code;
         this.message = message;
+        this.messageEn = getMessageEn();
     }
 
-    @Override
-    public Integer getCode() {
-        return code;
+    ResultCode(int code, String message, String messageEn) {
+        this.code = code;
+        this.message = message;
+        this.messageEn = messageEn;
     }
 
-    @Override
-    public String getMessage() {
-        return message;
-    }
+    /**
+     * code编码
+     */
+    final int code;
+
+    /**
+     * 中文信息描述
+     */
+    final String message;
+
+    /**
+     * 英文信息
+     *
+     * @since 2022.10.24
+     */
+    final String messageEn;
 }

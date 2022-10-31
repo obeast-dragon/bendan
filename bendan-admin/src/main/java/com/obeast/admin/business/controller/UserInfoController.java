@@ -6,7 +6,7 @@ import com.obeast.admin.business.vo.UserInfoLoginParam;
 import com.obeast.common.base.CommonResult;
 import com.obeast.common.constant.PageConstant;
 import com.obeast.common.domain.PageObjects;
-import com.obeast.common.to.UserInfoDto;
+import com.obeast.common.dto.UserInfoDto;
 import com.obeast.common.validation.group.AddGroup;
 import com.obeast.common.validation.group.DefaultGroup;
 import com.obeast.common.validation.group.UpdateGroup;
@@ -41,7 +41,7 @@ public class UserInfoController {
 
 
     @PostMapping("/login")
-    public CommonResult<?> login(@RequestBody UserInfoLoginParam userInfoLoginParam){
+    public CommonResult<?> login(UserInfoLoginParam userInfoLoginParam){
         return userInfoService.login(userInfoLoginParam.getUsername(), userInfoLoginParam.getPassword());
     }
 

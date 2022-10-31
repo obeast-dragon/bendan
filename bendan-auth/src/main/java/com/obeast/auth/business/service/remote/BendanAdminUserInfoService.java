@@ -1,6 +1,6 @@
 package com.obeast.auth.business.service.remote;
 
-import com.obeast.common.to.UserInfoDto;
+import com.obeast.common.dto.UserInfoDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

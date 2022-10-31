@@ -2,7 +2,7 @@ package com.obeast.common.base;
 
 
 public interface IErrorCode {
-    Integer getCode();
+    int getCode();
 
     String getMessage();
 }

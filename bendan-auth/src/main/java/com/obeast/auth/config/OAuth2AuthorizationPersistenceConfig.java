@@ -1,10 +1,8 @@
 package com.obeast.auth.config;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
@@ -16,26 +14,30 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
  * @author wxl
  * Date 2022/10/27 15:49
  * @version 1.0
- * Description:
+ * Description: OAuth2持久化配置
  */
 @Configuration
-public class OAuth2AuthorizationConfig {
-
-    @Autowired
-    JdbcTemplate jdbcTemplate;
+public class OAuth2AuthorizationPersistenceConfig {
 
 
-
+    /**
+     * Description: token 持久化存储
+     * @author wxl
+     * Date: 2022/10/31 13:51
+     * @param jdbcTemplate jdbcTemplate
+     * @param registeredClientRepository registeredClientRepository
+     * @return org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService
+     */
     @Bean
-    public OAuth2AuthorizationService getOAuth2AuthorizationService(){
-        JdbcOAuth2AuthorizationService jdbcOAuth2AuthorizationService = new JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository() );
-        return jdbcOAuth2AuthorizationService;
+    public OAuth2AuthorizationService oAuth2AuthorizationService(JdbcTemplate jdbcTemplate, RegisteredClientRepository registeredClientRepository){
+        return new JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository);
 
     }
 
 
+
     @Bean
-    public RegisteredClientRepository registeredClientRepository() {
+    public RegisteredClientRepository registeredClientRepository(JdbcTemplate jdbcTemplate) {
         return new JdbcRegisteredClientRepository(jdbcTemplate);
     }
 }

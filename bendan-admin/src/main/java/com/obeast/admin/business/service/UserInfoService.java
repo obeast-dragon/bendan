@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.obeast.admin.business.entity.UserInfoEntity;
 import com.obeast.common.base.CommonResult;
 import com.obeast.common.domain.PageObjects;
-import com.obeast.common.to.UserInfoDto;
+import com.obeast.common.dto.UserInfoDto;
 
 import java.util.Map;
 import java.util.List;

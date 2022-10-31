@@ -24,12 +24,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public CommonResult<?> exceptionHandler(Exception e) throws Exception {
         log.error("全局异常捕获---------------->", e);
-        return CommonResult.error(ResultCode.FAILED);
+        return CommonResult.error(ResultCode.FAILURE);
     }
 
     @ExceptionHandler(value = {NullPointerException.class, NumberFormatException.class})
     public Object nullPointerException(Exception e) {
         log.error("程序中出现空引用和空参数，请检查！ ------------>", e);
-        return CommonResult.error(ResultCode.ARGS_IS_NULL);
+        return CommonResult.error(ResultCode.PARAM_MISS);
     }
 }

@@ -2,6 +2,7 @@ package com.obeast.common.auto;
 
 import com.obeast.common.config.FieldFillConfig;
 import com.obeast.common.config.MyBatisPlusConfig;
+import com.obeast.common.config.RedisConfig;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +32,7 @@ public class CommonAutoConfiguration {
      * */
     @Bean
     @ConditionalOnMissingBean(MyBatisPlusConfig.class)
-    public MyBatisPlusConfig yBatisPlusConfig() {
+    public MyBatisPlusConfig myBatisPlusConfig() {
         return new MyBatisPlusConfig();
     }
 

@@ -27,6 +27,7 @@ final class OAuth2ConfigurerUtils {
     private OAuth2ConfigurerUtils() {
     }
 
+    @SuppressWarnings("unchecked")
     static <B extends HttpSecurityBuilder<B>> OAuth2TokenGenerator<? extends OAuth2Token> getTokenGenerator(B builder) {
         OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator = builder.getSharedObject(OAuth2TokenGenerator.class);
         if (tokenGenerator == null) {
