@@ -90,6 +90,11 @@ public enum ResultCode implements IErrorCode {
      */
     INTERNAL_SERVER_ERROR(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "数据操作错误, 请联系管理员", "Operation fail, please contact the admin"),
 
+    /**
+     * 远端服务器为启用或者调用失败 503
+     * */
+    REMOTE_SERVICE_NOT_ACTIVATED(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "远程服务调用失败或者还未启动", "The remote service call failed or has not been started"),
+
 
     /**
      * 数据重复保存 600

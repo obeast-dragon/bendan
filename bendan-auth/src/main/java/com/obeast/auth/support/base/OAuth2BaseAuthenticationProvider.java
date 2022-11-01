@@ -246,7 +246,6 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
                 add.put(OidcParameterNames.ID_TOKEN, idToken.getTokenValue());
             }
 
-            //todo 取消authorizationService保存
             OAuth2Authorization authorization = authorizationBuilder.build();
             this.authorizationService.save(authorization);
             log.debug("Password OAuth2Authorization saved successfully");

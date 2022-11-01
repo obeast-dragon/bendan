@@ -27,6 +27,11 @@ spring:
     # 连接超时时间（毫秒）
     timeout: 3000ms
 
+redis:
+  token:
+#    单位: 分钟
+    expiration: 10
+
 logging:
   level:
     root: info

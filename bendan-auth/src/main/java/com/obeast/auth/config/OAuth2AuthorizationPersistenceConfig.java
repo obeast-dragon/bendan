@@ -20,19 +20,19 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 public class OAuth2AuthorizationPersistenceConfig {
 
 
-    /**
-     * Description: token 持久化存储
-     * @author wxl
-     * Date: 2022/10/31 13:51
-     * @param jdbcTemplate jdbcTemplate
-     * @param registeredClientRepository registeredClientRepository
-     * @return org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService
-     */
-    @Bean
-    public OAuth2AuthorizationService oAuth2AuthorizationService(JdbcTemplate jdbcTemplate, RegisteredClientRepository registeredClientRepository){
-        return new JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository);
-
-    }
+//    /**
+//     * Description: token 持久化存储
+//     * @author wxl
+//     * Date: 2022/10/31 13:51
+//     * @param jdbcTemplate jdbcTemplate
+//     * @param registeredClientRepository registeredClientRepository
+//     * @return org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService
+//     */
+//    @Bean
+//    public OAuth2AuthorizationService oAuth2AuthorizationService(JdbcTemplate jdbcTemplate, RegisteredClientRepository registeredClientRepository){
+//        return new JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository);
+//
+//    }
 
 
 
