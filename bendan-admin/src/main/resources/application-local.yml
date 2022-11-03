@@ -81,3 +81,16 @@ springdoc.swagger-ui.path: /swagger-ui.html
 #    com.obeast: info
 #  file:
 #    name: log/bendan-pro.log
+
+logging:
+  level:
+    com:
+      obeast:
+        debug
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: full

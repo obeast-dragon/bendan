@@ -56,7 +56,6 @@ public class AuthorizationServerConfig {
             tokenEndpoint.accessTokenRequestConverter(createCustomizeConverter());
             tokenEndpoint.accessTokenResponseHandler(customizeAuthenticationSuccessHandler());
             tokenEndpoint.errorResponseHandler(customizeAuthenticationFailureHandler());
-            //                todo 成功处理器 失败处理器
         }));
 
 //        authorizationServerConfigurer.authorizationEndpoint(authorizationEndpoint ->

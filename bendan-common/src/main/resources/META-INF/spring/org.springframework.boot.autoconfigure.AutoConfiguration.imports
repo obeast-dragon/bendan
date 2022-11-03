@@ -1,2 +1,3 @@
-com.obeast.common.auto.CommonAutoConfiguration
-com.obeast.common.config.RedisConfig
+com.obeast.common.config.mybatis.MyBatisPlusConfig
+com.obeast.common.config.redis.RedisConfig
+#com.obeast.common.config.web.WebMvcConfig

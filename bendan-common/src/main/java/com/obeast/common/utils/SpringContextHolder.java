@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.obeast.auth.utils;
+package com.obeast.common.utils;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

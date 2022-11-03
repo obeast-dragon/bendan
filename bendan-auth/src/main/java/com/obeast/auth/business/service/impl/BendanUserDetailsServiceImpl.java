@@ -1,6 +1,5 @@
 package com.obeast.auth.business.service.impl;
 
-import com.google.common.collect.Lists;
 import com.obeast.auth.business.service.remote.BendanAdminUserInfoService;
 import com.obeast.common.dto.UserInfoDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +42,7 @@ public class BendanUserDetailsServiceImpl implements UserDetailsService {
 
     private UserDetails buildUser(UserInfoDto userInfoDto) {
         //todo 权限
-        List<GrantedAuthority> authorities = Lists.newArrayList(new SimpleGrantedAuthority("USER"));
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("USER"));
         return User.builder()
                 .username(userInfoDto.getUsername())
                 .password(userInfoDto.getPassword())

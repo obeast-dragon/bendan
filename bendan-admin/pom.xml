@@ -23,6 +23,8 @@
 
     <dependencies>
 
+
+
         <!-- 远程调用       -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -40,6 +42,18 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
+        <!--   Springcloud已经弃用了ribbon，目前使用的 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+        <!-- Spring Cloud LoadBalancer 缓存-->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${LoadBalancer-caffeine.version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>com.obeast</groupId>
@@ -65,16 +79,9 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!--   Springcloud已经弃用了ribbon，目前使用的 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
+
+
     </dependencies>
 
     <build>

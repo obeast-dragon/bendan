@@ -1,4 +1,4 @@
-package com.obeast.common.config;
+package com.obeast.common.config.redis;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;

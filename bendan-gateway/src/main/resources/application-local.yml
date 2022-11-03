@@ -28,3 +28,16 @@ logging:
       obeast:
         debug
 
+gateway:
+  ignore-clients:
+    - test
+    - client
+  ignore-url:
+    - "/doc.html"
+    - "/swagger-resources/**"
+    - "/swagger/**"
+    - "/*/v2/api-docs"
+    - "/*/*.js"
+    - "/*/*.css"
+    - "/*/*.png"
+    - "/*/*.ico"

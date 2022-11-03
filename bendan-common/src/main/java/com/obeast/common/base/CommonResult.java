@@ -124,6 +124,13 @@ public class CommonResult<T> {
     }
 
     /**
+     * 远程失败返回结果
+     */
+    public static <T> CommonResult<T> remoteFailed() {
+        return error(ResultCode.REQ_REJECT);
+    }
+
+    /**
      * 参数验证失败返回结果
      */
     public static <T> CommonResult<T> validateFailed() {

@@ -11,7 +11,6 @@ import org.springframework.security.oauth2.core.OAuth2TokenType;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -44,7 +43,6 @@ public class BendanOAuth2AuthorizationServiceImpl implements OAuth2Authorization
 
         if (isStateNonNull(authorization)) {
             String state = authorization.getAttribute("state");
-            /**/
             redisTemplate.opsForValue().set(
                     createRedisKey(OAuth2ParameterNames.STATE, state),
                     authorization,
@@ -149,7 +147,7 @@ public class BendanOAuth2AuthorizationServiceImpl implements OAuth2Authorization
     }
 
     /**
-     * Description: 判断stete是否为空
+     * Description: 判断state是否为空
      *
      * @param authorization OAuth2Authorization
      * @return boolean

@@ -34,8 +34,14 @@ redis:
 
 logging:
   level:
-    root: info
     com:
       obeast:
         debug
 
+feign:
+  client:
+    config:
+      default:
+        request-interceptors:
+          - com.obeast.auth.config.MyFeignRequestInterceptor
+        loggerLevel: full

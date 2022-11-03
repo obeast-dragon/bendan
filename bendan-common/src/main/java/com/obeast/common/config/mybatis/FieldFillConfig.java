@@ -1,4 +1,4 @@
-package com.obeast.common.config;
+package com.obeast.common.config.mybatis;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;

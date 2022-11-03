@@ -1,4 +1,4 @@
-package com.obeast.common.exception;
+package com.obeast.admin.exception;
 
 import com.obeast.common.base.CommonResult;
 import com.obeast.common.base.ResultCode;
@@ -32,4 +32,5 @@ public class GlobalExceptionHandler {
         log.error("程序中出现空引用和空参数，请检查！ ------------>", e);
         return CommonResult.error(ResultCode.PARAM_MISS);
     }
+
 }
