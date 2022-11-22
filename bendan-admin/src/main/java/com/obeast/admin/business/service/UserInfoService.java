@@ -34,6 +34,14 @@ public interface UserInfoService extends IService<UserInfoEntity> {
 
 
 
+    /**
+     * Description: 加载用户名
+     *
+     * @author wxl
+     * Date: 2022/11/21 15:37
+     * @param username username
+     * @return com.obeast.common.dto.UserInfoDto
+     */
     UserInfoDto loadUserByUsername(String username);
 
 

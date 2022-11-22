@@ -17,7 +17,6 @@ spring:
           filters:
 #            去除前缀
             - StripPrefix=1
-            - AddRequestHeader=IdCard, blue
         - id: bendan-auth-route
           uri: lb://bendan-auth
           predicates:

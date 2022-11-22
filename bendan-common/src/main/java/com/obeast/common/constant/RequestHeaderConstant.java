@@ -9,27 +9,22 @@ package com.obeast.common.constant;
  */
 public interface RequestHeaderConstant {
 
-
     /**
      * 网关请求头Key
      * */
-    String gatewayKey = "IdCard";
+    String from = "from";
 
     /**
-     * feign请求头Key
+     * 网关请求头Value gateway
      * */
-    String openFeignKey = "from";
+    String bendanValue = "bendan";
 
 
     /**
      * 网关请求头Value gateway
      * */
-    String gatewayValue = "gateway";
+    String bendanValueEncode = "YmVuZGFu";
 
-    /**
-     * feign请求头Value openFeign
-     * */
-    String openFeignValue = "openFeign";
 
 }
 

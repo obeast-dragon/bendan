@@ -1,7 +1,7 @@
 package com.obeast.admin.business.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.obeast.admin.business.OAuth2Params;
+import com.obeast.admin.business.vo.OAuth2Params;
 import com.obeast.admin.business.service.remote.OAuth2Remote;
 import com.obeast.admin.business.service.UserInfoService;
 import com.obeast.common.base.CommonResult;
@@ -27,7 +27,7 @@ import com.obeast.admin.business.entity.UserInfoEntity;
  * @author obeast-dragon
  * Date 2022-10-11 21:02:40
  * @version 1.0
- * Description: 
+ * Description:
  */
 @Service("userInfoService")
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfoEntity> implements UserInfoService {
@@ -99,11 +99,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfoEntity
     }
 
 
-
     @Override
     public boolean addList(List<UserInfoEntity> data) {
         return this.saveBatch(data);
     }
+
     @Override
     public boolean replace(UserInfoEntity userInfoEntity) {
         return this.updateById(userInfoEntity);
@@ -120,7 +120,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfoEntity
     }
 
 
-
     @Override
     public boolean deleteByIds(List<Long> ids) {
         return this.removeByIds(ids);
@@ -129,9 +128,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfoEntity
 
     /**
      * Description: 自定义QueryWrapper
+     *
+     * @return QueryWrapper<UserInfoEntity>
      * @author obeast-dragon
      * Date 2022-10-11 21:02:40
-     * @return QueryWrapper<UserInfoEntity>
      */
     private QueryWrapper<UserInfoEntity> getWrapper() {
         return new QueryWrapper<>();
@@ -145,9 +145,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfoEntity
 
     /**
      * Description: 自定义Excel  QueryWrapper
+     *
+     * @return QueryWrapper<UserInfoEntity>
      * @author obeast-dragon
      * Date 2022-10-11 21:02:40
-     * @return QueryWrapper<UserInfoEntity>
      */
     private QueryWrapper<UserInfoEntity> getExcelWrapper() {
         return new QueryWrapper<>();

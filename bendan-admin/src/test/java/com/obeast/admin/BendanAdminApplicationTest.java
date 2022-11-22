@@ -2,21 +2,16 @@ package com.obeast.admin;
 
 
 import cn.hutool.crypto.digest.BCrypt;
-import com.obeast.admin.business.OAuth2Params;
+import com.obeast.admin.business.vo.OAuth2Params;
 import com.obeast.admin.business.entity.UserInfoEntity;
 import com.obeast.admin.business.service.UserInfoService;
 import com.obeast.admin.business.service.remote.OAuth2Remote;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * @author wxl

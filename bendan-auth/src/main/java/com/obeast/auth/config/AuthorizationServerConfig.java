@@ -6,8 +6,6 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.obeast.auth.support.handler.result.failure.CustomizeAuthenticationFailureHandler;
 import com.obeast.auth.support.handler.result.success.CustomizeAuthenticationSuccessHandler;
-import com.obeast.auth.support.password.OAuth2PasswordAuthenticationConverter;
-import com.obeast.auth.support.password.OAuth2PasswordAuthenticationProvider;
 import com.obeast.auth.support.password.OAuth2PasswordCredentialsAuthenticationConverter;
 import com.obeast.auth.support.password.OAuth2PasswordCredentialsAuthenticationProvider;
 import com.obeast.auth.utils.Jwks;
@@ -15,17 +13,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.authorization.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
-
 import org.springframework.security.oauth2.server.authorization.config.ProviderSettings;
 import org.springframework.security.oauth2.server.authorization.web.authentication.*;
 import org.springframework.security.web.SecurityFilterChain;
@@ -41,9 +36,6 @@ import java.util.List;
 @Configuration(proxyBeanMethods = false)
 public class AuthorizationServerConfig {
 
-    private static final String CUSTOM_CONSENT_PAGE_URI = "/oauth2/consent";
-
-
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain authorizationServerSecurityFilterChain(
@@ -58,8 +50,6 @@ public class AuthorizationServerConfig {
             tokenEndpoint.errorResponseHandler(customizeAuthenticationFailureHandler());
         }));
 
-//        authorizationServerConfigurer.authorizationEndpoint(authorizationEndpoint ->
-//                authorizationEndpoint.consentPage(CUSTOM_CONSENT_PAGE_URI));
         RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
         http
                 .requestMatcher(endpointsMatcher)
@@ -76,7 +66,6 @@ public class AuthorizationServerConfig {
                             "/common/**",
                             "/login_sms"
                     );
-
                     authorizeRequests.antMatchers(ignores.toArray(new String[0])).permitAll();
 
                     authorizeRequests.anyRequest().authenticated();
@@ -127,7 +116,6 @@ public class AuthorizationServerConfig {
 //
 //    }
 
-
     @Bean
     public JWKSource<SecurityContext> jwkSource() {
         RSAKey rsaKey = Jwks.generateRsa();
@@ -146,9 +134,13 @@ public class AuthorizationServerConfig {
     }
 
     /**
-     * password认证模式
-     *
-     * @return
+     * Description: 密码模式
+     * @author wxl
+     * Date: 2022/11/22 16:47
+     * @param passwordEncoder passwordEncoder
+     * @param userDetailsService  userDetailsService
+     * @param httpSecurity http security
+     * @return com.obeast.auth.support.password.OAuth2PasswordCredentialsAuthenticationProvider
      */
     @Bean
     public OAuth2PasswordCredentialsAuthenticationProvider oAuth2PasswordCredentialsAuthenticationProvider

@@ -36,6 +36,4 @@ public class OAuth2ExceptionHandler {
         return CommonResult.error(ResultCode.FAILURE);
     }
 
-
-
 }

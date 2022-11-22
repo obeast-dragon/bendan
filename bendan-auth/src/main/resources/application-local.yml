@@ -37,11 +37,11 @@ logging:
     com:
       obeast:
         debug
-
-feign:
-  client:
-    config:
-      default:
-        request-interceptors:
-          - com.obeast.auth.config.MyFeignRequestInterceptor
-        loggerLevel: full
+#
+#feign:
+#  client:
+#    config:
+#      default:
+#        request-interceptors:
+#          - com.obeast.auth.config.MyFeignRequestInterceptor
+#        loggerLevel: full
