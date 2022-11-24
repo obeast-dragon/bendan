@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.lang.Nullable;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AuthorizationCode;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
@@ -43,6 +44,8 @@ public class BendanOAuth2AuthorizationServiceImpl implements OAuth2Authorization
 
         if (isStateNonNull(authorization)) {
             String state = authorization.getAttribute("state");
+            // TODO: 2022/11/23 注释掉可以在redis看见
+            redisTemplate.setValueSerializer(RedisSerializer.java());
             redisTemplate.opsForValue().set(
                     createRedisKey(OAuth2ParameterNames.STATE, state),
                     authorization,
@@ -56,6 +59,7 @@ public class BendanOAuth2AuthorizationServiceImpl implements OAuth2Authorization
             OAuth2AuthorizationCode authorizationCodeToken = authorizationCode.getToken();
             long between = ChronoUnit.MINUTES.between(authorizationCodeToken.getIssuedAt(),
                     authorizationCodeToken.getExpiresAt());
+            redisTemplate.setValueSerializer(RedisSerializer.java());
             redisTemplate.opsForValue().set(
                     createRedisKey(OAuth2ParameterNames.CODE, authorizationCodeToken.getTokenValue()),
                     authorization,
@@ -67,6 +71,7 @@ public class BendanOAuth2AuthorizationServiceImpl implements OAuth2Authorization
         if (isRefreshTokenNonNull(authorization)) {
             OAuth2RefreshToken refreshToken = authorization.getRefreshToken().getToken();
             long between = ChronoUnit.SECONDS.between(refreshToken.getIssuedAt(), refreshToken.getExpiresAt());
+            redisTemplate.setValueSerializer(RedisSerializer.java());
             redisTemplate.opsForValue().set(
                     createRedisKey(OAuth2ParameterNames.REFRESH_TOKEN, refreshToken.getTokenValue()),
                     authorization,
@@ -78,6 +83,7 @@ public class BendanOAuth2AuthorizationServiceImpl implements OAuth2Authorization
         if (isAccessTokenNonNull(authorization)) {
             OAuth2AccessToken accessToken = authorization.getAccessToken().getToken();
             long between = ChronoUnit.SECONDS.between(accessToken.getIssuedAt(), accessToken.getExpiresAt());
+            redisTemplate.setValueSerializer(RedisSerializer.java());
             redisTemplate.opsForValue().set(
                     createRedisKey(OAuth2ParameterNames.ACCESS_TOKEN, accessToken.getTokenValue()),
                     authorization,
@@ -125,7 +131,7 @@ public class BendanOAuth2AuthorizationServiceImpl implements OAuth2Authorization
     }
 
     @Override
-    public OAuth2Authorization findByToken(String token, OAuth2TokenType tokenType) {
+    public OAuth2Authorization findByToken(String token,@Nullable OAuth2TokenType tokenType) {
         Assert.hasText(token, "token cannot be empty");
         Assert.notNull(tokenType, "tokenType cannot be empty");
         redisTemplate.setValueSerializer(RedisSerializer.java());

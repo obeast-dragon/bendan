@@ -1,6 +1,6 @@
 package com.obeast.common.config.fegin;
 
-import com.obeast.common.constant.RequestHeaderConstant;
+import com.obeast.common.constant.BendanResHeaderConstant;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -18,6 +18,6 @@ public class FeignConfig implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate requestTemplate) {
-        requestTemplate.header(RequestHeaderConstant.from, Collections.singletonList(RequestHeaderConstant.bendanValue));
+        requestTemplate.header(BendanResHeaderConstant.from, Collections.singletonList(BendanResHeaderConstant.bendanValue));
     }
 }

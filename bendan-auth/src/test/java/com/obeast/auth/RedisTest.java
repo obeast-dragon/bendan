@@ -44,9 +44,9 @@ public class RedisTest {
         OAuth2Authorization authorizationServiceById = authorizationService.findById("946da889-0b30-49ff-8468-f90c6b44c885");
         System.out.println(authorizationServiceById.getAccessToken().getToken().getTokenValue());
         System.out.println();
-        redisTemplate.opsForValue().set("token", authorizationServiceById);
-        OAuth2Authorization token = (OAuth2Authorization) redisTemplate.opsForValue().get("token");
-        System.out.println("redis--------------------------------" + token.getAccessToken().getToken().getTokenValue());
+//        redisTemplate.opsForValue().set("token", authorizationServiceById);
+//        OAuth2Authorization token = (OAuth2Authorization) redisTemplate.opsForValue().get("token");
+//        System.out.println("redis--------------------------------" + token.getAccessToken().getToken().getTokenValue());
 
     }
 
@@ -59,11 +59,16 @@ public class RedisTest {
     @Test
     void getCount(){
         String token =
-                "eyJraWQiOiJlMDk1YjFlNi03NmQ0LTRkZjctYTBlMC03MzViZTQ1NTExMTciLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiYXVkIjoibWVzc2FnaW5nLWNsaWVudCIsIm5iZiI6MTY2NzI3MjkyMiwic2NvcGUiOlsib3BlbmlkIiwibWVzc2FnZS5yZWFkIiwibWVzc2FnZS53cml0ZSJdLCJpc3MiOiJodHRwOi8vYXV0aC1zZXJ2ZXI6OTAwMCIsImV4cCI6MTY2NzI3MzIyMiwiaWF0IjoxNjY3MjcyOTIyfQ.aRbEtVAv9R7iQcTJ1uPDPRKSiVoiHAuJAHRD8jfoZ3vVLCJso8Xdqqz7N4S0dQ6PeE6RHYuHjoMCPFS0ZJUJfunHnm4zpAKPJhzB75i13lcNOKSWf0MXL2-1HMriubp_lkNLdrWl_OPdV-ShM8D2a_mvrXSPA7zUVY-C859xgRb_A0bsWCmvY7sM28xS0R6qSjMeFpfOnYeVucJ-5ltP8gRKXn8CtI9VsNrj4d0xm-U46x4NBXjFteCsPc5JJ_F35oGuYUnGwLdxeixRa6nxcoeSbXVfsvc8kZDHi32HAju4OweRFfrR4k2w9OTOjx6593ReJQjmpoBdX0dQTGrHCg"
+                "eyJraWQiOiI1MTBmMTFiNy0xZGJhLTRjNTUtOWFkNi02ZmQ3MzEyNDczYzgiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiYXVkIjoibWVzc2FnaW5nLWNsaWVudCIsIm5iZiI6MTY2OTE4MTk1OSwic2NvcGUiOlsib3BlbmlkIiwibWVzc2FnZS5yZWFkIiwibWVzc2FnZS53cml0ZSJdLCJpc3MiOiJodHRwOi8vYXV0aC1zZXJ2ZXI6OTAwMCIsImV4cCI6MTY2OTE4MjI1OSwiaWF0IjoxNjY5MTgxOTU5fQ.PnzOKUjGHsU0Brag7_uM8jrRo2qQxMRGv-S_n3ziz1tbl6csj0T5sjWo8ZbwjmrhtTN2OKfezrlDZQ2xV4j6nhG9Mwxip7I0FYx6Sr9lEEQ8GXK5a6BX8Mvv05Pg5brSh6evqZNX1SLm3qDpbFXxmvi3Xd63uSf6WaevxOO-hz0CNP8379GGwmlsVSsjKPx47YwsBBr7XQbDfW5wWDNoApgnKpEh1NlnXqprRe_g3F1JvEk94CFd8UJTDcajLnbTE744IyRCmKFV4cSWCzaz_oT-ina8K8rujgXFBcrAL3aAR5_XmfpKZjCh7WrCAFMxW_inUUKRcLe9yeibjwioqA"
                 ;
         OAuth2Authorization serviceByToken = authorizationService.findByToken(token, OAuth2TokenType.ACCESS_TOKEN);
-//        System.out.println(serviceByToken.getAccessToken().getToken().getTokenValue());
-//        authorizationService.remove(serviceByToken);
+        System.out.println(serviceByToken);
+
+    }
+
+
+    private String createRedisKey(String type, String value) {
+        return String.format("%s::%s::%s", AUTHORIZATION, type, value);
     }
 
 }

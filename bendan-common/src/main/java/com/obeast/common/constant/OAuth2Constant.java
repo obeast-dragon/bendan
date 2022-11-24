@@ -8,6 +8,13 @@ package com.obeast.common.constant;
  */
 public interface OAuth2Constant {
 
+
+    /**
+     * 默认登录URL
+     */
+    String LOGIN_URL = "/userinfo/login";
+
+
     enum Type {
         MIN_APP("min-app"),
         WEB_BROWSER("web-browser"),

@@ -1,9 +1,11 @@
 package com.obeast.gateway.filter;
 
+import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.json.JSONUtil;
 import com.obeast.common.base.CommonResult;
 import com.obeast.common.base.ResultCode;
-import com.obeast.common.constant.RequestHeaderConstant;
+import com.obeast.common.constant.BendanResHeaderConstant;
+import com.obeast.common.constant.OAuth2Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +23,7 @@ import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * @author wxl
@@ -43,48 +46,59 @@ public class BendanRequestGlobalFilter implements GlobalFilter, Ordered {
         ServerHttpRequest exchangeRequest = request
                 .mutate()
                 .headers(httpHeaders -> {
-                    httpHeaders.put(RequestHeaderConstant.from, Collections.singletonList(RequestHeaderConstant.bendanValue));
+                    httpHeaders.put(BendanResHeaderConstant.from, Collections.singletonList(BendanResHeaderConstant.bendanValue));
                 }).build();
+        System.out.println(request.getURI().getPath());
+        boolean isAuthToken = CharSequenceUtil.containsAnyIgnoreCase(request.getURI().getPath(),
+                OAuth2Constant.LOGIN_URL);
 
-
+        if (!authenticateToken(request) && !isAuthToken){
+            return this.responseBody(exchange);
+        }
         return chain.filter(
                 exchange
                         .mutate()
                         .request(exchangeRequest.mutate().build()).build()
         );
-
-//        // 授权
-//        if (!this.auth(exchange, chain)) {
-//            return this.responseBody(exchange,  "请先登录");
-//        }
-//        return chain.filter(exchange);
     }
 
+
     /**
-     * 认证
+     * Description:认证
+     * @author wxl
+     * Date: 2022/11/22 17:11
+     * @param request HttpServletRequest
+     * @return boolean
      */
-    private boolean auth(ServerWebExchange exchange, GatewayFilterChain chain) {
-        // 逻辑自行实现
-        String token = this.getToken(exchange.getRequest());
-        log.info("token:{}", token);
-        return true;
+    private boolean authenticateToken(ServerHttpRequest request) {
+        if (request != null) {
+            List<String> authorizationList = request.getHeaders().get(BendanResHeaderConstant.authorization);
+            if (authorizationList != null) {
+                String authorization = authorizationList.get(0);
+                return true;
+            }
+        }
+        return false;
     }
 
+
+
     /**
-     * 获取token
+     * Description: res响应
+     * @author wxl
+     * Date: 2022/11/24 17:14
+     * @param exchange exchange
+     * @return reactor.core.publisher.Mono<java.lang.Void>
      */
-    public String getToken(ServerHttpRequest request) {
-        String token = request.getHeaders().getFirst("token");
-        return token;
-    }
-
-    /**
-     * 设置响应体
-     **/
-    public Mono<Void> responseBody(ServerWebExchange exchange, String msg) {
-        String str = JSONUtil.toJsonStr(CommonResult.error(ResultCode.UN_AUTHORIZED, msg));
+    public Mono<Void> responseBody(ServerWebExchange exchange) {
+//        响应头
+        ServerHttpResponse response = exchange.getResponse();
+        response.getHeaders().add(HttpHeaders.CONTENT_TYPE, "application/json");
+        ServerWebExchange header = exchange.mutate().response(response).build();
+//        响应体
+        String str = JSONUtil.toJsonStr(CommonResult.error(ResultCode.UN_AUTHORIZED, ResultCode.UN_AUTHORIZED.getMessage()));
         byte[] bytes = str.getBytes(StandardCharsets.UTF_8);
-        return this.responseHeader(exchange).getResponse()
+        return header.getResponse()
                 .writeWith(Flux.just(exchange.getResponse().bufferFactory().wrap(bytes)));
     }
 

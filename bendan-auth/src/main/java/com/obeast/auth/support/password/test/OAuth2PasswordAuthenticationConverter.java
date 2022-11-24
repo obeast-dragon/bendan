@@ -1,18 +1,14 @@
-package com.obeast.auth.support.password;
+package com.obeast.auth.support.password.test;
 
 import com.obeast.auth.support.base.OAuth2BaseAuthenticationConverter;
-import com.obeast.auth.support.base.OAuth2BaseAuthenticationToken;
 import com.obeast.auth.utils.OAuth2EndpointUtils;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2ErrorCodes;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
-import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**

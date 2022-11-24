@@ -159,33 +159,35 @@ public class OAuth2PasswordCredentialsAuthenticationProvider implements Authenti
                 authorizationBuilder.refreshToken(refreshToken);
             }
 
-            // ----- ID token -----
-            OidcIdToken idToken;
-            if (authorizedScopes.contains(OidcScopes.OPENID)) {
-                // @formatter:off
-                tokenContext = tokenContextBuilder
-                        .tokenType(ID_TOKEN_TOKEN_TYPE)
-                        .authorization(authorizationBuilder.build())    // ID token customizer may need access to the access token and/or refresh token
-                        .build();
-                // @formatter:on
-                OAuth2Token generatedIdToken = this.tokenGenerator.generate(tokenContext);
-                if (!(generatedIdToken instanceof Jwt)) {
-                    OAuth2Error error = new OAuth2Error(OAuth2ErrorCodes.SERVER_ERROR,
-                            "The token generator failed to generate the ID token.", ERROR_URI);
-                    throw new OAuth2AuthenticationException(error);
-                }
-                idToken = new OidcIdToken(generatedIdToken.getTokenValue(), generatedIdToken.getIssuedAt(),
-                        generatedIdToken.getExpiresAt(), ((Jwt) generatedIdToken).getClaims());
-                authorizationBuilder.token(idToken, (metadata) ->
-                        metadata.put(OAuth2Authorization.Token.CLAIMS_METADATA_NAME, idToken.getClaims()));
-            } else {
-                idToken = null;
-            }
-            Map<String, Object> add = Collections.emptyMap();
-            if (idToken != null) {
-                add = new HashMap<>();
-                add.put(OidcParameterNames.ID_TOKEN, idToken.getTokenValue());
-            }
+
+//            // ----- ID token -----
+//            OidcIdToken idToken;
+//            if (authorizedScopes.contains(OidcScopes.OPENID)) {
+//                // @formatter:off
+//                tokenContext = tokenContextBuilder
+//                        .tokenType(ID_TOKEN_TOKEN_TYPE)
+//                        .authorization(authorizationBuilder.build())    // ID token customizer may need access to the access token and/or refresh token
+//                        .build();
+//                // @formatter:on
+//                OAuth2Token generatedIdToken = this.tokenGenerator.generate(tokenContext);
+//                if (!(generatedIdToken instanceof Jwt)) {
+//                    OAuth2Error error = new OAuth2Error(OAuth2ErrorCodes.SERVER_ERROR,
+//                            "The token generator failed to generate the ID token.", ERROR_URI);
+//                    throw new OAuth2AuthenticationException(error);
+//                }
+//                idToken = new OidcIdToken(generatedIdToken.getTokenValue(), generatedIdToken.getIssuedAt(),
+//                        generatedIdToken.getExpiresAt(), ((Jwt) generatedIdToken).getClaims());
+//                authorizationBuilder.token(idToken, (metadata) ->
+//                        metadata.put(OAuth2Authorization.Token.CLAIMS_METADATA_NAME, idToken.getClaims()));
+//            } else {
+//                idToken = null;
+//            }
+//            Map<String, Object> add = Collections.emptyMap();
+//            if (idToken != null) {
+//                add = new HashMap<>();
+//                add.put(OidcParameterNames.ID_TOKEN, idToken.getTokenValue());
+//            }
+
 
             OAuth2Authorization authorization = authorizationBuilder.build();
             this.authorizationService.save(authorization);
@@ -195,8 +197,9 @@ public class OAuth2PasswordCredentialsAuthenticationProvider implements Authenti
                     registeredClient,
                     clientPrincipal,
                     accessToken,
-                    refreshToken,
-                    add);
+                    refreshToken
+//                    , add
+            );
         } catch (Exception ex) {
             log.error("the exception maybe in authenticate:  ", ex);
             throw throwOAuth2AuthenticationException((AuthenticationException) ex);

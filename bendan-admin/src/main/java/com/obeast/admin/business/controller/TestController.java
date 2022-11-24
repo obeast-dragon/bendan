@@ -23,5 +23,9 @@ public class TestController {
     public String t () {
         return mailRemote.test();
     }
+    @GetMapping("/gateway")
+    public void test () {
+        System.err.println("Validated " );
+    }
 
 }

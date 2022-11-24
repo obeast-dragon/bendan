@@ -20,7 +20,7 @@ import org.springframework.util.StringUtils;
     private OAuth2AccessToken accessToken;
     private OAuth2RefreshToken refreshToken;
 
-    private OAuth2AccessToken idToken;
+//    private OAuth2AccessToken idToken;
     private Map<String, Object> additionalParameters;
 
     private OAuth2CustomizeAccessTokenResponse() {
@@ -30,10 +30,10 @@ import org.springframework.util.StringUtils;
         return this.accessToken;
     }
 
-    @Nullable
-    public OAuth2AccessToken getIdToken() {
-        return idToken;
-    }
+//    @Nullable
+//    public OAuth2AccessToken getIdToken() {
+//        return idToken;
+//    }
 
     @Nullable
     public OAuth2RefreshToken getRefreshToken() {
@@ -72,8 +72,8 @@ import org.springframework.util.StringUtils;
             this.scopes = accessToken.getScopes();
             this.refreshToken = response.getRefreshToken()
                     != null ? response.getRefreshToken().getTokenValue() : null;
-            this.idToken = response.getIdToken()
-                    != null ? response.getIdToken().getTokenValue() : null;
+//            this.idToken = response.getIdToken()
+//                    != null ? response.getIdToken().getTokenValue() : null;
             this.additionalParameters = response.getAdditionalParameters();
         }
 
@@ -122,10 +122,9 @@ import org.springframework.util.StringUtils;
                 accessTokenResponse.refreshToken = new OAuth2RefreshToken(this.refreshToken, issuedAt);
             }
 
-            if (StringUtils.hasText(this.idToken)) {
-                accessTokenResponse.idToken =  new OAuth2AccessToken(this.tokenType, this.idToken, issuedAt, expiresAt, this.scopes);
-            }
-
+//            if (StringUtils.hasText(this.idToken)) {
+//                accessTokenResponse.idToken =  new OAuth2AccessToken(this.tokenType, this.idToken, issuedAt, expiresAt, this.scopes);
+//            }
             accessTokenResponse.additionalParameters = Collections.unmodifiableMap(CollectionUtils.isEmpty(this.additionalParameters) ? Collections.emptyMap() : this.additionalParameters);
             return accessTokenResponse;
         }

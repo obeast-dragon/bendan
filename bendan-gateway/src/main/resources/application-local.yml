@@ -29,10 +29,8 @@ logging:
         debug
 
 gateway:
-  ignore-clients:
-    - test
-    - client
-  ignore-url:
+
+  ignoreClients:
     - "/doc.html"
     - "/swagger-resources/**"
     - "/swagger/**"

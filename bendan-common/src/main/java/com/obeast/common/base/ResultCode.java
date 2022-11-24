@@ -60,7 +60,7 @@ public enum ResultCode implements IErrorCode {
     /**
      * 请求未授权 401
      */
-    UN_AUTHORIZED(HttpServletResponse.SC_UNAUTHORIZED, "未授权", "unauthorized"),
+    UN_AUTHORIZED(HttpServletResponse.SC_UNAUTHORIZED, "未授权,请登录", "unauthorized"),
 
     /**
      * 请求被拒绝 403
