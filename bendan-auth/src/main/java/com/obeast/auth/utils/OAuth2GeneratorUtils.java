@@ -1,4 +1,4 @@
-package com.obeast.auth.config;
+package com.obeast.auth.utils;
 
 
 import com.nimbusds.jose.jwk.source.JWKSource;
@@ -22,13 +22,13 @@ import java.util.Map;
  * @author Joe Grandja
  * @since 0.1.2
  */
-final class OAuth2ConfigurerUtils {
+public final class OAuth2GeneratorUtils {
 
-    private OAuth2ConfigurerUtils() {
+    private OAuth2GeneratorUtils() {
     }
 
     @SuppressWarnings("unchecked")
-    static <B extends HttpSecurityBuilder<B>> OAuth2TokenGenerator<? extends OAuth2Token> getTokenGenerator(B builder) {
+    public static <B extends HttpSecurityBuilder<B>> OAuth2TokenGenerator<? extends OAuth2Token> getTokenGenerator(B builder) {
         OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator = builder.getSharedObject(OAuth2TokenGenerator.class);
         if (tokenGenerator == null) {
             tokenGenerator = getOptionalBean(builder, OAuth2TokenGenerator.class);

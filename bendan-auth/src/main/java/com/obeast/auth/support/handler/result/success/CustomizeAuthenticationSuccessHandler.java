@@ -42,8 +42,6 @@ public class CustomizeAuthenticationSuccessHandler implements AuthenticationSucc
 
         OAuth2AccessToken accessToken = accessTokenAuthentication.getAccessToken();
         OAuth2RefreshToken refreshToken = accessTokenAuthentication.getRefreshToken();
-        Map<String, Object> additionalParameters = accessTokenAuthentication.getAdditionalParameters();
-        String idToken = (String) additionalParameters.get("id_token");
 
         OAuth2CustomizeAccessTokenResponse.Builder builder = OAuth2CustomizeAccessTokenResponse.withToken(accessToken.getTokenValue())
                 .tokenType(accessToken.getTokenType())
@@ -53,9 +51,6 @@ public class CustomizeAuthenticationSuccessHandler implements AuthenticationSucc
         }
         if (refreshToken != null) {
             builder.refreshToken(refreshToken.getTokenValue());
-        }
-        if (idToken != null) {
-            builder.idToken(idToken);
         }
 
         OAuth2CustomizeAccessTokenResponse accessTokenResponse = builder.build();

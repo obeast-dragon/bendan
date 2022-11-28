@@ -5,8 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
-import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 
@@ -18,7 +16,7 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
  * Description: OAuth2持久化配置
  */
 @Configuration
-public class OAuth2AuthorizationPersistenceConfig {
+public class OAuth2AuthorizationJdbcConfig {
 
 
 //    /**
@@ -34,7 +32,6 @@ public class OAuth2AuthorizationPersistenceConfig {
 //        return new JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository);
 //
 //    }
-
 
 
     @Bean

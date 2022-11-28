@@ -53,7 +53,7 @@ import org.springframework.util.StringUtils;
     }
 
     public static final class Builder {
-        private String tokenValue;
+        private final String tokenValue;
         private OAuth2AccessToken.TokenType tokenType;
         private Instant issuedAt;
         private Instant expiresAt;

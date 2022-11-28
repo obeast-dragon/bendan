@@ -9,6 +9,7 @@ import com.obeast.auth.support.handler.result.success.CustomizeAuthenticationSuc
 import com.obeast.auth.support.password.OAuth2PasswordCredentialsAuthenticationConverter;
 import com.obeast.auth.support.password.OAuth2PasswordCredentialsAuthenticationProvider;
 import com.obeast.auth.utils.Jwks;
+import com.obeast.auth.utils.OAuth2GeneratorUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -150,7 +151,7 @@ public class AuthorizationServerConfig {
         OAuth2AuthorizationService authorizationService = httpSecurity.getSharedObject(OAuth2AuthorizationService.class);
         OAuth2PasswordCredentialsAuthenticationProvider provider =
                 new OAuth2PasswordCredentialsAuthenticationProvider(
-                        OAuth2ConfigurerUtils.getTokenGenerator(httpSecurity), authorizationService);
+                        OAuth2GeneratorUtils.getTokenGenerator(httpSecurity), authorizationService);
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
         return provider;
