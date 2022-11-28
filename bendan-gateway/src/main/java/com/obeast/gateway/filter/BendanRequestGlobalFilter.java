@@ -1,17 +1,18 @@
 package com.obeast.gateway.filter;
 
-import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.json.JSONUtil;
 import com.obeast.common.base.CommonResult;
 import com.obeast.common.base.ResultCode;
 import com.obeast.common.constant.BendanResHeaderConstant;
-import com.obeast.common.constant.OAuth2Constant;
+import com.obeast.common.utils.OAuth2Util;
+import com.obeast.gateway.config.GatewayConfigProperties;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -31,8 +32,15 @@ import java.util.List;
  * @version 1.0
  * Description: 全局过滤器
  */
+@RequiredArgsConstructor
 public class BendanRequestGlobalFilter implements GlobalFilter, Ordered {
+
     private static final Logger log = LoggerFactory.getLogger(BendanRequestGlobalFilter.class);
+
+    private final GatewayConfigProperties gatewayConfigProperties;
+
+    private final RedisTemplate<String, Object> redisTemplate;
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
@@ -48,11 +56,8 @@ public class BendanRequestGlobalFilter implements GlobalFilter, Ordered {
                 .headers(httpHeaders -> {
                     httpHeaders.put(BendanResHeaderConstant.from, Collections.singletonList(BendanResHeaderConstant.bendanValue));
                 }).build();
-        System.out.println(request.getURI().getPath());
-        boolean isAuthToken = CharSequenceUtil.containsAnyIgnoreCase(request.getURI().getPath(),
-                OAuth2Constant.LOGIN_URL);
-
-        if (!authenticateToken(request) && !isAuthToken){
+        boolean pass = discharged(request.getURI().getPath(), gatewayConfigProperties.getIgnoreUrls());
+        if (!authenticateToken(request) && !pass){
             return this.responseBody(exchange);
         }
         return chain.filter(
@@ -60,6 +65,23 @@ public class BendanRequestGlobalFilter implements GlobalFilter, Ordered {
                         .mutate()
                         .request(exchangeRequest.mutate().build()).build()
         );
+    }
+
+    /**
+     * Description: 放行路径
+     * @author wxl
+     * Date: 2022/11/25 9:51
+     * @param path path
+     * @param ignoreUrls http
+     * @return boolean
+     */
+    private boolean discharged(String path, List<String> ignoreUrls) {
+        for (int i = 0; i < ignoreUrls.size(); i++) {
+            if (ignoreUrls.contains(path)){
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -75,7 +97,10 @@ public class BendanRequestGlobalFilter implements GlobalFilter, Ordered {
             List<String> authorizationList = request.getHeaders().get(BendanResHeaderConstant.authorization);
             if (authorizationList != null) {
                 String authorization = authorizationList.get(0);
-                return true;
+                String token = authorization.replace(OAuth2Util.JWT_TOKEN_PREFIX, "");
+                Object obj  = redisTemplate.opsForValue().get(OAuth2Util.createRedisKey(OAuth2Util.ACCESS_TOKEN, token));
+                log.info("obj {}",obj);
+                return obj != null;
             }
         }
         return false;

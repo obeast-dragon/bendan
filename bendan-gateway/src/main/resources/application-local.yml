@@ -29,8 +29,7 @@ logging:
         debug
 
 gateway:
-
-  ignoreClients:
+  ignoreUrls:
     - "/doc.html"
     - "/swagger-resources/**"
     - "/swagger/**"
@@ -39,3 +38,4 @@ gateway:
     - "/*/*.css"
     - "/*/*.png"
     - "/*/*.ico"
+    - "/userinfo/login"

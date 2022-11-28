@@ -1,4 +1,4 @@
-package com.obeast.common.constant;
+package com.obeast.common.utils;
 
 /**
  * @author wxl
@@ -6,19 +6,34 @@ package com.obeast.common.constant;
  * @version 1.0
  * Description: 客户端常量
  */
-public interface OAuth2Constant {
+public interface OAuth2Util {
 
-
-    /**
-     * 手机号登录
-     */
-    String APP = "app";
 
     /**
      * 默认登录URL
      */
     String LOGIN_URL = "/userinfo/login";
 
+
+    /**
+     * access_token
+     * */
+    String ACCESS_TOKEN = "access_token";
+
+    /**
+     * refresh_token
+     * */
+    String REFRESH_TOKEN = "refresh_token";
+
+    /**
+     * JWT令牌前缀
+     */
+    String JWT_TOKEN_PREFIX = "Bearer ";
+
+    /**
+     * redis 存储 token 名字
+     * */
+    String AUTHORIZATION = "token";
 
     enum Type {
         MIN_APP("min-app"),
@@ -73,4 +88,17 @@ public interface OAuth2Constant {
         }
     }
 
+
+    /**
+     * Description: 创建redis存储的key
+     *
+     * @param type  token type
+     * @param value token value
+     * @return java.lang.String
+     * @author wxl
+     * Date: 2022/10/31 17:02
+     */
+    static String createRedisKey(String type, String value) {
+        return String.format("%s::%s::%s", AUTHORIZATION, type, value);
+    }
 }
