@@ -60,7 +60,7 @@ import org.springframework.util.StringUtils;
         private long expiresIn;
         private Set<String> scopes;
         private String refreshToken;
-        private String idToken;
+//        private String idToken;
         private Map<String, Object> additionalParameters;
 
         private Builder(OAuth2CustomizeAccessTokenResponse response) {
@@ -102,10 +102,10 @@ import org.springframework.util.StringUtils;
             return this;
         }
 
-        public Builder idToken(String idToken) {
-            this.idToken = idToken;
-            return this;
-        }
+//        public Builder idToken(String idToken) {
+//            this.idToken = idToken;
+//            return this;
+//        }
 
         public Builder additionalParameters(Map<String, Object> additionalParameters) {
             this.additionalParameters = additionalParameters;
