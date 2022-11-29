@@ -1,6 +1,6 @@
 package com.obeast.auth.business.service.impl;
 
-import com.obeast.common.constant.OAuth2Constant;
+import com.obeast.core.constant.OAuth2Constant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;

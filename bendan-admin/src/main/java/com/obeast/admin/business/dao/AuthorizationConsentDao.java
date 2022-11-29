@@ -1,7 +1,7 @@
 package com.obeast.admin.business.dao;
 
 import com.obeast.admin.business.entity.AuthorizationConsentEntity;
-import com.obeast.common.base.BaseDao;
+import com.obeast.core.base.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 
 

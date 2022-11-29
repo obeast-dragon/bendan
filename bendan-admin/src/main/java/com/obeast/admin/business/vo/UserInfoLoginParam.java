@@ -1,6 +1,5 @@
 package com.obeast.admin.business.vo;
 
-import com.obeast.common.base.CommonResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

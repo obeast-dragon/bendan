@@ -1,6 +1,6 @@
 package com.obeast.admin.business.service.impl;
 
-import com.obeast.common.domain.PageObjects;
+import com.obeast.core.domain.PageObjects;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.obeast.common.utils.PageQueryUtils;
+import com.obeast.core.utils.PageQueryUtils;
 
 import com.obeast.admin.business.dao.SysMenuDao;
 import com.obeast.admin.business.entity.SysMenuEntity;

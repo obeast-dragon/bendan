@@ -1,7 +1,7 @@
 package com.obeast.admin.exception;
 
-import com.obeast.common.base.CommonResult;
-import com.obeast.common.constant.ResultCode;
+import com.obeast.core.base.CommonResult;
+import com.obeast.core.constant.ResultCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;

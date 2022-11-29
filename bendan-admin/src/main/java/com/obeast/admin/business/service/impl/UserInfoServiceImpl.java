@@ -4,10 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.obeast.admin.business.vo.OAuth2Params;
 import com.obeast.admin.business.service.remote.OAuth2Remote;
 import com.obeast.admin.business.service.UserInfoService;
-import com.obeast.common.base.CommonResult;
-import com.obeast.common.domain.PageObjects;
+import com.obeast.core.base.CommonResult;
+import com.obeast.core.domain.PageObjects;
 
-import com.obeast.common.dto.UserInfoDto;
+import com.obeast.core.dto.UserInfoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.obeast.common.utils.PageQueryUtils;
+import com.obeast.core.utils.PageQueryUtils;
 
 import com.obeast.admin.business.dao.UserInfoDao;
 import com.obeast.admin.business.entity.UserInfoEntity;

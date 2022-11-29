@@ -2,7 +2,7 @@ package com.obeast.blog.dao;
 
 
 import com.obeast.blog.entity.CommentEntity;
-import com.obeast.common.base.BaseDao;
+import com.obeast.core.base.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 
 

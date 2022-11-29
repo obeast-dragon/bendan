@@ -22,8 +22,6 @@
 
     <dependencies>
 
-
-
         <!-- 远程调用       -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -53,10 +51,9 @@
             <version>${LoadBalancer-caffeine.version}</version>
         </dependency>
 
-
         <dependency>
             <groupId>com.obeast</groupId>
-            <artifactId>bendan-common</artifactId>
+            <artifactId>bendan-common-core</artifactId>
         </dependency>
 
         <!-- druid-spring-boot-starter -->

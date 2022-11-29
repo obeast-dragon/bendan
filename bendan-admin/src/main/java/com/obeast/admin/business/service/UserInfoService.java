@@ -2,9 +2,9 @@ package com.obeast.admin.business.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.obeast.admin.business.entity.UserInfoEntity;
-import com.obeast.common.base.CommonResult;
-import com.obeast.common.domain.PageObjects;
-import com.obeast.common.dto.UserInfoDto;
+import com.obeast.core.base.CommonResult;
+import com.obeast.core.domain.PageObjects;
+import com.obeast.core.dto.UserInfoDto;
 
 import java.util.Map;
 import java.util.List;

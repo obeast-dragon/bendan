@@ -1,9 +1,8 @@
 package com.obeast.auth.business.service.impl;
 
 import com.obeast.auth.business.service.remote.BendanAdminUserInfoService;
-import com.obeast.common.dto.UserInfoDto;
+import com.obeast.core.dto.UserInfoDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

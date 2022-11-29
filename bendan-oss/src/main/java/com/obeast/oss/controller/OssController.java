@@ -3,7 +3,7 @@ package com.obeast.oss.controller;
 
 import cn.hutool.json.JSONException;
 import cn.hutool.json.JSONObject;
-import com.obeast.common.base.CommonResult;
+import com.obeast.core.base.CommonResult;
 import com.obeast.oss.domain.ResponseEntry;
 import com.obeast.oss.entity.OssEntity;
 import com.obeast.oss.enumration.ShardFileStatusCode;

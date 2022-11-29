@@ -1,10 +1,10 @@
 package com.obeast.gateway.filter;
 
 import cn.hutool.json.JSONUtil;
-import com.obeast.common.base.CommonResult;
-import com.obeast.common.constant.ResultCode;
-import com.obeast.common.constant.BendanResHeaderConstant;
-import com.obeast.common.utils.OAuth2Util;
+import com.obeast.core.base.CommonResult;
+import com.obeast.core.constant.ResultCode;
+import com.obeast.core.constant.BendanResHeaderConstant;
+import com.obeast.core.utils.OAuth2Util;
 import com.obeast.gateway.config.GatewayConfigProperties;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

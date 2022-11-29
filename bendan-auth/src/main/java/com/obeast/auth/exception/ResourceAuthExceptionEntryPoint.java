@@ -2,8 +2,8 @@
 package com.obeast.auth.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.obeast.common.base.CommonResult;
-import com.obeast.common.constant.ResultCode;
+import com.obeast.core.base.CommonResult;
+import com.obeast.core.constant.ResultCode;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 

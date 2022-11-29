@@ -1,6 +1,6 @@
 package com.obeast.auth.support.resourceServer;
 
-import com.obeast.common.constant.OAuth2Constant;
+import com.obeast.core.constant.OAuth2Constant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

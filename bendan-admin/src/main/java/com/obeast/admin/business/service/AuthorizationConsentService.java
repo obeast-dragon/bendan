@@ -2,7 +2,7 @@ package com.obeast.admin.business.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.obeast.admin.business.entity.AuthorizationConsentEntity;
-import com.obeast.common.domain.PageObjects;
+import com.obeast.core.domain.PageObjects;
 
 import java.util.Map;
 import java.util.List;

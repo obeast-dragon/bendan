@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.obeast.blog.entity.TypeEntity;
 import com.obeast.blog.excel.TypeExcel;
-import com.obeast.common.domain.PageObjects;
-import com.obeast.common.utils.PageQueryUtils;
+import com.obeast.core.domain.PageObjects;
+import com.obeast.core.utils.PageQueryUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

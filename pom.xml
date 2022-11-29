@@ -226,6 +226,12 @@
             <!--    项目core       -->
             <dependency>
                 <groupId>com.obeast</groupId>
+                <artifactId>bendan-common-core</artifactId>
+                <version>${bendan.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.obeast</groupId>
                 <artifactId>bendan-common</artifactId>
                 <version>${bendan.version}</version>
             </dependency>

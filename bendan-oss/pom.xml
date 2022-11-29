@@ -21,7 +21,7 @@
 
         <dependency>
             <groupId>com.obeast</groupId>
-            <artifactId>bendan-common</artifactId>
+            <artifactId>bendan-common-core</artifactId>
         </dependency>
 
 

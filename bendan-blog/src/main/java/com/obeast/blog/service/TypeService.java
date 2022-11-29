@@ -5,7 +5,7 @@ package com.obeast.blog.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.obeast.blog.entity.TypeEntity;
 import com.obeast.blog.excel.TypeExcel;
-import com.obeast.common.domain.PageObjects;
+import com.obeast.core.domain.PageObjects;
 
 import java.util.Map;
 import java.util.List;

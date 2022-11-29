@@ -1,8 +1,8 @@
 package com.obeast.admin.business.service.remote;
 
 import com.obeast.admin.business.vo.OAuth2Params;
-import com.obeast.common.base.CommonResult;
-import com.obeast.common.config.fegin.FeignConfig;
+import com.obeast.core.base.CommonResult;
+import com.obeast.core.config.fegin.FeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;

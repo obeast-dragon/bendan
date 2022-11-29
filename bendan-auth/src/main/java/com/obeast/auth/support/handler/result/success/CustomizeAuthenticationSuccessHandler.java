@@ -1,7 +1,7 @@
 package com.obeast.auth.support.handler.result.success;
 
 import com.obeast.auth.support.handler.result.OAuth2CustomizeAccessTokenResponse;
-import com.obeast.common.base.CommonResult;
+import com.obeast.core.base.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
