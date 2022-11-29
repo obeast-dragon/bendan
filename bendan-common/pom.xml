@@ -10,15 +10,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>bendan-common</artifactId>
+    <packaging>pom</packaging>
     <version>2.0.0</version>
+    <modules>
+        <module>bendan-common-core</module>
+        <module>bendan-common-security</module>
+    </modules>
 
     <name>bendan-common</name>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
 
     <dependencies>
 
@@ -59,23 +59,5 @@
         </dependency>
 
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

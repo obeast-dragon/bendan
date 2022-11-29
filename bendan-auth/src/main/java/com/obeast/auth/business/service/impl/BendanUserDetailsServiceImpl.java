@@ -2,27 +2,33 @@ package com.obeast.auth.business.service.impl;
 
 import com.obeast.auth.business.service.remote.BendanAdminUserInfoService;
 import com.obeast.common.dto.UserInfoDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
-@Component
+@Service
+@RequiredArgsConstructor
 public class BendanUserDetailsServiceImpl implements UserDetailsService {
 
-    @Autowired
-    private BendanAdminUserInfoService bendanAdminUserInfoService;
+    private final BendanAdminUserInfoService bendanAdminUserInfoService;
 
-    @Autowired
-    private HttpServletRequest request;
+    private final HttpServletRequest request;
+
+    /**
+     * 二级缓存
+     * */
+    private final CacheManager cacheManager;
 
 
     @Override
