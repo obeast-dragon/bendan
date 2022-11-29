@@ -1,5 +1,6 @@
-package com.obeast.common.base;
+package com.obeast.common.constant;
 
+import com.obeast.common.base.IErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -85,10 +86,13 @@ public enum ResultCode implements IErrorCode {
     MEDIA_TYPE_NOT_SUPPORTED(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "不支持当前媒体类型", "Media type not supported"),
 
 
+
+    INTERNAL_RESOURCE_SERVER_ERROR(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "资源服务器异常, 请联系管理员", "RESOURCE SERVER ERROR, please contact the admin"),
+
     /**
      * 服务器异常 500
      */
-    INTERNAL_SERVER_ERROR(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "数据操作错误, 请联系管理员", "Operation fail, please contact the admin"),
+    INTERNAL_SERVER_ERROR(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "服务器异常, 请联系管理员", "Operation fail, please contact the admin"),
 
     /**
      * 远端服务器为启用或者调用失败 503

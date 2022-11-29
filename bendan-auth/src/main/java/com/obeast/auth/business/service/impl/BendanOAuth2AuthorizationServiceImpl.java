@@ -1,5 +1,6 @@
 package com.obeast.auth.business.service.impl;
 
+import com.obeast.common.constant.OAuth2Constant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -34,7 +35,7 @@ public class BendanOAuth2AuthorizationServiceImpl implements OAuth2Authorization
     @Value("${redis.token.expiration}")
     private Long TIMEOUT;
 
-    private static final String AUTHORIZATION = "token";
+
 
     private final RedisTemplate<String, Object> redisTemplate;
 
@@ -149,7 +150,7 @@ public class BendanOAuth2AuthorizationServiceImpl implements OAuth2Authorization
      * Date: 2022/10/31 17:02
      */
     private String createRedisKey(String type, String value) {
-        return String.format("%s::%s::%s", AUTHORIZATION, type, value);
+        return String.format("%s::%s::%s", OAuth2Constant.authorization, type, value);
     }
 
     /**

@@ -2,7 +2,7 @@ package com.obeast.gateway.filter;
 
 import cn.hutool.json.JSONUtil;
 import com.obeast.common.base.CommonResult;
-import com.obeast.common.base.ResultCode;
+import com.obeast.common.constant.ResultCode;
 import com.obeast.common.constant.BendanResHeaderConstant;
 import com.obeast.common.utils.OAuth2Util;
 import com.obeast.gateway.config.GatewayConfigProperties;

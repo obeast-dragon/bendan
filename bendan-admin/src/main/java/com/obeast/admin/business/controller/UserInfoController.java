@@ -2,7 +2,6 @@ package com.obeast.admin.business.controller;
 
 import com.obeast.admin.business.entity.UserInfoEntity;
 import com.obeast.admin.business.service.UserInfoService;
-import com.obeast.admin.business.service.remote.OAuth2Remote;
 import com.obeast.admin.business.vo.UserInfoLoginParam;
 import com.obeast.common.base.CommonResult;
 import com.obeast.common.constant.PageConstant;

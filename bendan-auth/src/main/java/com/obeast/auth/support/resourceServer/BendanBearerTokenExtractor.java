@@ -1,11 +1,16 @@
 package com.obeast.auth.support.resourceServer;
 
+import com.obeast.common.constant.OAuth2Constant;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.server.resource.BearerTokenError;
+import org.springframework.security.oauth2.server.resource.BearerTokenErrors;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.regex.Matcher;
@@ -17,6 +22,7 @@ import java.util.regex.Pattern;
  * @version 1.0
  * Description: BearerToken解析配置
  */
+@Slf4j
 @RequiredArgsConstructor
 public class BendanBearerTokenExtractor implements BearerTokenResolver {
 
@@ -25,7 +31,6 @@ public class BendanBearerTokenExtractor implements BearerTokenResolver {
 
     private final PathMatcher pathMatcher = new AntPathMatcher();
     private final ResourcesProperties urlProperties;
-
 
     @Override
     public String resolve(HttpServletRequest request) {
@@ -38,11 +43,7 @@ public class BendanBearerTokenExtractor implements BearerTokenResolver {
         if (match) {
             return null;
         }
-        final String authorizationHeader =  resolveFromAuthorizationHeader(request);
-        if (authorizationHeader != null) {
-            return authorizationHeader;
-        }
-        return null;
+        return resolveFromAuthorizationHeader(request);
     }
 
     /**
@@ -54,11 +55,16 @@ public class BendanBearerTokenExtractor implements BearerTokenResolver {
      */
     private String resolveFromAuthorizationHeader(HttpServletRequest request) {
         String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
-
-        if (!StringUtils.startsWithIgnoreCase(authorization, "bearer")) {
-            return null;
+        if (authorization == null){
+            throw new InvalidBearerTokenException(null);
         }
-        return null;
+        Matcher matcher = authorizationPattern.matcher(authorization);
+        if (!matcher.matches()) {
+            BearerTokenError error = BearerTokenErrors.invalidToken("Bearer token is malformed");
+            throw new OAuth2AuthenticationException(error);
+        }
+        return matcher.group(OAuth2Constant.authorization);
     }
+
 
 }

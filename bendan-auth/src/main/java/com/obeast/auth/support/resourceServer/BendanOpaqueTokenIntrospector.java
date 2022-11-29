@@ -17,15 +17,16 @@ import java.security.Principal;
 import java.util.Objects;
 
 /**
- * @author lengleng
- * @date 2022/5/28
+ * @author wxl
+ * Date 2022/11/29 13:12
+ * @version 1.0
+ * Description: token 解析
  */
 @Slf4j
 @RequiredArgsConstructor
-public class BendanCustomOpaqueTokenIntrospector implements OpaqueTokenIntrospector {
+public class BendanOpaqueTokenIntrospector implements OpaqueTokenIntrospector {
 
 	private final OAuth2AuthorizationService authorizationService;
-
 	private final UserDetailsService userDetailsService;
 
 	@Override
@@ -34,7 +35,6 @@ public class BendanCustomOpaqueTokenIntrospector implements OpaqueTokenIntrospec
 		if (Objects.isNull(oldAuthorization)) {
 			throw new InvalidBearerTokenException(token);
 		}
-
 
 		UserDetails userDetails = null;
 		try {

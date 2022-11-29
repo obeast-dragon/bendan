@@ -1,7 +1,7 @@
 package com.obeast.auth.support.handler.result.failure;
 
 import com.obeast.common.base.CommonResult;
-import com.obeast.common.base.ResultCode;
+import com.obeast.common.constant.ResultCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConverter;

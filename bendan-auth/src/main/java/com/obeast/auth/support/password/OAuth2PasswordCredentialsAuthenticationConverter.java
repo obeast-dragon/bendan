@@ -1,6 +1,6 @@
 package com.obeast.auth.support.password;
 
-import com.obeast.auth.utils.OAuth2EndpointUtils;
+import com.obeast.auth.utils.OAuth2Utils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -29,13 +29,13 @@ public class OAuth2PasswordCredentialsAuthenticationConverter implements Authent
             return null;
         }
 
-        MultiValueMap<String, String> parameters = OAuth2EndpointUtils.getParameters(request);
+        MultiValueMap<String, String> parameters = OAuth2Utils.getParameters(request);
 
         // scope (OPTIONAL)
         String scope = parameters.getFirst(OAuth2ParameterNames.SCOPE);
         if (StringUtils.hasText(scope) &&
                 parameters.get(OAuth2ParameterNames.SCOPE).size() != 1) {
-            OAuth2EndpointUtils.throwError(
+            OAuth2Utils.throwError(
                     OAuth2ErrorCodes.INVALID_REQUEST,
                     OAuth2ParameterNames.SCOPE,
                     ACCESS_TOKEN_REQUEST_ERROR_URI);
@@ -50,7 +50,7 @@ public class OAuth2PasswordCredentialsAuthenticationConverter implements Authent
         //获取用户名密码
         String username = parameters.getFirst(OAuth2ParameterNames.USERNAME);
         if(!StringUtils.hasText(username)){
-            OAuth2EndpointUtils.throwError(
+            OAuth2Utils.throwError(
                     OAuth2ErrorCodes.INVALID_REQUEST,
                     OAuth2ParameterNames.USERNAME,
                     ACCESS_TOKEN_REQUEST_ERROR_URI);
@@ -58,7 +58,7 @@ public class OAuth2PasswordCredentialsAuthenticationConverter implements Authent
 
         String password = parameters.getFirst(OAuth2ParameterNames.PASSWORD);
         if(!StringUtils.hasText(password)){
-            OAuth2EndpointUtils.throwError(
+            OAuth2Utils.throwError(
                     OAuth2ErrorCodes.INVALID_REQUEST,
                     OAuth2ParameterNames.PASSWORD,
                     ACCESS_TOKEN_REQUEST_ERROR_URI);
@@ -76,8 +76,8 @@ public class OAuth2PasswordCredentialsAuthenticationConverter implements Authent
         // 获取当前已经认证的客户端信息
         Authentication clientPrincipal = SecurityContextHolder.getContext().getAuthentication();
         if (clientPrincipal == null) {
-            OAuth2EndpointUtils.throwError(OAuth2ErrorCodes.INVALID_REQUEST, OAuth2ErrorCodes.INVALID_CLIENT,
-                    OAuth2EndpointUtils.ACCESS_TOKEN_REQUEST_ERROR_URI);
+            OAuth2Utils.throwError(OAuth2ErrorCodes.INVALID_REQUEST, OAuth2ErrorCodes.INVALID_CLIENT,
+                    OAuth2Utils.ACCESS_TOKEN_REQUEST_ERROR_URI);
         }
 
         return new OAuth2PasswordCredentialsAuthenticationToken(

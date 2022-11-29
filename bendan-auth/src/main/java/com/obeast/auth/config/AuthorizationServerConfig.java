@@ -11,13 +11,12 @@ import com.obeast.auth.support.handler.result.success.CustomizeAuthenticationSuc
 import com.obeast.auth.support.password.OAuth2PasswordCredentialsAuthenticationConverter;
 import com.obeast.auth.support.password.OAuth2PasswordCredentialsAuthenticationProvider;
 import com.obeast.auth.support.resourceServer.BendanBearerTokenExtractor;
-import com.obeast.auth.support.resourceServer.BendanCustomOpaqueTokenIntrospector;
-import com.obeast.auth.support.resourceServer.ResourceAuthExceptionEntryPoint;
+import com.obeast.auth.support.resourceServer.BendanOpaqueTokenIntrospector;
+import com.obeast.auth.exception.ResourceAuthExceptionEntryPoint;
 import com.obeast.auth.support.resourceServer.ResourcesProperties;
 import com.obeast.auth.utils.Jwks;
 import com.obeast.auth.utils.OAuth2GeneratorUtils;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -35,7 +34,6 @@ import org.springframework.security.oauth2.server.authorization.web.authenticati
 import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationConverter;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.List;
 
@@ -47,35 +45,18 @@ import java.util.List;
 @EnableConfigurationProperties(ResourcesProperties.class)
 public class AuthorizationServerConfig {
 
-
-    @Bean
-    @Order(Ordered.HIGHEST_PRECEDENCE)
-    SecurityFilterChain securityFilterChain(
-            HttpSecurity http,
-            BendanBearerTokenExtractor bendanBearerTokenExtractor,
-            ResourcesProperties propertiesUrls,
-            ResourceAuthExceptionEntryPoint resourceAuthExceptionEntryPoint,
-            OpaqueTokenIntrospector opaqueTokenIntrospector) throws Exception {
-
-        http.authorizeRequests(authorizeRequests -> authorizeRequests
-                        .antMatchers(ArrayUtil.toArray(propertiesUrls.getUrls(), String.class)).permitAll().anyRequest()
-                        .authenticated())
-                .oauth2ResourceServer(
-                        oauth2 -> oauth2
-                                .opaqueToken(token -> token.introspector(opaqueTokenIntrospector))
-                                .authenticationEntryPoint(resourceAuthExceptionEntryPoint)
-                                .bearerTokenResolver(bendanBearerTokenExtractor))
-                .headers().frameOptions().disable().and().csrf().disable();
-
-        return http.build();
-    }
-
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain authorizationServerSecurityFilterChain(
             HttpSecurity http,
             OAuth2PasswordCredentialsAuthenticationProvider oAuth2PasswordCredentialsAuthenticationProvider,
-            DaoAuthenticationProvider daoAuthenticationProvider) throws Exception {
+            DaoAuthenticationProvider daoAuthenticationProvider,
+            BendanBearerTokenExtractor bendanBearerTokenExtractor,
+            ResourcesProperties propertiesUrls,
+            ResourceAuthExceptionEntryPoint resourceAuthExceptionEntryPoint,
+            OpaqueTokenIntrospector opaqueTokenIntrospector
+    ) throws Exception {
+        /*配置自定义密码 token 、 res*/
         OAuth2AuthorizationServerConfigurer<HttpSecurity> authorizationServerConfigurer =
                 new OAuth2AuthorizationServerConfigurer<>();
         http.apply(authorizationServerConfigurer.tokenEndpoint(tokenEndpoint -> {
@@ -84,32 +65,22 @@ public class AuthorizationServerConfig {
             tokenEndpoint.errorResponseHandler(customizeAuthenticationFailureHandler());
         }));
 
-        RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
+        /*配置登录处理*/
         http
-                .requestMatcher(endpointsMatcher)
-                .authorizeRequests(authorizeRequests -> {
-                    //设置不需要权限拦截的url
-                    List<String> ignores = List.of(
-                            //swagger 相关
-                            "/v3/api-docs",
-                            "/swagger-ui/**",
-                            "/swagger-resources/**",
-                            //登录、图形验证码，站点图标
-                            "/login*",
-                            "/favicon.ico",
-                            "/common/**",
-                            "/login_sms"
-                    );
-                    authorizeRequests.antMatchers(ignores.toArray(new String[0])).permitAll();
-
-                    authorizeRequests.anyRequest().authenticated();
-                })
-                .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
+            .authorizeRequests(authorizeRequests -> authorizeRequests
+                        .antMatchers(ArrayUtil.toArray(propertiesUrls.getUrls(), String.class)).permitAll().anyRequest()
+                        .authenticated())
+                .oauth2ResourceServer(
+                        oauth2 -> oauth2
+                                .opaqueToken(token -> token.introspector(opaqueTokenIntrospector))
+                                .authenticationEntryPoint(resourceAuthExceptionEntryPoint)
+                                .bearerTokenResolver(bendanBearerTokenExtractor))
+                .headers().frameOptions().disable().and()
+                .csrf()
+                .disable()
                 .apply(authorizationServerConfigurer);
 
-
         SecurityFilterChain securityFilterChain = http.formLogin(Customizer.withDefaults()).build();
-
         http.authenticationProvider(oAuth2PasswordCredentialsAuthenticationProvider);
         http.authenticationProvider(daoAuthenticationProvider);
         return securityFilterChain;
@@ -130,13 +101,11 @@ public class AuthorizationServerConfig {
     /**
      * 资源服务器异常处理
      * @param objectMapper jackson 输出对象
-     * @param securityMessageSource 自定义国际化处理器
      * @return ResourceAuthExceptionEntryPoint
      */
     @Bean
-    public ResourceAuthExceptionEntryPoint resourceAuthExceptionEntryPoint(ObjectMapper objectMapper,
-                                                                           MessageSource securityMessageSource) {
-        return new ResourceAuthExceptionEntryPoint(objectMapper, securityMessageSource);
+    public ResourceAuthExceptionEntryPoint resourceAuthExceptionEntryPoint(ObjectMapper objectMapper) {
+        return new ResourceAuthExceptionEntryPoint(objectMapper);
     }
 
     /**
@@ -146,7 +115,7 @@ public class AuthorizationServerConfig {
      */
     @Bean
     public OpaqueTokenIntrospector opaqueTokenIntrospector(OAuth2AuthorizationService authorizationService, UserDetailsService userDetailsService) {
-        return new BendanCustomOpaqueTokenIntrospector(authorizationService, userDetailsService);
+        return new BendanOpaqueTokenIntrospector(authorizationService, userDetailsService);
     }
 
     /**

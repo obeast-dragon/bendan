@@ -19,6 +19,11 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>com.obeast</groupId>
+            <artifactId>bendan-common</artifactId>
+        </dependency>
+
 
         <!--   Springcloud已经弃用了ribbon，目前使用的 -->
         <dependency>
@@ -57,10 +62,7 @@
             <artifactId>okhttp</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.obeast</groupId>
-            <artifactId>bendan-common</artifactId>
-        </dependency>
+
 
         <!-- druid-spring-boot-starter -->
         <dependency>
@@ -81,11 +83,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
 
     <build>

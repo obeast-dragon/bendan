@@ -10,7 +10,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/bendan_oauth2?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT
+    url: jdbc:mysql://localhost:3306/bendan?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT
     username: root
     password: mysql1234
     type: com.alibaba.druid.pool.DruidDataSource
@@ -46,6 +46,7 @@ security:
         - "/swagger-ui/**"
         - "/swagger-resources/**"
         - "/favicon.ico"
+        - "/oauth2/token"
 
 #
 #feign:

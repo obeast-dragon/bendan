@@ -2,6 +2,7 @@ package com.obeast.common.base;
 
 
 
+import com.obeast.common.constant.ResultCode;
 import lombok.Data;
 
 /**
@@ -148,8 +149,8 @@ public class CommonResult<T> {
     /**
      * 未登录返回结果
      */
-    public static <T> CommonResult<T> unauthorized(T data) {
-        return new CommonResult<>(ResultCode.UN_AUTHORIZED.getCode(), ResultCode.UN_AUTHORIZED.getMessage(), data, false);
+    public static <T> CommonResult<T> unauthorized() {
+        return new CommonResult<>(ResultCode.UN_AUTHORIZED.getCode(), ResultCode.UN_AUTHORIZED.getMessage(), null, false);
     }
 
     /**

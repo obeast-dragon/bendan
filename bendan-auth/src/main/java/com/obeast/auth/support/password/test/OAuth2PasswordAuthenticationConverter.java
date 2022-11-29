@@ -1,7 +1,7 @@
 package com.obeast.auth.support.password.test;
 
 import com.obeast.auth.support.base.OAuth2BaseAuthenticationConverter;
-import com.obeast.auth.utils.OAuth2EndpointUtils;
+import com.obeast.auth.utils.OAuth2Utils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2ErrorCodes;
@@ -31,7 +31,7 @@ public class OAuth2PasswordAuthenticationConverter
         //获取用户名密码
         String username = parameters.getFirst(OAuth2ParameterNames.USERNAME);
         if(!StringUtils.hasText(username)){
-            OAuth2EndpointUtils.throwError(
+            OAuth2Utils.throwError(
                     OAuth2ErrorCodes.INVALID_REQUEST,
                     OAuth2ParameterNames.USERNAME,
                     ACCESS_TOKEN_REQUEST_ERROR_URI);
@@ -39,7 +39,7 @@ public class OAuth2PasswordAuthenticationConverter
 
         String password = parameters.getFirst(OAuth2ParameterNames.PASSWORD);
         if(!StringUtils.hasText(password)){
-            OAuth2EndpointUtils.throwError(
+            OAuth2Utils.throwError(
                     OAuth2ErrorCodes.INVALID_REQUEST,
                     OAuth2ParameterNames.PASSWORD,
                     ACCESS_TOKEN_REQUEST_ERROR_URI);

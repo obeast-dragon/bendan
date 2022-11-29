@@ -44,7 +44,7 @@ import java.util.*;
 @Slf4j
 public class OAuth2PasswordCredentialsAuthenticationProvider implements AuthenticationProvider {
     private static final String ERROR_URI = "https://datatracker.ietf.org/doc/html/rfc6749#section-5.2";
-    private static final OAuth2TokenType ID_TOKEN_TOKEN_TYPE = new OAuth2TokenType(OidcParameterNames.ID_TOKEN);
+//    private static final OAuth2TokenType ID_TOKEN_TOKEN_TYPE = new OAuth2TokenType(OidcParameterNames.ID_TOKEN);
 
     private final MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
     @Setter

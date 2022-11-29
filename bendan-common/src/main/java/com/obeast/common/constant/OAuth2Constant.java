@@ -10,6 +10,11 @@ public interface OAuth2Constant {
 
 
     /**
+     * token 名
+     * */
+    String authorization = "token";
+
+    /**
      * 手机号登录
      */
     String APP = "app";

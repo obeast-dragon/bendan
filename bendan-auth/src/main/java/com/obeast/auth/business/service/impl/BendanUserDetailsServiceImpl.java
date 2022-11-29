@@ -21,7 +21,6 @@ public class BendanUserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private BendanAdminUserInfoService bendanAdminUserInfoService;
 
-
     @Autowired
     private HttpServletRequest request;
 
