@@ -1,6 +1,7 @@
 package com.obeast.auth;
 
 import com.obeast.auth.business.service.remote.BendanAdminUserInfoService;
+import com.obeast.auth.support.resourceServer.ResourcesProperties;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,18 +31,18 @@ public class JdbcTest {
     @Autowired
     private RegisteredClientRepository registeredClientRepository;
 
+    @Autowired
+    ResourcesProperties resourcesProperties;
+
 
     @Autowired
     BendanAdminUserInfoService bendanAdminUserInfoService;
 
-    public static void main(String[] args) {
-        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        String password  = "{bcrypt}$2a$10$ROWGidQi1gte/6xRlLP3xeeSeiDLCuT.BuGMYEkmulygTKF4RjvEG";
-        System.out.println(passwordEncoder.matches("password", password));
-        System.out.println(passwordEncoder.encode("password"));
-    }
 
-    void encode(){
+
+    @Test
+    void url(){
+        System.out.println(resourcesProperties.getUrls());
 
     }
     @Test

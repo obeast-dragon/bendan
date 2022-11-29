@@ -1,5 +1,6 @@
 package com.obeast.auth;
 
+import com.obeast.common.utils.OAuth2Util;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +40,15 @@ public class RedisTest {
 
     private static final String AUTHORIZATION = "token";
 
+    @Test
+    void redisTest(){
+        String token  =
+                "eyJraWQiOiIwNDZhMDQ5Yi04ZjIzLTRmYmUtODU1Yi05MmJiZTdlY2Q3NjciLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJsZCIsImF1ZCI6Im1lc3NhZ2luZy1jbGllbnQiLCJuYmYiOjE2Njk2MTc3NzQsInNjb3BlIjpbIm9wZW5pZCIsIm1lc3NhZ2UucmVhZCIsIm1lc3NhZ2Uud3JpdGUiXSwiaXNzIjoiaHR0cDovL2F1dGgtc2VydmVyOjkwMDAiLCJleHAiOjE2Njk2MTgwNzQsImlhdCI6MTY2OTYxNzc3NH0.KFqfEk4oDh-HpybBKjpyjZiFw6qfYvdA3MsuWed0aieCe_-jCTramqtHeQDxYDR-aP9aRcdXlh0gH53sn3FvhfPmP63MHGQthxOQNH3-zbmb6q39KME_ojCdYqdHGjwbvkO4r1D9QtJ8lvvuV5z_NkpTBjogFKkJXiJY6urzImHUDOXJajrMs_WrAxbvfJDn8HaWPUP_--58VIl0FSdwmYU61LuTPdJ_AJJWKPU74zxpcwFO48M_4WtbtVfsHm6kRHqfJEXw4M7Ztgu0LJgzxsM3loiuFH_LDXOoeykn9g_vnXaT04osBsIpzHFpEUaDltM01m-yzZMhSFNSBii7VA"
+                ;
+        OAuth2Authorization authorizationServiceByToken = authorizationService.findByToken(token, OAuth2TokenType.ACCESS_TOKEN);
+//        OAuth2Authorization oAuth2Authorization = (OAuth2Authorization) redisTemplate.opsForValue().get(OAuth2Util.createRedisKey(OAuth2Util.ACCESS_TOKEN, token));
+        System.out.println(authorizationServiceByToken);
+    }
     @Test
     void get() {
         OAuth2Authorization authorizationServiceById = authorizationService.findById("946da889-0b30-49ff-8468-f90c6b44c885");

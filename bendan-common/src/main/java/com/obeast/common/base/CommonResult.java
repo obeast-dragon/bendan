@@ -21,7 +21,7 @@ public class CommonResult<T> {
 
     private T data;
 
-    protected CommonResult() {
+    public CommonResult() {
     }
 
     protected CommonResult(Integer code, String message, T data, Boolean isSuccess) {

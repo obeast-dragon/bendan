@@ -40,9 +40,6 @@ public class UserInfoController {
     @Autowired
     private UserInfoService userInfoService;
 
-    @Autowired
-    private OAuth2Remote  oAuth2Remote;
-
 
     @PostMapping("/login")
     public CommonResult<?> login(UserInfoLoginParam userInfoLoginParam){
