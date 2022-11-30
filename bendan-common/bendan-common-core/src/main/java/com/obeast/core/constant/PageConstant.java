@@ -3,9 +3,10 @@ package com.obeast.core.constant;
 
 /**
  * @author wxl
- * @date 2022/7/16 23:02
- * @description: page constant
- **/
+ * Date 2022/11/30 22:04
+ * @version 1.0
+ * Description: page constant
+ */
 public interface PageConstant {
     /**
      * 成功

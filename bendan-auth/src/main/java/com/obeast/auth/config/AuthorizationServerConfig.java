@@ -6,14 +6,15 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import com.obeast.auth.business.service.BendanUserDetailsService;
 import com.obeast.auth.support.handler.result.failure.CustomizeAuthenticationFailureHandler;
 import com.obeast.auth.support.handler.result.success.CustomizeAuthenticationSuccessHandler;
 import com.obeast.auth.support.password.OAuth2PasswordCredentialsAuthenticationConverter;
 import com.obeast.auth.support.password.OAuth2PasswordCredentialsAuthenticationProvider;
-import com.obeast.auth.support.resourceServer.BendanBearerTokenExtractor;
-import com.obeast.auth.support.resourceServer.BendanOpaqueTokenIntrospector;
+import com.obeast.auth.support.resource.BendanBearerTokenExtractor;
+import com.obeast.auth.support.resource.BendanOpaqueTokenIntrospector;
 import com.obeast.auth.exception.ResourceAuthExceptionEntryPoint;
-import com.obeast.auth.support.resourceServer.ResourcesProperties;
+import com.obeast.auth.support.resource.ResourcesProperties;
 import com.obeast.auth.utils.Jwks;
 import com.obeast.auth.utils.OAuth2GeneratorUtils;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -114,7 +115,7 @@ public class AuthorizationServerConfig {
      * @return TokenIntrospector
      */
     @Bean
-    public OpaqueTokenIntrospector opaqueTokenIntrospector(OAuth2AuthorizationService authorizationService, UserDetailsService userDetailsService) {
+    public OpaqueTokenIntrospector opaqueTokenIntrospector(OAuth2AuthorizationService authorizationService, BendanUserDetailsService userDetailsService) {
         return new BendanOpaqueTokenIntrospector(authorizationService, userDetailsService);
     }
 
@@ -165,7 +166,7 @@ public class AuthorizationServerConfig {
     @Bean
     public OAuth2PasswordCredentialsAuthenticationProvider oAuth2PasswordCredentialsAuthenticationProvider
     (PasswordEncoder passwordEncoder,
-     UserDetailsService userDetailsService,
+     BendanUserDetailsService userDetailsService,
      HttpSecurity httpSecurity) {
         OAuth2AuthorizationService authorizationService = httpSecurity.getSharedObject(OAuth2AuthorizationService.class);
         OAuth2PasswordCredentialsAuthenticationProvider provider =
@@ -178,7 +179,7 @@ public class AuthorizationServerConfig {
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(
-            PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
+            PasswordEncoder passwordEncoder, BendanUserDetailsService userDetailsService) {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);

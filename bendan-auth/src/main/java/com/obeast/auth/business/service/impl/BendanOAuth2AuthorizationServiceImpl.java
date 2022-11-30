@@ -1,4 +1,4 @@
-package com.obeast.security.business.service.impl;
+package com.obeast.auth.business.service.impl;
 
 import com.obeast.core.constant.UserLoginConstant;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +32,8 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class BendanOAuth2AuthorizationServiceImpl implements OAuth2AuthorizationService {
 
-    @Value("${redis.token.expiration}")
-    private Long TIMEOUT;
+//    @Value("${redis.token.expiration}")
+    private static final Long TIMEOUT = 10L;
 
     private final RedisTemplate<String, Object> redisTemplate;
 

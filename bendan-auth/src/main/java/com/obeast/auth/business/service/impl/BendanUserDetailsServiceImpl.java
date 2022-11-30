@@ -1,12 +1,12 @@
-package com.obeast.security.business.service.impl;
+package com.obeast.auth.business.service.impl;
 
+import com.obeast.auth.business.BendanSecurityUser;
 import com.obeast.business.entity.BendanSysUser;
 import com.obeast.business.vo.UserInfo;
 import com.obeast.core.base.CommonResult;
 import com.obeast.core.constant.UserLoginConstant;
-import com.obeast.security.business.service.BendanUserDetailsService;
-import com.obeast.security.business.service.remote.BendanSysUserRemote;
-import com.obeast.security.domain.BendanSecurityUser;
+import com.obeast.auth.business.service.BendanUserDetailsService;
+import com.obeast.auth.business.service.remote.BendanSysUserRemote;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;

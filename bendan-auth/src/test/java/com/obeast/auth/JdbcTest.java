@@ -1,7 +1,7 @@
 package com.obeast.auth;
 
 
-import com.obeast.auth.support.resourceServer.ResourcesProperties;
+import com.obeast.auth.support.resource.ResourcesProperties;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -14,7 +14,6 @@
     <version>2.0.0</version>
     <modules>
         <module>bendan-common-core</module>
-        <module>bendan-common-security</module>
         <module>bendan-common-business</module>
     </modules>
 

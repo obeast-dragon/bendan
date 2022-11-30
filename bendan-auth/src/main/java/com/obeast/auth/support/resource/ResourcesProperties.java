@@ -1,4 +1,4 @@
-package com.obeast.auth.support.resourceServer;
+package com.obeast.auth.support.resource;
 
 import lombok.Getter;
 import lombok.Setter;

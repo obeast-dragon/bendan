@@ -1,4 +1,4 @@
-package com.obeast.auth.support.resourceServer;
+package com.obeast.auth.support.resource;
 
 import com.obeast.core.constant.UserLoginConstant;
 import lombok.RequiredArgsConstructor;
