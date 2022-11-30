@@ -3,7 +3,8 @@ package com.obeast.core.base;
 
 
 import com.obeast.core.constant.ResultCode;
-import lombok.Data;
+
+import java.util.Optional;
 
 /**
  * @author wxl
@@ -11,7 +12,6 @@ import lombok.Data;
  * @version 1.0
  * Description: 全局返回值类
  */
-@Data
 public class CommonResult<T> {
 
     private Boolean success;
@@ -33,9 +33,9 @@ public class CommonResult<T> {
     }
 
     /**
-     * @description: 无返回值
+     * Description: 无返回值
      * @author wxl
-     * @date 2022/7/15 17:56
+     * Date 2022/7/15 17:56
      * @return null
      **/
     public static <T> CommonResult<T> success() {
@@ -167,8 +167,16 @@ public class CommonResult<T> {
         return new CommonResult<>(ResultCode.REQ_REJECT.getCode(), ResultCode.REQ_REJECT.getMessage(), data, false);
     }
 
-    public long getCode() {
-        return code == null ? 200 : code;
+    public Boolean getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(Boolean success) {
+        this.success = success;
+    }
+
+    public Integer getCode() {
+        return code;
     }
 
     public void setCode(Integer code) {
@@ -189,6 +197,10 @@ public class CommonResult<T> {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    public static <T> Optional<T> getOptionalData(CommonResult<T> result){
+        return Optional.of(result.getData());
     }
 }
 

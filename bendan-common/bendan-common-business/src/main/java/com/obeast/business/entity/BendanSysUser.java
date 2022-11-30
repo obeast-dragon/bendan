@@ -76,19 +76,9 @@ public class BendanSysUser implements Serializable {
     private String secret;
 
     /**
-     * 锁定状态（3-正常，2-锁定）
+     * 锁定状态（0-正常，1-锁定）
      */
-    private Integer useStatus;
-
-    /**
-     * 使用状态（5-正常，4-禁用）
-     */
-    private Integer userAble;
-
-    /**
-     * 过期状态（7-正常，6-过期）
-     */
-    private Integer userExpired;
+    private Integer lockStatus;
 
 
     /**

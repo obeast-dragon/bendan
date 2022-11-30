@@ -4,25 +4,36 @@ package com.obeast.core.constant;
  * @author wxl
  * Date 2022/10/20 11:31
  * @version 1.0
- * Description: 客户端常量
+ * Description: 用户管理的常量
  */
-public interface OAuth2Constant {
+public interface UserLoginConstant {
+
+    /**
+     * 二级缓存名字
+     * */
+    String USERINFO = "USERINFO";
+    
+    /**
+     * 用户锁定状态
+     * */
+    Integer NORMAL_STATUS = 0;
 
 
     /**
      * token 名
      * */
-    String authorization = "token";
+    String AUTHORIZATION = "token";
 
-    /**
-     * 手机号登录
-     */
-    String APP = "app";
 
     /**
      * 默认登录URL
      */
     String LOGIN_URL = "/userinfo/login";
+
+    /**
+     *角色权限前缀
+     * */
+    String ROLE = "ROLE_";
 
 
     enum Type {

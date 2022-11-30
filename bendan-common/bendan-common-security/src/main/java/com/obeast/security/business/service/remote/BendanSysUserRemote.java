@@ -1,6 +1,7 @@
 package com.obeast.security.business.service.remote;
 
 import com.obeast.business.entity.BendanSysUser;
+import com.obeast.business.vo.UserInfo;
 import com.obeast.core.base.CommonResult;
 import com.obeast.core.config.fegin.FeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -17,5 +18,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface BendanSysUserRemote {
 
     @GetMapping("/sysUser/getUserinfo")
-    CommonResult<BendanSysUser> getUserinfo(@RequestParam("username") String username);
+    CommonResult<UserInfo> getUserinfo(@RequestParam("username") String username);
 }

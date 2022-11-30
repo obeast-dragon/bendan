@@ -1,6 +1,6 @@
 package com.obeast.auth.support.resourceServer;
 
-import com.obeast.core.constant.OAuth2Constant;
+import com.obeast.core.constant.UserLoginConstant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -63,7 +63,7 @@ public class BendanBearerTokenExtractor implements BearerTokenResolver {
             BearerTokenError error = BearerTokenErrors.invalidToken("Bearer token is malformed");
             throw new OAuth2AuthenticationException(error);
         }
-        return matcher.group(OAuth2Constant.authorization);
+        return matcher.group(UserLoginConstant.AUTHORIZATION);
     }
 
 

@@ -8,6 +8,8 @@ import com.obeast.business.vo.OAuth2TokenParams;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,9 +28,16 @@ public class BendanAdminApplicationTest {
 
     @Autowired
     BendanSysRoleDao bendanSysRoleDao;
+
+    @Autowired
+    private CacheManager cacheManager;
     @Test
     void testSaveUser() {
-        System.out.println(bendanSysRoleDao.listRolesByUserId(3L));
+        Cache cache = cacheManager.getCache("user");
+        cache.put("user", "12121");
+        Cache.ValueWrapper user = cache.get("user");
+        Object o = user.get();
+        System.out.println(o);
     }
 
     @Test
