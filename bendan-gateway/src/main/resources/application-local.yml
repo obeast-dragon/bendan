@@ -38,4 +38,4 @@ gateway:
     - "/*/*.css"
     - "/*/*.png"
     - "/*/*.ico"
-    - "/userinfo/login"
+    - "/sysUser/login"

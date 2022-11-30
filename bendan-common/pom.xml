@@ -15,6 +15,7 @@
     <modules>
         <module>bendan-common-core</module>
         <module>bendan-common-security</module>
+        <module>bendan-common-business</module>
     </modules>
 
     <name>bendan-common</name>

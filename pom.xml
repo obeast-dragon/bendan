@@ -222,32 +222,20 @@
                 <scope>runtime</scope>
             </dependency>
 
-
-            <!--    项目core       -->
+            <!--    common 项目 core       -->
             <dependency>
                 <groupId>com.obeast</groupId>
                 <artifactId>bendan-common-core</artifactId>
                 <version>${bendan.version}</version>
             </dependency>
 
+            <!--    common 项目 business       -->
             <dependency>
                 <groupId>com.obeast</groupId>
-                <artifactId>bendan-common</artifactId>
+                <artifactId>bendan-common-business</artifactId>
                 <version>${bendan.version}</version>
             </dependency>
 
-
-<!--            <dependency>-->
-<!--                <groupId>com.beast</groupId>-->
-<!--                <artifactId>bendan-blog</artifactId>-->
-<!--                <version>${bendan.version}</version>-->
-<!--            </dependency>-->
-
-<!--            <dependency>-->
-<!--                <groupId>com.beast</groupId>-->
-<!--                <artifactId>bendan-admin</artifactId>-->
-<!--                <version>${bendan.version}</version>-->
-<!--            </dependency>-->
 
         </dependencies>
     </dependencyManagement>

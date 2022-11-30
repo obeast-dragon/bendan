@@ -22,6 +22,11 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>com.obeast</groupId>
+            <artifactId>bendan-common-business</artifactId>
+        </dependency>
+
         <!-- 远程调用       -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -51,11 +56,6 @@
             <version>${LoadBalancer-caffeine.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.obeast</groupId>
-            <artifactId>bendan-common-core</artifactId>
-        </dependency>
-
         <!-- druid-spring-boot-starter -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -74,8 +74,6 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
-
-
 
 
     </dependencies>

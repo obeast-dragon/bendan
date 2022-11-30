@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.obeast.admin.business.dao.BendanSysUserDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.obeast.business.entity.BendanSysUser" id="BendanSysUserMap">
+        <result property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="realName" column="real_name"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="avatarUrl" column="avatar_url"/>
+        <result property="email" column="email"/>
+        <result property="gender" column="gender"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createId" column="create_id"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateId" column="update_id"/>
+        <result property="delEnabled" column="del_enabled"/>
+        <result property="useStatus" column="use_status"/>
+        <result property="secret" column="secret"/>
+    </resultMap>
+
+
+</mapper>

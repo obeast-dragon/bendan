@@ -1,13 +1,11 @@
 package com.obeast.auth;
 
-import com.obeast.auth.business.service.remote.BendanAdminUserInfoService;
+
 import com.obeast.auth.support.resourceServer.ResourcesProperties;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
@@ -35,8 +33,6 @@ public class JdbcTest {
     ResourcesProperties resourcesProperties;
 
 
-    @Autowired
-    BendanAdminUserInfoService bendanAdminUserInfoService;
 
 
 
@@ -45,10 +41,7 @@ public class JdbcTest {
         System.out.println(resourcesProperties.getUrls());
 
     }
-    @Test
-    void getUser() {
-        System.out.println(bendanAdminUserInfoService.loadUserByUsername("user"));
-    }
+
 
 
     @Test
