@@ -5,13 +5,13 @@
 
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.obeast.business.entity.BendanSysUser" id="BendanSysUserMap">
-        <result property="userId" column="user_id"/>
+        <result property="id" column="user_id"/>
         <result property="username" column="username"/>
         <result property="password" column="password"/>
         <result property="nickName" column="nick_name"/>
         <result property="realName" column="real_name"/>
         <result property="phoneNumber" column="phone_number"/>
-        <result property="avatarUrl" column="avatar_url"/>
+        <result property="avatar" column="avatar_url"/>
         <result property="email" column="email"/>
         <result property="gender" column="gender"/>
         <result property="lockStatus" column="lock_status"/>

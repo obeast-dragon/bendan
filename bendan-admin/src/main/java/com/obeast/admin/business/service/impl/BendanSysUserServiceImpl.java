@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.obeast.admin.business.dao.BendanSysMenuDao;
 import com.obeast.admin.business.dao.BendanSysRoleDao;
 import com.obeast.admin.business.dao.BendanSysUserDao;
 import com.obeast.admin.business.service.BendanSysMenuService;
@@ -21,6 +20,8 @@ import com.obeast.core.base.CommonResult;
 import com.obeast.core.domain.PageObjects;
 import com.obeast.core.utils.PageQueryUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.login.LoginException;
@@ -38,14 +39,40 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class BendanSysUserServiceImpl extends ServiceImpl<BendanSysUserDao, BendanSysUser> implements BendanSysUserService {
 
-
     private final BendanSysRoleDao bendanSysRoleDao;
-
-    private final BendanSysMenuDao bendanSysMenuDao;
 
     private final OAuth2TokenRemote OAuth2TokenRemote;
 
     private final BendanSysMenuService bendanSysMenuService;
+
+    private static final PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
+
+
+    @Override
+    public CommonResult<?> login(String username, String password) {
+        OAuth2TokenParams oAuth2Params = new OAuth2TokenParams();
+        oAuth2Params.setClient_id("messaging-client");
+        oAuth2Params.setClient_secret("secret");
+        oAuth2Params.setGrant_type("password");
+        oAuth2Params.setUsername(username);
+        oAuth2Params.setPassword(password);
+        return OAuth2TokenRemote.getAccessToken(oAuth2Params);
+    }
+
+    @Override
+    public void register(BendanSysUser bendanSysUser) throws LoginException {
+        String username = bendanSysUser.getUsername();
+        if (username != null) {
+            if (this.findByUsername(username) != null){
+                throw new LoginException("用户已经存在");
+            }
+            String password = bendanSysUser.getPassword();
+            String encodePassword = encoder.encode(password);
+            bendanSysUser.setPassword(encodePassword);
+            this.save(bendanSysUser);
+        }
+    }
 
     @Override
     public PageObjects<BendanSysUser> queryPage(JSONObject params) {
@@ -58,16 +85,7 @@ public class BendanSysUserServiceImpl extends ServiceImpl<BendanSysUserDao, Bend
         return new PageQueryUtils<>().getPageObjects(page, BendanSysUser.class);
     }
 
-    @Override
-    public CommonResult<?> login(String username, String password) {
-        OAuth2TokenParams oAuth2Params = new OAuth2TokenParams();
-        oAuth2Params.setClient_id("messaging-client");
-        oAuth2Params.setClient_secret("secret");
-        oAuth2Params.setGrant_type("password");
-        oAuth2Params.setUsername(username);
-        oAuth2Params.setPassword(password);
-        return OAuth2TokenRemote.getAccessToken(oAuth2Params);
-    }
+
 
     @Override
     public List<BendanSysUser> queryAll() {
@@ -88,7 +106,7 @@ public class BendanSysUserServiceImpl extends ServiceImpl<BendanSysUserDao, Bend
         UserInfo userInfo = new UserInfo();
         BendanSysUser bendanSysUser = this.findByUsername(username);
         if (bendanSysUser != null) {
-            List<BendanSysRole> bendanSysRoles = bendanSysRoleDao.listRolesByUserId(bendanSysUser.getUserId());
+            List<BendanSysRole> bendanSysRoles = bendanSysRoleDao.listRolesByUserId(bendanSysUser.getId());
             if (bendanSysRoles.isEmpty()){
                 throw new LoginException("当前用户没有设置角色");
             }

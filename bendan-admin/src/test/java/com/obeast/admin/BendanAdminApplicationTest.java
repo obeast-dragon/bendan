@@ -3,7 +3,9 @@ package com.obeast.admin;
 
 
 import com.obeast.admin.business.dao.BendanSysRoleDao;
+import com.obeast.admin.business.service.BendanSysUserService;
 import com.obeast.admin.business.service.remote.OAuth2TokenRemote;
+import com.obeast.business.entity.BendanSysUser;
 import com.obeast.business.vo.OAuth2TokenParams;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 
+import javax.security.auth.login.LoginException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,14 +33,21 @@ public class BendanAdminApplicationTest {
     BendanSysRoleDao bendanSysRoleDao;
 
     @Autowired
-    private CacheManager cacheManager;
+    BendanSysUserService bendanSysUserService;
+
     @Test
-    void testSaveUser() {
-        Cache cache = cacheManager.getCache("user");
-        cache.put("user", "12121");
-        Cache.ValueWrapper user = cache.get("user");
-        Object o = user.get();
-        System.out.println(o);
+    void testGetUserInfo() throws LoginException {
+        System.out.println(bendanSysUserService.findUserInfo("admin"));
+    }
+
+
+    @Test
+    void testSaveUser() throws LoginException {
+        BendanSysUser bendanSysUser = new BendanSysUser();
+        bendanSysUser.setUsername("admin");
+        bendanSysUser.setPassword("password");
+        bendanSysUser.setEmail("obeast.gym@gmail.com");
+        bendanSysUserService.register(bendanSysUser);
     }
 
     @Test

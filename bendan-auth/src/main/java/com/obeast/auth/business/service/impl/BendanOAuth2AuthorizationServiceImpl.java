@@ -32,7 +32,6 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class BendanOAuth2AuthorizationServiceImpl implements OAuth2AuthorizationService {
 
-//    @Value("${redis.token.expiration}")
     private static final Long TIMEOUT = 10L;
 
     private final RedisTemplate<String, Object> redisTemplate;

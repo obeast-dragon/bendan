@@ -1,5 +1,6 @@
 package com.obeast.auth.business.service.impl;
 
+import cn.hutool.core.stream.CollectorUtil;
 import com.obeast.auth.business.BendanSecurityUser;
 import com.obeast.business.entity.BendanSysUser;
 import com.obeast.business.vo.UserInfo;
@@ -10,6 +11,7 @@ import com.obeast.auth.business.service.remote.BendanSysUserRemote;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +19,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -28,19 +34,19 @@ public class BendanUserDetailsServiceImpl implements BendanUserDetailsService {
     /**
      * 二级缓存
      * */
-    private final CacheManager cacheManager;
+//    private final CacheManager cacheManager;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Cache cache = cacheManager.getCache(UserLoginConstant.USERINFO);
-        if (cache != null && cache.get(username) != null) {
-            return (BendanSecurityUser) cache.get(username).get();
-        }
+//        Cache cache = cacheManager.getCache(UserLoginConstant.USERINFO);
+//        if (cache != null && cache.get(username) != null) {
+//            return (BendanSecurityUser) cache.get(username).get();
+//        }
         CommonResult<UserInfo> result = bendanSysUserRemote.getUserinfo(username);
         UserDetails userDetails = getUserDetails(result);
-        if (cache != null){
-            cache.put(username, userDetails);
-        }
+//        if (cache != null){
+//            cache.put(username, userDetails);
+//        }
         return userDetails;
     }
 
@@ -49,9 +55,9 @@ public class BendanUserDetailsServiceImpl implements BendanUserDetailsService {
         // TODO: 2022/11/30 资源控制
         BendanSysUser sysUser = userInfo.getBendanSysUser();
         String[] roles = userInfo.getBendanSysRoles().stream().map(item -> UserLoginConstant.ROLE + item.getName()).toArray(String[]::new);
-        Collection<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(roles);
+        Set<GrantedAuthority> authorities = new HashSet<>(AuthorityUtils.createAuthorityList(roles));
         return new BendanSecurityUser(
-                sysUser.getUserId(),
+                sysUser.getId(),
                 sysUser.getUsername(),
                 sysUser.getPassword(),
                 sysUser.getEmail(),

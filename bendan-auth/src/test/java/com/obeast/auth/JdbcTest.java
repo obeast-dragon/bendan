@@ -1,12 +1,18 @@
 package com.obeast.auth;
 
 
+import cn.hutool.crypto.digest.BCrypt;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import com.obeast.auth.business.BendanSecurityUser;
 import com.obeast.auth.business.service.remote.BendanSysUserRemote;
 import com.obeast.auth.support.resource.ResourcesProperties;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
@@ -14,6 +20,7 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.ClientSettings;
 
+import java.util.HashSet;
 import java.util.UUID;
 
 /**
@@ -24,33 +31,25 @@ import java.util.UUID;
  */
 @SpringBootTest
 public class JdbcTest {
-
+    private static final PasswordEncoder encoder = new BCryptPasswordEncoder();
 
     //
     @Autowired
     private RegisteredClientRepository registeredClientRepository;
 
     @Autowired
-    ResourcesProperties resourcesProperties;
-
-
-    @Autowired
     BendanSysUserRemote bendanSysUserRemote;
 
-
-
-    @Test
-    void url(){
-        System.out.println(bendanSysUserRemote.getUserinfo("admin"));
+    public static void main(String[] args) {
 
     }
 
-
-
     @Test
-    @Disabled
-    void testOAuth2AuthorizationService() {
+    void test(){
+
+
     }
+
 
     /**
      * 创建clientId信息

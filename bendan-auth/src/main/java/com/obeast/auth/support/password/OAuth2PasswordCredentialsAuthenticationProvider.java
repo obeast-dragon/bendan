@@ -200,9 +200,9 @@ public class OAuth2PasswordCredentialsAuthenticationProvider implements Authenti
                     refreshToken
 //                    , add
             );
-        } catch (Exception ex) {
+        } catch (AuthenticationException ex) {
             log.error("the exception maybe in authenticate:  ", ex);
-            throw throwOAuth2AuthenticationException((AuthenticationException) ex);
+            throw throwOAuth2AuthenticationException(ex);
         }
     }
 

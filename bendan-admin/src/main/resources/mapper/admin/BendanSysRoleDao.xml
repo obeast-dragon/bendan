@@ -24,8 +24,8 @@
                r.del,
                r.create_time,
                r.update_time,
-               r.update_by,
-               r.create_by
+               r.update_id,
+               r.create_id
         FROM bendan_sys_user_role AS ur,
              bendan_sys_role AS r
         WHERE r.id = ur.role_id

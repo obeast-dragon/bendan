@@ -57,7 +57,7 @@ public class BendanRequestGlobalFilter implements GlobalFilter, Ordered {
                     httpHeaders.put(BendanResHeaderConstant.from, Collections.singletonList(BendanResHeaderConstant.bendanValue));
                 }).build();
         boolean pass = discharged(request.getURI().getPath(), gatewayConfigProperties.getIgnoreUrls());
-        if (!authenticateToken(request) && !pass){
+        if (!pass){
             return this.responseBody(exchange);
         }
         return chain.filter(
@@ -83,29 +83,6 @@ public class BendanRequestGlobalFilter implements GlobalFilter, Ordered {
         }
         return false;
     }
-
-
-    /**
-     * Description:认证
-     * @author wxl
-     * Date: 2022/11/22 17:11
-     * @param request HttpServletRequest
-     * @return boolean
-     */
-    private boolean authenticateToken(ServerHttpRequest request) {
-        if (request != null) {
-            List<String> authorizationList = request.getHeaders().get(BendanResHeaderConstant.authorization);
-            if (authorizationList != null) {
-                String authorization = authorizationList.get(0);
-                String token = authorization.replace(OAuth2Util.JWT_TOKEN_PREFIX, "");
-                Object obj  = redisTemplate.opsForValue().get(OAuth2Util.createRedisKey(OAuth2Util.ACCESS_TOKEN, token));
-                log.info("obj {}",obj);
-                return obj != null;
-            }
-        }
-        return false;
-    }
-
 
 
     /**

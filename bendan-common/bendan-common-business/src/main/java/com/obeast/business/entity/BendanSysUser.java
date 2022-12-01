@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -28,7 +30,7 @@ public class BendanSysUser implements Serializable {
      * 用户ID
      */
     @TableId(type = IdType.AUTO)
-    private Long userId;
+    private Long id;
 
     /**
      * 用户名称
@@ -58,7 +60,7 @@ public class BendanSysUser implements Serializable {
     /**
      * 头像
      */
-    private String avatarUrl;
+    private String avatar;
 
     /**
      * 邮箱
@@ -78,7 +80,7 @@ public class BendanSysUser implements Serializable {
 
 
     /**
-     * 性别   -1 未知 0 女性  1 男性
+     * 性别   (-1 未知 0 女性  1 男性)
      */
     private Integer gender;
 

@@ -27,9 +27,9 @@
                sm.path,
                sm.sort,
                sm.status,
-               sm.create_by,
+               sm.create_id,
                sm.create_time,
-               sm.update_by,
+               sm.update_id,
                sm.update_time
         FROM bendan_sys_menu AS sm
                  LEFT JOIN bendan_sys_role_menu AS srm ON sm.id = srm.menu_id

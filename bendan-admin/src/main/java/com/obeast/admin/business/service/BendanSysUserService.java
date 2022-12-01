@@ -32,6 +32,16 @@ public interface BendanSysUserService extends IService<BendanSysUser> {
     CommonResult<?> login(String username, String password);
 
     /**
+     * Description: 注册
+     * @author wxl
+     * Date: 2022/12/1 18:53
+     * @param bendanSysUser  bendanSysUser
+     */
+    void register(BendanSysUser bendanSysUser) throws LoginException;
+
+//    ----------------------default------------------------------------------
+
+    /**
      * Description: 查询用户详情
      *
      * @author wxl
@@ -79,4 +89,6 @@ public interface BendanSysUserService extends IService<BendanSysUser> {
      * @return com.obeast.business.entity.BendanSysUser
      */
     BendanSysUser findByUsername(String username);
+
+
 }

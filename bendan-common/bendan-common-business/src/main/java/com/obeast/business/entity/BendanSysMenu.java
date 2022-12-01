@@ -43,7 +43,7 @@ public class BendanSysMenu implements Serializable {
 	private String name;
 
 	/**
-	 * 是否可跳转，0 不可跳转  1 可跳转
+	 * 是否可跳转，(0 不可跳转  1 可跳转)
 	 */
 	private Integer type;
 

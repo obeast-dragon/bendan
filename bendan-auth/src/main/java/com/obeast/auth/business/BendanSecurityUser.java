@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 
 import java.io.Serial;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +17,7 @@ import java.util.Map;
  * @version 1.0
  * Description: User扩展
  */
-public class BendanSecurityUser extends User  implements OAuth2AuthenticatedPrincipal {
+public class BendanSecurityUser extends User implements OAuth2AuthenticatedPrincipal, Serializable {
 
     @Serial
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
@@ -50,6 +51,7 @@ public class BendanSecurityUser extends User  implements OAuth2AuthenticatedPrin
 
     /**
      * Get the OAuth 2.0 token attributes
+     *
      * @return the OAuth 2.0 token attributes
      */
     @Override
