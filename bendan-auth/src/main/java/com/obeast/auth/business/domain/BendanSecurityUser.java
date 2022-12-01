@@ -1,4 +1,4 @@
-package com.obeast.auth.business;
+package com.obeast.auth.business.domain;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;

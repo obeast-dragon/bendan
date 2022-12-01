@@ -1,16 +1,15 @@
 package com.obeast.auth;
 
 
-import cn.hutool.crypto.digest.BCrypt;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
-import com.obeast.auth.business.BendanSecurityUser;
+import cn.hutool.json.JSON;
 import com.obeast.auth.business.service.remote.BendanSysUserRemote;
-import com.obeast.auth.support.resource.ResourcesProperties;
+import com.obeast.core.constant.UserLoginConstant;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -20,7 +19,6 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.ClientSettings;
 
-import java.util.HashSet;
 import java.util.UUID;
 
 /**
@@ -40,12 +38,14 @@ public class JdbcTest {
     @Autowired
     BendanSysUserRemote bendanSysUserRemote;
 
-    public static void main(String[] args) {
-
-    }
+    @Autowired
+     CacheManager cacheManager;
 
     @Test
     void test(){
+        Cache cache = cacheManager.getCache(UserLoginConstant.USERINFO);
+        JSON json = (JSON) cache.get("admin").get();
+        System.out.println(json);
 
 
     }

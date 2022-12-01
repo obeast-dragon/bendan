@@ -1,30 +1,24 @@
 package com.obeast.auth.business.service.impl;
 
-import cn.hutool.core.stream.CollectorUtil;
-import com.obeast.auth.business.BendanSecurityUser;
+import com.obeast.auth.business.domain.BendanSecurityUser;
+import com.obeast.auth.business.service.BendanUserDetailsService;
+import com.obeast.auth.business.service.remote.BendanSysUserRemote;
 import com.obeast.business.entity.BendanSysUser;
 import com.obeast.business.vo.UserInfo;
 import com.obeast.core.base.CommonResult;
 import com.obeast.core.constant.UserLoginConstant;
-import com.obeast.auth.business.service.BendanUserDetailsService;
-import com.obeast.auth.business.service.remote.BendanSysUserRemote;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.Cacheable;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BendanUserDetailsServiceImpl implements BendanUserDetailsService {
