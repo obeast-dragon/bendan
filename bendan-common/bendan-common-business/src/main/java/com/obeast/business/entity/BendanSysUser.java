@@ -65,10 +65,6 @@ public class BendanSysUser implements Serializable {
      */
     private String email;
 
-    /**
-     * 删除状态（1-正常，0-删除）
-     */
-    private Integer delEnabled;
 
     /**
      * 密文

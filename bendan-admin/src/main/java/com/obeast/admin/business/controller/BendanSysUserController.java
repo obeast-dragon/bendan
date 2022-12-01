@@ -41,9 +41,10 @@ public class BendanSysUserController {
         return bendanSysUserService.login(userInfoLoginParam.getUsername(), userInfoLoginParam.getPassword());
     }
 
+
     @Operation(summary = "根据用户名获取通用用户信息")
     @GetMapping("/getUserinfo")
-    public CommonResult<UserInfo> getUserinfo(@RequestParam String username) throws LoginException {
+    public CommonResult<UserInfo> getUserinfo(@RequestParam("username") String username) throws LoginException {
         UserInfo userInfo = bendanSysUserService.findUserInfo(username);
         if (userInfo == null){
             CommonResult.error("获取失败");

@@ -33,8 +33,8 @@
                sm.update_time
         FROM bendan_sys_menu AS sm
                  LEFT JOIN bendan_sys_role_menu AS srm ON sm.id = srm.menu_id
-        WHERE sm.del = 0
-          AND sys_role_menu.role_id = #{roleId}
+        WHERE sm.status = 0
+          AND srm.role_id = #{roleId}
         ORDER BY sm.sort DESC
     </select>
 

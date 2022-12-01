@@ -1,6 +1,7 @@
 package com.obeast.auth;
 
 
+import com.obeast.auth.business.service.remote.BendanSysUserRemote;
 import com.obeast.auth.support.resource.ResourcesProperties;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -33,12 +34,14 @@ public class JdbcTest {
     ResourcesProperties resourcesProperties;
 
 
+    @Autowired
+    BendanSysUserRemote bendanSysUserRemote;
 
 
 
     @Test
     void url(){
-        System.out.println(resourcesProperties.getUrls());
+        System.out.println(bendanSysUserRemote.getUserinfo("admin"));
 
     }
 

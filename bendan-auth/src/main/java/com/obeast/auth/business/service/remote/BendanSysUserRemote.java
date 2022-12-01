@@ -20,4 +20,5 @@ public interface BendanSysUserRemote {
 
     @GetMapping("/sysUser/getUserinfo")
     CommonResult<UserInfo> getUserinfo(@RequestParam("username") String username);
+
 }
