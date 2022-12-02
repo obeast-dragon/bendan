@@ -1,12 +1,12 @@
-package com.obeast.auth.business.service.impl;
+package com.obeast.security.business.service.impl;
 
-import com.obeast.auth.business.domain.BendanSecurityUser;
-import com.obeast.auth.business.service.BendanUserDetailsService;
-import com.obeast.auth.business.service.remote.BendanSysUserRemote;
 import com.obeast.business.entity.BendanSysUser;
 import com.obeast.business.vo.UserInfo;
 import com.obeast.core.base.CommonResult;
 import com.obeast.core.constant.UserLoginConstant;
+import com.obeast.security.business.domain.BendanSecurityUser;
+import com.obeast.security.business.service.BendanUserDetailsService;
+import com.obeast.security.business.service.remote.BendanSysUserRemote;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +19,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
-@Service
 @RequiredArgsConstructor
 public class BendanUserDetailsServiceImpl implements BendanUserDetailsService {
 

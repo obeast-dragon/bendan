@@ -1,10 +1,9 @@
-package com.obeast.auth.business.service.remote;
+package com.obeast.security.business.service.remote;
 
 import com.obeast.business.vo.UserInfo;
 import com.obeast.core.base.CommonResult;
 import com.obeast.core.config.fegin.FeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.context.annotation.Primary;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @version 1.0
  * Description:
  */
-@Primary
 @FeignClient(value = "bendan-admin", configuration = FeignConfig.class)
 public interface BendanSysUserRemote {
 

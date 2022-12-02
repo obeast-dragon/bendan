@@ -236,6 +236,13 @@
                 <version>${bendan.version}</version>
             </dependency>
 
+            <!--    common 项目 security       -->
+            <dependency>
+                <groupId>com.obeast</groupId>
+                <artifactId>bendan-common-security</artifactId>
+                <version>${bendan.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

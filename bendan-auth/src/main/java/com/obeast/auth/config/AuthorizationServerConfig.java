@@ -6,7 +6,7 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import com.obeast.auth.business.service.BendanUserDetailsService;
+
 import com.obeast.auth.support.handler.result.failure.CustomizeAuthenticationFailureHandler;
 import com.obeast.auth.support.handler.result.success.CustomizeAuthenticationSuccessHandler;
 import com.obeast.auth.support.password.OAuth2PasswordCredentialsAuthenticationConverter;
@@ -17,6 +17,7 @@ import com.obeast.auth.exception.ResourceAuthExceptionEntryPoint;
 import com.obeast.auth.support.resource.ResourcesProperties;
 import com.obeast.auth.utils.Jwks;
 import com.obeast.auth.utils.OAuth2GeneratorUtils;
+import com.obeast.security.business.service.BendanUserDetailsService;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +27,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.authorization.OAuth2AuthorizationServerConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;

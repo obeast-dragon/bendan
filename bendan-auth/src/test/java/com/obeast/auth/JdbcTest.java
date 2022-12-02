@@ -2,8 +2,8 @@ package com.obeast.auth;
 
 
 import cn.hutool.json.JSON;
-import com.obeast.auth.business.service.remote.BendanSysUserRemote;
 import com.obeast.core.constant.UserLoginConstant;
+import com.obeast.security.business.service.remote.BendanSysUserRemote;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

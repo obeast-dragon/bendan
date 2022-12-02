@@ -1,8 +1,7 @@
-package com.obeast.auth.business.service.impl;
+package com.obeast.security.business.service.impl;
 
 import com.obeast.core.constant.UserLoginConstant;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.lang.Nullable;
@@ -28,7 +27,6 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0
  * Description: OAuth2Authorization redis缓存实现
  */
-@Service
 @RequiredArgsConstructor
 public class BendanOAuth2AuthorizationServiceImpl implements OAuth2AuthorizationService {
 

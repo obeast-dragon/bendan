@@ -1,4 +1,4 @@
-package com.obeast.auth.business.service;
+package com.obeast.security.business.service;
 
 import org.springframework.core.Ordered;
 import org.springframework.security.core.userdetails.UserDetailsService;

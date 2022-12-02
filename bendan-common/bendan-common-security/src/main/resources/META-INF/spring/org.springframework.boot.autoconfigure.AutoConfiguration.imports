@@ -1,0 +1,2 @@
+com.obeast.security.business.service.impl.BendanUserDetailsServiceImpl
+com.obeast.security.business.service.impl.BendanOAuth2AuthorizationServiceImpl

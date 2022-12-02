@@ -21,7 +21,7 @@
     <dependencies>
         <dependency>
             <groupId>com.obeast</groupId>
-            <artifactId>bendan-common-business</artifactId>
+            <artifactId>bendan-common-security</artifactId>
             <exclusions>
                 <exclusion>
                     <groupId>com.alibaba</groupId>

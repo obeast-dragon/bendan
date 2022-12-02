@@ -4,7 +4,6 @@ package com.obeast.admin;
 
 import com.obeast.admin.business.dao.BendanSysRoleDao;
 import com.obeast.admin.business.service.BendanSysUserService;
-import com.obeast.admin.business.service.remote.OAuth2TokenRemote;
 import com.obeast.business.entity.BendanSysUser;
 import com.obeast.business.vo.OAuth2TokenParams;
 import org.junit.jupiter.api.Test;
@@ -26,8 +25,8 @@ import java.util.Map;
 @SpringBootTest
 public class BendanAdminApplicationTest {
 
-    @Autowired
-    OAuth2TokenRemote oAuth2TokenRemote;
+//    @Autowired
+//    OAuth2TokenRemote oAuth2TokenRemote;
 
     @Autowired
     BendanSysRoleDao bendanSysRoleDao;
@@ -66,7 +65,7 @@ public class BendanAdminApplicationTest {
         oAuth2Params.setPassword("password");
 
 
-        System.out.println(oAuth2TokenRemote.getAccessToken(oAuth2Params));
+//        System.out.println(oAuth2TokenRemote.getAccessToken(oAuth2Params));
 //        userInfoService.login("user", "password");
     }
 
