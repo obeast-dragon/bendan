@@ -55,6 +55,19 @@ spring:
     timeout: 3000ms
 
 
+security:
+  resources:
+    ignore:
+      urls:
+        - "/v3/api-docs"
+        - "/swagger-ui/**"
+        - "/swagger-resources/**"
+        - "/favicon.ico"
+        - "/oauth2/token"
+        - "/sysUser/login"
+        - "/oauth2/token"
+        - "/sysUser/getUserinfo/**"
+
 #扫描包并打印日志
 mybatis-plus:
   mapper-locations: classpath:/mapper/admin/*.xml

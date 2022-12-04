@@ -3,7 +3,6 @@ package com.obeast.auth;
 
 import cn.hutool.json.JSON;
 import com.obeast.core.constant.UserLoginConstant;
-import com.obeast.security.business.service.remote.BendanSysUserRemote;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +34,6 @@ public class JdbcTest {
     @Autowired
     private RegisteredClientRepository registeredClientRepository;
 
-    @Autowired
-    BendanSysUserRemote bendanSysUserRemote;
 
     @Autowired
      CacheManager cacheManager;

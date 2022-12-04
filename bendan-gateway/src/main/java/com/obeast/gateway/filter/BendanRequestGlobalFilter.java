@@ -18,13 +18,19 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR;
+import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.addOriginalRequestUrl;
 
 /**
  * @author wxl
@@ -39,32 +45,35 @@ public class BendanRequestGlobalFilter implements GlobalFilter, Ordered {
 
     private final GatewayConfigProperties gatewayConfigProperties;
 
-    private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerHttpRequest request = exchange.getRequest();
-        ServerHttpResponse response = exchange.getResponse();
+//        ServerHttpRequest serverHttpRequest = exchange.getRequest();
+//        ServerHttpResponse response = exchange.getResponse();
+//        // 跨域放行
+//        if (serverHttpRequest.getMethod() == HttpMethod.OPTIONS) {
+//            response.setStatusCode(HttpStatus.OK);
+//            return Mono.empty();
+//        }
 
-        // 跨域放行
-        if (request.getMethod() == HttpMethod.OPTIONS) {
-            response.setStatusCode(HttpStatus.OK);
-            return Mono.empty();
-        }
-        ServerHttpRequest exchangeRequest = request
-                .mutate()
-                .headers(httpHeaders -> {
-                    httpHeaders.put(BendanResHeaderConstant.from, Collections.singletonList(BendanResHeaderConstant.bendanValue));
-                }).build();
-        boolean pass = discharged(request.getURI().getPath(), gatewayConfigProperties.getIgnoreUrls());
-        if (!pass){
-            return this.responseBody(exchange);
-        }
-        return chain.filter(
-                exchange
-                        .mutate()
-                        .request(exchangeRequest.mutate().build()).build()
-        );
+
+        // 1. 清洗请求头中from 参数
+        ServerHttpRequest request = exchange.getRequest().mutate().headers(httpHeaders -> {
+            httpHeaders.put(BendanResHeaderConstant.from,
+                                        Collections.singletonList(BendanResHeaderConstant.bendanValue));
+        }).build();
+
+
+        // 2. 重写StripPrefix
+        addOriginalRequestUrl(exchange, request.getURI());
+        String rawPath = request.getURI().getRawPath();
+        String newPath = "/" + Arrays.stream(StringUtils.tokenizeToStringArray(rawPath, "/")).skip(1L)
+                .collect(Collectors.joining("/"));
+
+        ServerHttpRequest newRequest = request.mutate().path(newPath).build();
+        exchange.getAttributes().put(GATEWAY_REQUEST_URL_ATTR, newRequest.getURI());
+
+        return chain.filter(exchange.mutate().request(newRequest.mutate().build()).build());
     }
 
     /**

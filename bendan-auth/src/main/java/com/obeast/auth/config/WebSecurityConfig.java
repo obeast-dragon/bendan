@@ -2,8 +2,7 @@ package com.obeast.auth.config;
 
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -12,23 +11,23 @@ import org.springframework.security.web.SecurityFilterChain;
  * @author Joe Grandja
  * @since 0.1.0
  */
-@EnableWebSecurity
-@Configuration
+@EnableWebSecurity(debug = true)
 public class WebSecurityConfig {
 
 
-    // @formatter:off
+    /**
+     * Description: 暴露静态资源
+     * @author wxl
+     * Date: 2022/12/3 20:53
+     * @param http http
+     * @return org.springframework.security.web.SecurityFilterChain
+     */
     @Bean
-    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-
-        http
-                .authorizeRequests(authorizeRequests ->
-                        authorizeRequests
-                                .mvcMatchers("/assets/**", "/webjars/**", "/login").permitAll()
-                                .anyRequest().authenticated()
-                )
-                .formLogin(Customizer.withDefaults());
+    @Order(0)
+    SecurityFilterChain resources(HttpSecurity http) throws Exception {
+        http.requestMatchers((matchers) -> matchers.antMatchers("/actuator/**", "/css/**","/assets/**", "/webjars/**",  "/error"))
+                .authorizeHttpRequests((authorize) -> authorize.anyRequest().permitAll()).requestCache().disable()
+                .securityContext().disable().sessionManagement().disable();
         return http.build();
     }
-    // @formatter:on
 }

@@ -1,11 +1,11 @@
 package com.obeast.admin.business.controller;
 
 import cn.hutool.json.JSONObject;
-import com.obeast.business.entity.BendanSysUser;
-import com.obeast.admin.business.service.BendanSysUserService;
+import com.obeast.entity.BendanSysUser;
 
-import com.obeast.business.vo.SysUserLoginParam;
-import com.obeast.business.vo.UserInfo;
+import com.obeast.security.business.service.BendanSysUserService;
+import com.obeast.vo.SysUserLoginParam;
+import com.obeast.vo.UserInfo;
 import com.obeast.core.base.CommonResult;
 import com.obeast.core.constant.PageConstant;
 import com.obeast.core.domain.PageObjects;

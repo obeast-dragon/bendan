@@ -5,7 +5,6 @@
     <modules>
         <module>bendan-oss</module>
         <module>bendan-admin</module>
-        <module>bendan-blog</module>
         <module>bendan-common</module>
         <module>bendan-auth</module>
         <module>bendan-gateway</module>

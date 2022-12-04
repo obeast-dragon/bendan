@@ -19,6 +19,5 @@
     </modules>
 
     <name>bendan-common</name>
-
-
+    <description>common 基模块</description>
 </project>

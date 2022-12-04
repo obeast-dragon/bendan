@@ -1,2 +1,8 @@
 com.obeast.security.business.service.impl.BendanUserDetailsServiceImpl
 com.obeast.security.business.service.impl.BendanOAuth2AuthorizationServiceImpl
+com.obeast.security.config.ResourceAutoConfig
+
+#business
+com.obeast.security.business.service.impl.BendanSysUserServiceImpl
+com.obeast.security.business.service.impl.BendanSysMenuServiceImpl
+com.obeast.security.business.service.impl.BendanSysRoleServiceImpl

@@ -1,5 +1,8 @@
 package com.obeast.admin;
 
+
+import com.obeast.security.annotation.EnableBendanResourceServer;
+import com.obeast.security.business.service.remote.OAuth2TokenRemote;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,9 +16,10 @@ import org.springframework.context.ConfigurableApplicationContext;
  * @version 1.0
  * Description:
  */
-@EnableFeignClients
+@EnableFeignClients(basePackageClasses = OAuth2TokenRemote.class)
 @EnableDiscoveryClient
-@MapperScan("com.obeast.admin.business.dao")
+@EnableBendanResourceServer
+@MapperScan("com.obeast.security.business.dao")
 @SpringBootApplication
 public class BendanAdminApplication {
     public static void main(String[] args) {

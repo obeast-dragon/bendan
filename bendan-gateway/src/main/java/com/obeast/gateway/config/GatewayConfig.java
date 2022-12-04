@@ -1,6 +1,7 @@
 package com.obeast.gateway.config;
 
 import com.obeast.gateway.filter.BendanRequestGlobalFilter;
+
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,14 +14,15 @@ import org.springframework.data.redis.core.RedisTemplate;
  * @version 1.0
  * Description: 网关配置
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(GatewayConfigProperties.class)
 public class GatewayConfig {
 
     @Bean
-    public BendanRequestGlobalFilter bendanRequestGlobalFilter (GatewayConfigProperties configProperties, RedisTemplate<String, Object> redisTemplate) {
-        return new BendanRequestGlobalFilter(configProperties,redisTemplate);
+    public BendanRequestGlobalFilter bendanRequestGlobalFilter (GatewayConfigProperties configProperties) {
+        return new BendanRequestGlobalFilter(configProperties);
     }
+
 
 //
 //    /**

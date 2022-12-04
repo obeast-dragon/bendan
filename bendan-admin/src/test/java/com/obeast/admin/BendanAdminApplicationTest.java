@@ -1,16 +1,13 @@
 package com.obeast.admin;
 
-
-
-import com.obeast.admin.business.dao.BendanSysRoleDao;
-import com.obeast.admin.business.service.BendanSysUserService;
-import com.obeast.business.entity.BendanSysUser;
-import com.obeast.business.vo.OAuth2TokenParams;
+import com.obeast.entity.BendanSysUser;
+import com.obeast.security.business.dao.BendanSysRoleDao;
+import com.obeast.security.business.service.BendanSysUserService;
+import com.obeast.vo.OAuth2TokenParams;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
+
 
 import javax.security.auth.login.LoginException;
 import java.util.HashMap;
