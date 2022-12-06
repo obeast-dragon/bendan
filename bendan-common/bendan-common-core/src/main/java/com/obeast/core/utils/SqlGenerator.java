@@ -10,13 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Title SqlGenerator
- * @Description	根据JAVA实体生成SQL建表语句工具
- * @Copyright: 版权所有 (c) 2018 - 2019
- * @Company: wt
- * @Author root
- * @Version 1.0.0
- * @Create 19-4-1 下午4:22
+ * @author wxl
+ * Date 2022/12/4 19:53
+ * @version 1.0
+ * Description: 根据JAVA实体生成SQL建表语句工具
  */
 @Slf4j
 public class SqlGenerator {
@@ -39,12 +36,11 @@ public class SqlGenerator {
         property2SqlColumnMap.put("boolean", "bit");
         property2SqlColumnMap.put("timestamp", "datetime");
         property2SqlColumnMap.put("date", "datetime");
-        property2SqlColumnMap.put("string", "VARCHAR(500)");
+        property2SqlColumnMap.put("string", "VARCHAR(256)");
     }
 
 
     public static String generateSql(Class<?> clz,String tableName,String primaryKey,String filePath){
-        String className = clz.getSimpleName();
         Field[] fields = clz.getDeclaredFields();
         StringBuffer column = new StringBuffer();
         for (Field f : fields) {

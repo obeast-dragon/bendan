@@ -1,15 +1,13 @@
 package com.obeast.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler;
 import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
-
+import java.util.List;
 
 
 /**
@@ -25,7 +23,6 @@ public class BendanSysMenu implements Serializable {
 	@TableField(exist = false)
 	private static final long serialVersionUID = 1L;
 
-
 	/**
 	 * 
 	 */
@@ -38,14 +35,25 @@ public class BendanSysMenu implements Serializable {
 	private Long parentId;
 
 	/**
+	 * 层级
+	 * */
+	private Integer level;
+
+	/**
+	 * 孩子们 （空间换时间）
+	 * */
+	@TableField(value = "menu_children", typeHandler = FastjsonTypeHandler.class)
+	private List<BendanSysMenu> children;
+
+	/**
 	 * 菜单名
 	 */
 	private String name;
 
 	/**
-	 * 是否可跳转，(0 不可跳转  1 可跳转)
+	 * 是否可跳转，(null 不可跳转  !null 可跳转)
 	 */
-	private Integer type;
+	private String url;
 
 	/**
 	 * 图标
@@ -71,21 +79,22 @@ public class BendanSysMenu implements Serializable {
 	/**
 	 * 创建人
 	 */
-	private String createBy;
+	private String createId;
+	/**
+	 * 修改人
+	 */
+	private String updateId;
 
 	/**
 	 * 创建时间
 	 */
+	@TableField(value = "create_time", fill = FieldFill.INSERT)
 	private Date createTime;
-
-	/**
-	 * 修改人
-	 */
-	private String updateBy;
 
 	/**
 	 * 更新时间
 	 */
+	@TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
 	private Date updateTime;
 
 }

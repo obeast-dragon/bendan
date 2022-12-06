@@ -18,9 +18,6 @@ public class FieldFillConfig implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         this.setFieldValByName("createTime", new Date(), metaObject);
         this.setFieldValByName("updateTime", new Date(), metaObject);
-//        帐号启用状态：0->禁用；1->启用
-        this.setFieldValByName("disableStatus", 1, metaObject);
-
     }
 
     @Override

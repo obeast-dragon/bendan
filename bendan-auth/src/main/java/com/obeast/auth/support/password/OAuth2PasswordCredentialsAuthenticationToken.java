@@ -12,7 +12,10 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author 01266953
+ * @author wxl
+ * Date 2022/12/6 10:47
+ * @version 1.0
+ * Description: password token
  */
 public class OAuth2PasswordCredentialsAuthenticationToken extends OAuth2AuthorizationGrantAuthenticationToken {
     private final Set<String> scopes;

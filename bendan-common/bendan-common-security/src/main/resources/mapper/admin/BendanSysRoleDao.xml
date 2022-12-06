@@ -10,9 +10,9 @@
         <result property="code" column="code"/>
         <result property="roleDescribe" column="role_describe"/>
         <result property="del" column="del"/>
-        <result property="createBy" column="create_by"/>
+        <result property="createId" column="create_by"/>
         <result property="createTime" column="create_time"/>
-        <result property="updateBy" column="update_by"/>
+        <result property="updateId" column="update_by"/>
         <result property="updateTime" column="update_time"/>
     </resultMap>
 

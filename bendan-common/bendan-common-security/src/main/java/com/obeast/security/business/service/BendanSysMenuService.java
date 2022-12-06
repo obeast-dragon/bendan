@@ -125,5 +125,14 @@ public interface BendanSysMenuService extends IService<BendanSysMenu> {
      * @return java.util.Set<com.obeast.business.entity.BendanSysMenu>
      */
     Set<BendanSysMenu> getMenusByRoleIds(List<Long> roleIds);
+
+    /**
+     * Description: 根据title获取id
+     * @author wxl
+     * Date: 2022/12/5 10:38
+     * @param title title
+     * @return java.lang.Long
+     */
+    Long getIdByTitle(String title) throws NullPointerException;
 }
 

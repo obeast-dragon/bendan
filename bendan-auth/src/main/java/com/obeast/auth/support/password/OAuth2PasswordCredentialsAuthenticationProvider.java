@@ -37,9 +37,10 @@ import java.security.Principal;
 import java.util.*;
 
 /**
- * password provider
- *
- * @author 01266953
+ * @author wxl
+ * Date 2022/12/6 10:47
+ * @version 1.0
+ * Description: password provider
  */
 @Slf4j
 public class OAuth2PasswordCredentialsAuthenticationProvider implements AuthenticationProvider {

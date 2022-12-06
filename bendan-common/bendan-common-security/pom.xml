@@ -43,6 +43,5 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-authorization-server</artifactId>
         </dependency>
-
     </dependencies>
 </project>

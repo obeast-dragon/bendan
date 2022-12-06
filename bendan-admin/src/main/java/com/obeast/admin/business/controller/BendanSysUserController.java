@@ -1,6 +1,12 @@
 package com.obeast.admin.business.controller;
 
+
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.digest.DigestAlgorithm;
+import cn.hutool.crypto.digest.Digester;
+import cn.hutool.crypto.digest.HMac;
 import cn.hutool.json.JSONObject;
+import com.alibaba.nacos.common.utils.MD5Utils;
 import com.obeast.entity.BendanSysUser;
 
 import com.obeast.security.business.service.BendanSysUserService;
@@ -37,16 +43,15 @@ public class BendanSysUserController {
 
     @Operation(summary = "登录")
     @PostMapping("/login")
-    public CommonResult<?> login(SysUserLoginParam userInfoLoginParam){
+    public CommonResult<?> login(SysUserLoginParam userInfoLoginParam) {
         return bendanSysUserService.login(userInfoLoginParam.getUsername(), userInfoLoginParam.getPassword());
     }
-
 
     @Operation(summary = "根据用户名获取通用用户信息")
     @GetMapping("/getUserinfo")
     public CommonResult<UserInfo> getUserinfo(@RequestParam("username") String username) throws LoginException {
         UserInfo userInfo = bendanSysUserService.findUserInfo(username);
-        if (userInfo == null){
+        if (userInfo == null) {
             CommonResult.error("获取失败");
         }
         return CommonResult.success(userInfo);
@@ -74,7 +79,7 @@ public class BendanSysUserController {
 
     /**
      * 查询所有
-     * */
+     */
     @GetMapping("/listAll")
     @Operation(summary = "查询所有")
     public CommonResult<List<BendanSysUser>> listAll() {
@@ -83,15 +88,14 @@ public class BendanSysUserController {
     }
 
 
-
     /**
      * 根据id查询
      */
     @GetMapping("/getOneById/{userId}")
     @Operation(summary = "根据id查询")
     @Parameter(name = "id", description = "id of the entity", in = ParameterIn.PATH, required = true, schema = @Schema(implementation = Long.class))
-    public CommonResult<BendanSysUser> getOneById(@PathVariable("userId") Long userId){
-        if (userId < 0){
+    public CommonResult<BendanSysUser> getOneById(@PathVariable("userId") Long userId) {
+        if (userId < 0) {
             return CommonResult.error("id is null");
         }
         BendanSysUser userInfo = bendanSysUserService.queryById(userId);

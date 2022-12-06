@@ -22,13 +22,6 @@
             <artifactId>bendan-common-core</artifactId>
         </dependency>
 
-        <!-- feign 工具类       -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-openfeign-core</artifactId>
-        </dependency>
-
-
     </dependencies>
 
 </project>

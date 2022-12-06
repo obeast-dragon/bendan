@@ -21,6 +21,7 @@ public abstract class OAuth2BaseAuthenticationToken extends AbstractAuthenticati
 
     @Serial
     private static final long serialVersionUID = Version.SERIAL_VERSION_UID;
+
     /**
      * the authorization grant type.
      * */

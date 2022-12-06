@@ -2,6 +2,7 @@ package com.obeast.auth.support.base;
 
 import com.obeast.auth.constant.BendanOAuth2ErrorConstant;
 import com.obeast.auth.exception.OAuth2ScopeException;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,8 +56,7 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
     /**
      * OAuth2AuthorizationService 方法引入
      */
-    @Autowired
-    private  OAuth2AuthorizationService authorizationService;
+    private final OAuth2AuthorizationService authorizationService;
 
     /**
      * token生成
