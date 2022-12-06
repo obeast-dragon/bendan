@@ -1,6 +1,5 @@
-package com.obeast.auth.support.password.test;
+package com.obeast.auth.support.password.old;
 
-import com.obeast.auth.support.password.OAuth2PasswordCredentialsAuthenticationToken;
 import com.obeast.auth.utils.OAuth2Utils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +19,7 @@ import java.util.*;
  * @version 1.0
  * Description: 获取参数生成 OAuth2PasswordCredentialsAuthenticationToken
  */
-public class OAuth2PasswordAuthenticationConverter implements AuthenticationConverter {
+public class OAuth2PasswordCredentialsAuthenticationConverter implements AuthenticationConverter {
     private static final String ACCESS_TOKEN_REQUEST_ERROR_URI = "https://datatracker.ietf.org/doc/html/rfc6749#section-5.2";
     @Override
     public Authentication convert(HttpServletRequest request) {

@@ -1,0 +1,9 @@
+# swagger 配置
+swagger:
+  enabled: true
+  title: bendan Swagger API
+  gateway: http://${GATEWAY_HOST:127.0.0.1}:${GATEWAY-PORT:18814}
+  token-url: ${swagger.gateway}/auth/oauth2/token
+  scope: message.read
+  services:
+    agri-iot-admin: admin

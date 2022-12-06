@@ -7,6 +7,13 @@ spring:
   application:
     name: bendan-gateway
   cloud:
+    nacos:
+      discovery:
+        server-addr: http://127.0.0.1:8848
+      config:
+        server-addr: http://127.0.0.1:8848
+        file-extension: yaml
+
     gateway:
       discovery:
         locator:
@@ -28,10 +35,3 @@ spring:
           predicates:
             - Path=/admin/**
 
-
-#  security:
-#    oauth2:
-#      resourceserver:
-#        jwt:
-#          #配置RSA的公钥访问地址
-#          jwk-set-uri:

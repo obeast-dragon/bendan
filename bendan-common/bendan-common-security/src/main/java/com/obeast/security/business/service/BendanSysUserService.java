@@ -5,8 +5,8 @@ import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.obeast.core.base.CommonResult;
 import com.obeast.core.domain.PageObjects;
-import com.obeast.entity.BendanSysUser;
-import com.obeast.vo.UserInfo;
+import com.obeast.business.entity.BendanSysUser;
+import com.obeast.business.vo.UserInfo;
 
 import javax.security.auth.login.LoginException;
 import java.util.List;

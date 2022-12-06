@@ -13,6 +13,13 @@
     <name>bendan-common-core</name>
 
     <dependencies>
+        <!--     spring mvc 支持    -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
@@ -51,11 +58,6 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 
-        <!--     spring mvc 支持    -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
 
     </dependencies>
 

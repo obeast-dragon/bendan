@@ -1,4 +1,4 @@
-package com.obeast.auth.support.password.test;
+package com.obeast.auth.support.password;
 
 import com.obeast.auth.support.base.OAuth2BaseAuthenticationToken;
 import org.springframework.security.core.Authentication;

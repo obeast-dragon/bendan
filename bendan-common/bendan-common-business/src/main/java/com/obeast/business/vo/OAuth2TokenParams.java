@@ -1,4 +1,4 @@
-package com.obeast.vo;
+package com.obeast.business.vo;
 
 import lombok.Data;
 

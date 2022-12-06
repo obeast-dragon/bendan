@@ -1,4 +1,4 @@
-package com.obeast.entity;
+package com.obeast.business.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;

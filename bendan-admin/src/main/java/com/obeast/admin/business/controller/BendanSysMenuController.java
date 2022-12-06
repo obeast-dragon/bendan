@@ -8,15 +8,18 @@ import com.obeast.core.validation.group.AddGroup;
 import com.obeast.core.validation.group.DefaultGroup;
 import com.obeast.core.validation.group.DeleteGroup;
 import com.obeast.core.validation.group.UpdateGroup;
-import com.obeast.entity.BendanSysMenu;
+import com.obeast.business.entity.BendanSysMenu;
 import com.obeast.security.business.service.BendanSysMenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,10 +36,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/bendansysmenu")
 @Tag(name = "BendanSysMenu接口")
+@RequiredArgsConstructor
+@SecurityRequirement(name = HttpHeaders.AUTHORIZATION)
 public class BendanSysMenuController {
 
-    @Autowired
-    private BendanSysMenuService bendanSysMenuService;
+    private final BendanSysMenuService bendanSysMenuService;
 
     /**
      * 分页列表

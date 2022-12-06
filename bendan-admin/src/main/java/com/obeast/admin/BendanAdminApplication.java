@@ -3,6 +3,7 @@ package com.obeast.admin;
 
 import com.obeast.security.annotation.EnableBendanResourceServer;
 import com.obeast.security.business.service.remote.OAuth2TokenRemote;
+import com.obeast.swagger.annotation.EnableBendanSwagger;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,6 +18,7 @@ import org.springframework.context.ConfigurableApplicationContext;
  * Description:
  */
 @EnableFeignClients(basePackageClasses = OAuth2TokenRemote.class)
+@EnableBendanSwagger
 @EnableDiscoveryClient
 @EnableBendanResourceServer
 @MapperScan("com.obeast.security.business.dao")
@@ -24,9 +26,9 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class BendanAdminApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext run = SpringApplication.run(BendanAdminApplication.class, args);
-//        String[] beanDefinitionNames = run.getBeanDefinitionNames();
-//        for (String beanDefinitionName : beanDefinitionNames) {
-//            System.out.println(beanDefinitionName);
-//        }
+        String[] beanDefinitionNames = run.getBeanDefinitionNames();
+        for (String beanDefinitionName : beanDefinitionNames) {
+            System.out.println(beanDefinitionName);
+        }
     }
 }

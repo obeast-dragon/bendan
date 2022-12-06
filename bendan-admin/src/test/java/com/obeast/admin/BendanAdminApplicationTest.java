@@ -1,10 +1,10 @@
 package com.obeast.admin;
 
-import com.obeast.entity.BendanSysMenu;
-import com.obeast.entity.BendanSysUser;
+import com.obeast.business.entity.BendanSysMenu;
+import com.obeast.business.entity.BendanSysUser;
 import com.obeast.security.business.service.BendanSysMenuService;
 import com.obeast.security.business.service.BendanSysUserService;
-import com.obeast.vo.OAuth2TokenParams;
+import com.obeast.business.vo.OAuth2TokenParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

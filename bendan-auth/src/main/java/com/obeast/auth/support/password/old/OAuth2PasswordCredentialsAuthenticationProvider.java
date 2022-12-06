@@ -1,10 +1,9 @@
-package com.obeast.auth.support.password;
+package com.obeast.auth.support.password.old;
 
 import com.obeast.auth.constant.BendanOAuth2ErrorConstant;
 import com.obeast.auth.exception.OAuth2ScopeException;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
@@ -16,10 +15,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.*;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
-import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-import org.springframework.security.oauth2.core.oidc.OidcScopes;
-import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2AccessTokenAuthenticationToken;
@@ -52,8 +47,8 @@ public class OAuth2PasswordCredentialsAuthenticationProvider implements Authenti
     private UserDetailsService userDetailsService;
     @Setter
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private OAuth2AuthorizationService authorizationService;
+
+    private final OAuth2AuthorizationService authorizationService;
     private final OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator;
 
 
@@ -93,8 +88,8 @@ public class OAuth2PasswordCredentialsAuthenticationProvider implements Authenti
                 authorizedScopes = new LinkedHashSet<>(requestedScopes);
             }
 
-            //-------UsernamePasswordAuthenticationToken------------
             Map<String, Object> additionalParameters = oAuth2PasswordCredentialsAuthenticationToken.getAdditionalParameters();
+            //-------UsernamePasswordAuthenticationToken------------
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                     buildAndAuthenticateUsernamePasswordToken(additionalParameters);
 
@@ -111,6 +106,7 @@ public class OAuth2PasswordCredentialsAuthenticationProvider implements Authenti
             // @formatter:on
 //        -----------
 
+            //-------OAuth2Authorization 构建------
             OAuth2Authorization.Builder authorizationBuilder = OAuth2Authorization.withRegisteredClient(registeredClient)
                     .principalName(usernamePasswordAuthenticationToken.getName())
                     .authorizationGrantType(AuthorizationGrantType.PASSWORD)
@@ -242,6 +238,14 @@ public class OAuth2PasswordCredentialsAuthenticationProvider implements Authenti
     }
 
 
+    /**
+     * Description: 校验用户详情
+     * @author wxl
+     * Date: 2022/12/6 11:10
+     * @param username username
+     * @param password  password
+     * @return org.springframework.security.core.userdetails.UserDetails
+     */
     private UserDetails verifyUserDetails(String username, String password) throws AuthenticationException {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
         if (userDetails == null) {

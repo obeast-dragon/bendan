@@ -9,6 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>bendan-admin</artifactId>
+    <packaging>jar</packaging>
 
     <name>bendan-admin</name>
 
@@ -22,10 +23,18 @@
 
     <dependencies>
 
+        <!-- common-security -->
         <dependency>
             <groupId>com.obeast</groupId>
             <artifactId>bendan-common-security</artifactId>
         </dependency>
+
+        <!-- common-swagger -->
+        <dependency>
+            <groupId>com.obeast</groupId>
+            <artifactId>bendan-common-swagger</artifactId>
+        </dependency>
+
 
         <!-- 远程调用       -->
         <dependency>
@@ -60,13 +69,6 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-        </dependency>
-
-
-        <!--   springdoc-openapi-ui     -->
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
         </dependency>
 
         <dependency>

@@ -1,12 +1,4 @@
 spring:
-  cloud:
-    nacos:
-      discovery:
-        server-addr: http://127.0.0.1:8848
-      config:
-        server-addr: http://127.0.0.1:8848
-        file-extension: yaml
-
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -34,21 +26,16 @@ logging:
       obeast:
         debug
 
+
 security:
   resources:
     ignore:
       urls:
         - "/v3/api-docs"
         - "/swagger-ui/**"
+        - "/swagger-ui.html"
         - "/swagger-resources/**"
+        - "/swagger-config/**"
         - "/favicon.ico"
-        - "/oauth2/token"
-
-#
-#feign:
-#  client:
-#    config:
-#      default:
-#        request-interceptors:
-#          - com.obeast.auth.config.MyFeignRequestInterceptor
-#        loggerLevel: full
+        - "/sysUser/login"
+        - "/oauth2/**"

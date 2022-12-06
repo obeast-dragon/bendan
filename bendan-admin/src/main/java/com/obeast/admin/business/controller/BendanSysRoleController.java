@@ -8,24 +8,22 @@ import com.obeast.core.validation.group.AddGroup;
 import com.obeast.core.validation.group.DefaultGroup;
 import com.obeast.core.validation.group.DeleteGroup;
 import com.obeast.core.validation.group.UpdateGroup;
-import com.obeast.entity.BendanSysMenu;
-import com.obeast.entity.BendanSysRole;
+import com.obeast.business.entity.BendanSysRole;
 import com.obeast.security.business.service.BendanSysRoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
 
 
 /**
@@ -37,10 +35,11 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/bendansysrole")
 @Tag(name = "BendanSysRole接口")
+@RequiredArgsConstructor
+@SecurityRequirement(name = HttpHeaders.AUTHORIZATION)
 public class BendanSysRoleController {
 
-    @Autowired
-    private BendanSysRoleService bendanSysRoleService;
+    private final BendanSysRoleService bendanSysRoleService;
 
     /**
      * 分页列表

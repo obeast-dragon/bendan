@@ -2,7 +2,7 @@ package com.obeast.security.business.dao;
 
 
 import com.obeast.core.base.BaseDao;
-import com.obeast.entity.BendanSysUser;
+import com.obeast.business.entity.BendanSysUser;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

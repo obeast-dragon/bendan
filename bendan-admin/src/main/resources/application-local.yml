@@ -1,13 +1,4 @@
 spring:
-
-  cloud:
-    nacos:
-      discovery:
-        server-addr: http://127.0.0.1:8848
-      config:
-        server-addr: http://127.0.0.1:8848
-        file-extension: yaml
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/bendan?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT
@@ -55,19 +46,6 @@ spring:
     timeout: 3000ms
 
 
-security:
-  resources:
-    ignore:
-      urls:
-        - "/v3/api-docs"
-        - "/swagger-ui/**"
-        - "/swagger-resources/**"
-        - "/favicon.ico"
-        - "/oauth2/token"
-        - "/sysUser/login"
-        - "/oauth2/token"
-        - "/sysUser/getUserinfo/**"
-
 #扫描包并打印日志
 mybatis-plus:
   mapper-locations: classpath:/mapper/admin/*.xml
@@ -75,7 +53,6 @@ mybatis-plus:
   configuration:
     #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     cache-enabled: true
-
 
 
 #指定接口包扫描
@@ -107,3 +84,28 @@ feign:
         connectTimeout: 5000
         readTimeout: 5000
         loggerLevel: full
+
+
+# swagger 配置
+swagger:
+  enabled: true
+  title: bendan Swagger API
+  gateway: http://${GATEWAY_HOST:127.0.0.1}:${GATEWAY-PORT:18814}
+  token-url: ${swagger.gateway}/auth/oauth2/token
+  scope: message.read
+  services:
+    agri-iot-admin: admin
+
+
+security:
+  resources:
+    ignore:
+      urls:
+        - "/v3/api-docs"
+        - "/swagger-ui/**"
+        - "/swagger-ui.html"
+        - "/swagger-resources/**"
+        - "/swagger-config/**"
+        - "/favicon.ico"
+        - "/sysUser/login"
+        - "/oauth2/**"

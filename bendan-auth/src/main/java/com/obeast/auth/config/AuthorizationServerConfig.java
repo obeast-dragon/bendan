@@ -6,11 +6,13 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.obeast.auth.support.handler.result.failure.CustomizeAuthenticationFailureHandler;
 import com.obeast.auth.support.handler.result.success.CustomizeAuthenticationSuccessHandler;
-import com.obeast.auth.support.password.OAuth2PasswordCredentialsAuthenticationConverter;
-import com.obeast.auth.support.password.OAuth2PasswordCredentialsAuthenticationProvider;
+
+import com.obeast.auth.support.password.OAuth2PasswordAuthenticationConverter;
+import com.obeast.auth.support.password.OAuth2PasswordAuthenticationProvider;
 import com.obeast.auth.utils.Jwks;
 import com.obeast.auth.utils.OAuth2GeneratorUtils;
 import com.obeast.security.business.service.BendanUserDetailsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -35,13 +37,16 @@ import java.util.List;
  * @since 0.0.1
  */
 @Configuration(proxyBeanMethods = false)
+@RequiredArgsConstructor
 public class AuthorizationServerConfig {
+
+    private final OAuth2AuthorizationService authorizationService;
 
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain authorizationServerSecurityFilterChain(
             HttpSecurity http,
-            OAuth2PasswordCredentialsAuthenticationProvider oAuth2PasswordCredentialsAuthenticationProvider,
+            OAuth2PasswordAuthenticationProvider oAuth2PasswordCredentialsAuthenticationProvider,
             DaoAuthenticationProvider daoAuthenticationProvider
     ) throws Exception {
         /*配置自定义密码 token 、 res*/
@@ -56,31 +61,10 @@ public class AuthorizationServerConfig {
 
         http
                 .requestMatcher(endpointsMatcher)
-                .authorizeRequests(authorizeRequests -> {
-                    //设置不需要权限拦截的url
-                    List<String> ignores = List.of(
-                            //swagger 相关
-                            "/v3/api-docs",
-                            "/swagger-ui/**",
-                            "/swagger-resources/**",
-                            //登录、图形验证码，站点图标
-                            "/login*",
-                            "/favicon.ico",
-                            "/common/**",
-                            "/login"
-                    );
-
-                    authorizeRequests.antMatchers(ignores.toArray(new String[0])).permitAll();
-
-                    authorizeRequests.anyRequest().authenticated();
-                })
                 .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
                 .apply(authorizationServerConfigurer);
 
-
-
         SecurityFilterChain securityFilterChain = http.formLogin(Customizer.withDefaults()).build();
-
         http.authenticationProvider(oAuth2PasswordCredentialsAuthenticationProvider);
         http.authenticationProvider(daoAuthenticationProvider);
         return securityFilterChain;
@@ -97,11 +81,44 @@ public class AuthorizationServerConfig {
         return new DelegatingAuthenticationConverter(List.of(
                 new OAuth2RefreshTokenAuthenticationConverter(),
                 new OAuth2ClientCredentialsAuthenticationConverter(),
-                new OAuth2PasswordCredentialsAuthenticationConverter(),
+                new OAuth2PasswordAuthenticationConverter(),
                 new OAuth2AuthorizationCodeAuthenticationConverter(),
                 new OAuth2AuthorizationCodeRequestAuthenticationConverter())
         );
 
+    }
+
+    /**
+     * Description: 密码模式
+     * @author wxl
+     * Date: 2022/11/22 16:47
+     * @param passwordEncoder passwordEncoder
+     * @param userDetailsService  userDetailsService
+     * @param httpSecurity http security
+     * @return com.obeast.auth.support.password.test.OAuth2PasswordCredentialsAuthenticationProvider
+     */
+    @Bean
+    public OAuth2PasswordAuthenticationProvider oAuth2PasswordCredentialsAuthenticationProvider
+    (PasswordEncoder passwordEncoder,
+     BendanUserDetailsService userDetailsService,
+     HttpSecurity httpSecurity) {
+        OAuth2PasswordAuthenticationProvider provider =
+                new OAuth2PasswordAuthenticationProvider(
+                        authorizationService,
+                        OAuth2GeneratorUtils.getTokenGenerator(httpSecurity),
+                        userDetailsService,
+                        passwordEncoder
+                );
+        return provider;
+    }
+
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider(
+            PasswordEncoder passwordEncoder, BendanUserDetailsService userDetailsService) {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+        return daoAuthenticationProvider;
     }
 
     @Bean
@@ -121,37 +138,7 @@ public class AuthorizationServerConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    /**
-     * Description: 密码模式
-     * @author wxl
-     * Date: 2022/11/22 16:47
-     * @param passwordEncoder passwordEncoder
-     * @param userDetailsService  userDetailsService
-     * @param httpSecurity http security
-     * @return com.obeast.auth.support.password.OAuth2PasswordCredentialsAuthenticationProvider
-     */
-    @Bean
-    public OAuth2PasswordCredentialsAuthenticationProvider oAuth2PasswordCredentialsAuthenticationProvider
-    (PasswordEncoder passwordEncoder,
-     BendanUserDetailsService userDetailsService,
-     HttpSecurity httpSecurity) {
-        OAuth2AuthorizationService authorizationService = httpSecurity.getSharedObject(OAuth2AuthorizationService.class);
-        OAuth2PasswordCredentialsAuthenticationProvider provider =
-                new OAuth2PasswordCredentialsAuthenticationProvider(
-                        OAuth2GeneratorUtils.getTokenGenerator(httpSecurity), authorizationService);
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder);
-        return provider;
-    }
 
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(
-            PasswordEncoder passwordEncoder, BendanUserDetailsService userDetailsService) {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
-        return daoAuthenticationProvider;
-    }
 
     /**
      * Description: 创建自定义CustomizeAuthenticationSuccessHandler

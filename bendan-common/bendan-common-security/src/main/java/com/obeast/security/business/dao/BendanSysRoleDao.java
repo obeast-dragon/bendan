@@ -2,7 +2,7 @@ package com.obeast.security.business.dao;
 
 
 import com.obeast.core.base.BaseDao;
-import com.obeast.entity.BendanSysRole;
+import com.obeast.business.entity.BendanSysRole;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

@@ -1,12 +1,4 @@
 spring:
-  cloud:
-    nacos:
-      discovery:
-        server-addr: http://127.0.0.1:8848
-      config:
-        server-addr: http://127.0.0.1:8848
-        file-extension: yaml
-
   redis:
     # Redis服务器地址
     host: 175.178.183.32

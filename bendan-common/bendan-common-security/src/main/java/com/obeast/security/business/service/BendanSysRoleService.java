@@ -3,7 +3,7 @@ package com.obeast.security.business.service;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.obeast.core.domain.PageObjects;
-import com.obeast.entity.BendanSysRole;
+import com.obeast.business.entity.BendanSysRole;
 
 import java.util.List;
 

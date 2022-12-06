@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.obeast.core.domain.PageObjects;
 import com.obeast.core.utils.PageQueryUtils;
-import com.obeast.entity.BendanSysRole;
+import com.obeast.business.entity.BendanSysRole;
 import com.obeast.security.business.dao.BendanSysRoleDao;
 import com.obeast.security.business.service.BendanSysRoleService;
 import org.springframework.stereotype.Service;

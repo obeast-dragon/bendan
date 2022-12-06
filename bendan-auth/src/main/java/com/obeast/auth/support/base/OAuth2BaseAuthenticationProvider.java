@@ -144,11 +144,12 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
             throw new OAuth2ScopeException(BendanOAuth2ErrorConstant.SCOPE_IS_EMPTY);
         }
 
+
         Map<String, Object> additionalParameters = passwordCredentialsAuthenticationToken.getAdditionalParameters();
         try {
             //-------UsernamePasswordAuthenticationToken------------
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                    buildAndAuthenticateUsernamePasswordToken(additionalParameters);
+                    this.buildAndAuthenticateUsernamePasswordToken(additionalParameters);
 
             log.debug("got usernamePasswordAuthenticationToken:  " + usernamePasswordAuthenticationToken);
 
@@ -218,33 +219,6 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
                 authorizationBuilder.refreshToken(refreshToken);
             }
 
-            // ----- ID token -----
-            OidcIdToken idToken;
-            if (scopes.contains(OidcScopes.OPENID)) {
-                // @formatter:off
-                tokenContext = tokenContextBuilder
-                        .tokenType(ID_TOKEN_TOKEN_TYPE)
-                        .authorization(authorizationBuilder.build())    // ID token customizer may need access to the access token and/or refresh token
-                        .build();
-                // @formatter:on
-                OAuth2Token generatedIdToken = this.tokenGenerator.generate(tokenContext);
-                if (!(generatedIdToken instanceof Jwt)) {
-                    OAuth2Error error = new OAuth2Error(OAuth2ErrorCodes.SERVER_ERROR,
-                            "The token generator failed to generate the ID token.", ERROR_URI);
-                    throw new OAuth2AuthenticationException(error);
-                }
-                idToken = new OidcIdToken(generatedIdToken.getTokenValue(), generatedIdToken.getIssuedAt(),
-                        generatedIdToken.getExpiresAt(), ((Jwt) generatedIdToken).getClaims());
-                authorizationBuilder.token(idToken, (metadata) ->
-                        metadata.put(OAuth2Authorization.Token.CLAIMS_METADATA_NAME, idToken.getClaims()));
-            } else {
-                idToken = null;
-            }
-            Map<String, Object> add = Collections.emptyMap();
-            if (idToken != null) {
-                add = new HashMap<>();
-                add.put(OidcParameterNames.ID_TOKEN, idToken.getTokenValue());
-            }
 
             OAuth2Authorization authorization = authorizationBuilder.build();
             this.authorizationService.save(authorization);
@@ -254,11 +228,10 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
                     registeredClient,
                     oAuth2ClientAuthentication,
                     accessToken,
-                    refreshToken,
-                    add);
+                    refreshToken);
         } catch (Exception ex) {
             log.error("the exception maybe in authenticate:  ", ex);
-            throw throwOAuth2AuthenticationException((AuthenticationException) ex);
+            throw throwOAuth2AuthenticationException(ex);
         }
 
     }
@@ -272,7 +245,7 @@ public abstract class OAuth2BaseAuthenticationProvider<T extends OAuth2BaseAuthe
      * @author wxl
      * Date: 2022/10/24 16:06
      */
-    private AuthenticationException throwOAuth2AuthenticationException(AuthenticationException ex) {
+    private AuthenticationException throwOAuth2AuthenticationException(Exception ex) {
         return switch (ex) {
             case UsernameNotFoundException ignored -> new OAuth2AuthenticationException(
                     new OAuth2Error(BendanOAuth2ErrorConstant.USERNAME_NOT_FOUND,

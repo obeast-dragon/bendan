@@ -1,22 +1,25 @@
-package com.obeast.entity;
+package com.obeast.business.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
 
+
 /**
  * @author obeast-dragon
- * Date 2022-09-21 12:18:12
+ * Date 2022-11-30 10:42:42
  * @version 1.0
- * Description: 
+ * Description: 角色表
  */
 @Data
-@TableName("bendan_tags")
-public class TagsEntity implements Serializable {
+@TableName("bendan_sys_role")
+public class BendanSysRole implements Serializable {
 
+	@Serial
 	@TableField(exist = false)
 	private static final long serialVersionUID = 1L;
 
@@ -28,9 +31,34 @@ public class TagsEntity implements Serializable {
 	private Long id;
 
 	/**
-	 * 标签名称
+	 * 角色名字
 	 */
 	private String name;
+
+	/**
+	 * 角色码
+	 */
+	private String code;
+
+	/**
+	 * 角色描述
+	 */
+	private String roleDescribe;
+
+	/**
+	 * 逻辑删除标记(0--正常 1--删除)
+	 */
+	private Integer del;
+
+	/**
+	 * 创建人
+	 */
+	private String createId;
+
+	/**
+	 * 修改人
+	 */
+	private String updateId;
 
 	/**
 	 * 创建时间

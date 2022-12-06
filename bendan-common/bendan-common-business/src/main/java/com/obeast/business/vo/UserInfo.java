@@ -1,8 +1,8 @@
-package com.obeast.vo;
+package com.obeast.business.vo;
 
-import com.obeast.entity.BendanSysMenu;
-import com.obeast.entity.BendanSysRole;
-import com.obeast.entity.BendanSysUser;
+import com.obeast.business.entity.BendanSysMenu;
+import com.obeast.business.entity.BendanSysRole;
+import com.obeast.business.entity.BendanSysUser;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

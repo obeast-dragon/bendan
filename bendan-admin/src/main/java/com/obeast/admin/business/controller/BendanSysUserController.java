@@ -1,17 +1,12 @@
 package com.obeast.admin.business.controller;
 
 
-import cn.hutool.crypto.SecureUtil;
-import cn.hutool.crypto.digest.DigestAlgorithm;
-import cn.hutool.crypto.digest.Digester;
-import cn.hutool.crypto.digest.HMac;
 import cn.hutool.json.JSONObject;
-import com.alibaba.nacos.common.utils.MD5Utils;
-import com.obeast.entity.BendanSysUser;
+import com.obeast.business.entity.BendanSysUser;
 
 import com.obeast.security.business.service.BendanSysUserService;
-import com.obeast.vo.SysUserLoginParam;
-import com.obeast.vo.UserInfo;
+import com.obeast.business.vo.SysUserLoginParam;
+import com.obeast.business.vo.UserInfo;
 import com.obeast.core.base.CommonResult;
 import com.obeast.core.constant.PageConstant;
 import com.obeast.core.domain.PageObjects;
@@ -20,8 +15,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.login.LoginException;
@@ -37,6 +34,7 @@ import java.util.List;
 @RequestMapping("/sysUser")
 @Tag(name = "SysMenu接口")
 @RequiredArgsConstructor
+@SecurityRequirement(name = HttpHeaders.AUTHORIZATION)
 public class BendanSysUserController {
 
     private final BendanSysUserService bendanSysUserService;

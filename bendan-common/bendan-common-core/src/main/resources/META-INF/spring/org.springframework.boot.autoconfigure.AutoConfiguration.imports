@@ -1,4 +1,4 @@
 com.obeast.core.config.redis.RedisConfig
-com.obeast.core.config.web.WebMvcConfig
+#com.obeast.core.config.web.WebMvcConfig
 com.obeast.core.config.fegin.FeignConfig
 com.obeast.core.config.mybatis.MyBatisPlusConfig

@@ -3,7 +3,7 @@ package com.obeast.security.business.service;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.obeast.core.domain.PageObjects;
-import com.obeast.entity.BendanSysMenu;
+import com.obeast.business.entity.BendanSysMenu;
 
 import java.util.List;
 import java.util.Set;

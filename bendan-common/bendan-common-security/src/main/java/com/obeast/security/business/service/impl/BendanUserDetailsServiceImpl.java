@@ -1,8 +1,8 @@
 package com.obeast.security.business.service.impl;
 
-import com.obeast.entity.BendanSysUser;
+import com.obeast.business.entity.BendanSysUser;
 import com.obeast.security.business.service.BendanSysUserService;
-import com.obeast.vo.UserInfo;
+import com.obeast.business.vo.UserInfo;
 import com.obeast.core.constant.UserLoginConstant;
 import com.obeast.security.business.domain.BendanSecurityUser;
 import com.obeast.security.business.service.BendanUserDetailsService;
