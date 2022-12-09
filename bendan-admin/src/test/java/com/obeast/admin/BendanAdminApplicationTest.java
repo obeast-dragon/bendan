@@ -342,18 +342,6 @@ public class BendanAdminApplicationTest {
 
     @Test
     void login() {
-        Map<String, String> params = new HashMap<>();
-        params.put("client_id", "messaging-client");
-        params.put("client_secret", "secret");
-        params.put("grant_type", "password");
-        params.put("username", "user");
-        params.put("password", "password");
-        OAuth2TokenParams oAuth2Params = new OAuth2TokenParams();
-        oAuth2Params.setClient_id("messaging-client");
-        oAuth2Params.setClient_secret("secret");
-        oAuth2Params.setGrant_type("password");
-        oAuth2Params.setUsername("user");
-        oAuth2Params.setPassword("password");
 
 
 //        System.out.println(oAuth2TokenRemote.getAccessToken(oAuth2Params));

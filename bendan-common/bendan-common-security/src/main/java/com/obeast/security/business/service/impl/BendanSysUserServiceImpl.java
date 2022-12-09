@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.obeast.core.base.CommonResult;
+import com.obeast.core.constant.OauthScopeConstant;
 import com.obeast.core.domain.PageObjects;
 import com.obeast.core.utils.PageQueryUtils;
 import com.obeast.business.entity.BendanSysMenu;
@@ -20,11 +21,14 @@ import com.obeast.security.business.service.remote.OAuth2TokenRemote;
 import com.obeast.business.vo.OAuth2TokenParams;
 import com.obeast.business.vo.UserInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.login.LoginException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Set;
 
@@ -51,14 +55,17 @@ public class BendanSysUserServiceImpl extends ServiceImpl<BendanSysUserDao, Bend
 
 
     @Override
-    public CommonResult<?> login(String username, String password) {
+    public CommonResult<?> login(String username, String password, HttpServletRequest request) throws LoginException {
+        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (header == null){
+            throw new LoginException("Authentication header is null, please check your http headers");
+        }
         OAuth2TokenParams oAuth2Params = new OAuth2TokenParams();
-        oAuth2Params.setClient_id("messaging-client");
-        oAuth2Params.setClient_secret("secret");
-        oAuth2Params.setGrant_type("password");
+        oAuth2Params.setGrant_type(AuthorizationGrantType.PASSWORD.getValue());
         oAuth2Params.setUsername(username);
         oAuth2Params.setPassword(password);
-        return OAuth2TokenRemote.getAccessToken(oAuth2Params);
+        oAuth2Params.setScope(OauthScopeConstant.ALL);
+        return OAuth2TokenRemote.getAccessToken(header, oAuth2Params);
     }
 
     @Override

@@ -54,15 +54,15 @@ mybatis-plus:
     #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     cache-enabled: true
 
-
-#指定接口包扫描
-springdoc.packagesToScan: com.obeast.bendan.controller
-#或者指定访问接口路径扫描
-#springdoc.pathsToMatch=/hs/**, /hsType/**
-
-# swagger-ui custom path
-springdoc.swagger-ui.path: /swagger-ui.html
-
+#
+##指定接口包扫描
+#springdoc.packagesToScan: com.obeast.bendan.controller
+##或者指定访问接口路径扫描
+##springdoc.pathsToMatch=/hs/**, /hsType/**
+#
+## swagger-ui custom path
+#springdoc.swagger-ui.path: /swagger-ui.html
+#
 
 #---en delete
 #logging:
@@ -101,11 +101,10 @@ security:
   resources:
     ignore:
       urls:
-        - "/v3/api-docs"
+        - "/v3/api-docs/**"
         - "/swagger-ui/**"
         - "/swagger-ui.html"
         - "/swagger-resources/**"
         - "/swagger-config/**"
         - "/favicon.ico"
-        - "/sysUser/login"
-        - "/oauth2/**"
+        - "/oauth2/token/**"

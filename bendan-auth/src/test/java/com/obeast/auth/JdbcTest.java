@@ -2,6 +2,7 @@ package com.obeast.auth;
 
 
 import cn.hutool.json.JSON;
+import com.obeast.core.constant.OauthScopeConstant;
 import com.obeast.core.constant.UserLoginConstant;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,9 @@ import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.ClientSettings;
+import org.springframework.security.oauth2.server.authorization.config.TokenSettings;
 
+import java.time.Duration;
 import java.util.UUID;
 
 /**
@@ -35,6 +38,8 @@ public class JdbcTest {
     private RegisteredClientRepository registeredClientRepository;
 
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
     @Autowired
      CacheManager cacheManager;
 
@@ -54,19 +59,25 @@ public class JdbcTest {
     @Test
     @Disabled
     void testSaveClient() {
-
+        String bendan = passwordEncoder.encode("bendan");
         RegisteredClient cLIENT_SECRET_BASIC = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("messaging-client")
-                .clientSecret("{noop}secret")
+                .clientId("web")
+                .clientSecret(bendan)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.PASSWORD)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .redirectUri("http://127.0.0.1:18812/authorized")
                 .scope(OidcScopes.OPENID)
-                .scope("message.read")
-                .scope("message.write")
+                .scope(OauthScopeConstant.READ)
+                .scope(OauthScopeConstant.WRITE)
+                .scope(OauthScopeConstant.ALL)
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+                .tokenSettings(TokenSettings.builder()
+                        .accessTokenTimeToLive(Duration.ofHours(12))
+                        .refreshTokenTimeToLive(Duration.ofDays(3))
+                        .build())
                 .build();
         RegisteredClient cLIENT_SECRET_POST = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("messaging-client")
@@ -93,7 +104,7 @@ public class JdbcTest {
 //        registeredClientRepository.save(cLIENT_SECRET_POST);
 
 
-        registeredClientRepository.save(cLIENT_SECRET_POST);
+        registeredClientRepository.save(cLIENT_SECRET_BASIC);
 
     }
 

@@ -3,7 +3,7 @@ package com.obeast.security.exceptition;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.obeast.core.base.CommonResult;
-import com.obeast.core.constant.ResultCode;
+import com.obeast.core.constant.WebResultEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.MediaType;
@@ -43,16 +43,16 @@ public class ResourceAuthException implements AuthenticationEntryPoint {
 		CommonResult<String> result;
 		switch (authException){
 			case InvalidBearerTokenException ignored -> {
-				response.setStatus(ResultCode.UN_AUTHORIZED.getCode());
+				response.setStatus(WebResultEnum.UN_AUTHORIZED.getCode());
 				result =  CommonResult.unauthorized();
 			}
 			case InsufficientAuthenticationException ignored -> {
-				response.setStatus(ResultCode.REQ_REJECT.getCode());
-				result =  CommonResult.error(ResultCode.REQ_REJECT, ResultCode.REQ_REJECT.getMessage());
+				response.setStatus(WebResultEnum.REQ_REJECT.getCode());
+				result =  CommonResult.error(WebResultEnum.REQ_REJECT, WebResultEnum.REQ_REJECT.getMessage());
 			}
 			default -> {
-				response.setStatus(ResultCode.INTERNAL_RESOURCE_SERVER_ERROR.getCode());
-				result =  CommonResult.error(ResultCode.INTERNAL_RESOURCE_SERVER_ERROR, ResultCode.INTERNAL_RESOURCE_SERVER_ERROR.getMessage());
+				response.setStatus(WebResultEnum.INTERNAL_RESOURCE_SERVER_ERROR.getCode());
+				result =  CommonResult.error(WebResultEnum.INTERNAL_RESOURCE_SERVER_ERROR, WebResultEnum.INTERNAL_RESOURCE_SERVER_ERROR.getMessage());
 			}
 		}
 

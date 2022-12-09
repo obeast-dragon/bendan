@@ -12,8 +12,14 @@ import lombok.Data;
 public class OAuth2TokenParams {
 
     String username;
+
     String password;
+
     String grant_type;
-    String client_id;
-    String client_secret;
+
+    String scope;
+
+    String clientId;
+
+    String clientSecret;
 }

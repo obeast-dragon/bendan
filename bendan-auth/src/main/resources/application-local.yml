@@ -31,11 +31,10 @@ security:
   resources:
     ignore:
       urls:
-        - "/v3/api-docs"
+        - "/v3/api-docs/**"
         - "/swagger-ui/**"
         - "/swagger-ui.html"
         - "/swagger-resources/**"
         - "/swagger-config/**"
         - "/favicon.ico"
-        - "/sysUser/login"
-        - "/oauth2/**"
+        - "/oauth2/token/**"

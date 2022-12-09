@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  * Description: 定义基本的错误码
  */
 @Getter
-public enum ResultCode implements IErrorCode {
+public enum WebResultEnum implements IErrorCode {
 
     /**
      * 操作成功 200
@@ -111,13 +111,13 @@ public enum ResultCode implements IErrorCode {
     ;
 
 
-    ResultCode(int code, String message) {
+    WebResultEnum(int code, String message) {
         this.code = code;
         this.message = message;
         this.messageEn = getMessageEn();
     }
 
-    ResultCode(int code, String message, String messageEn) {
+    WebResultEnum(int code, String message, String messageEn) {
         this.code = code;
         this.message = message;
         this.messageEn = messageEn;

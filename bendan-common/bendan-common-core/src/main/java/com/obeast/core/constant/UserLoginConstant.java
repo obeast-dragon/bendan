@@ -26,11 +26,6 @@ public interface UserLoginConstant {
 
 
     /**
-     * 默认登录URL
-     */
-    String LOGIN_URL = "/userinfo/login";
-
-    /**
      *角色权限前缀
      * */
     String ROLE = "ROLE_";

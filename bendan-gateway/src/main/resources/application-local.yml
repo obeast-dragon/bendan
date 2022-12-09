@@ -21,11 +21,13 @@ logging:
 gateway:
   ignoreUrls:
     - "/doc.html"
+    - "/v3/api-docs/swagger-config"
     - "/swagger-resources/**"
     - "/swagger/**"
-    - "/*/v2/api-docs"
-    - "/*/*.js"
-    - "/*/*.css"
-    - "/*/*.png"
-    - "/*/*.ico"
-    - "/sysUser/login"
+    - "/swagger-ui/**"
+    - "/**/**.js"
+    - "/**/**.css"
+    - "/**/**.png"
+    - "/**/**.ico"
+    - "/v3/api-docs"
+

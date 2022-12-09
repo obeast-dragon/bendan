@@ -9,6 +9,7 @@ import com.obeast.business.entity.BendanSysUser;
 import com.obeast.business.vo.UserInfo;
 
 import javax.security.auth.login.LoginException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -23,13 +24,15 @@ public interface BendanSysUserService extends IService<BendanSysUser> {
 
     /**
      * Description: 登录
+     *
+     * @param username username
+     * @param password password
+     * @param request request
+     * @return com.obeast.core.base.CommonResult<?>
      * @author wxl
      * Date: 2022/11/30 9:56
-     * @param username username
-     * @param password  password
-     * @return com.obeast.core.base.CommonResult<?>
      */
-    CommonResult<?> login(String username, String password);
+    CommonResult<?> login(String username, String password, HttpServletRequest request) throws LoginException;
 
     /**
      * Description: 注册

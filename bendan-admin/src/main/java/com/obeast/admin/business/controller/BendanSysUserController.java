@@ -22,6 +22,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.login.LoginException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -41,8 +42,8 @@ public class BendanSysUserController {
 
     @Operation(summary = "登录")
     @PostMapping("/login")
-    public CommonResult<?> login(SysUserLoginParam userInfoLoginParam) {
-        return bendanSysUserService.login(userInfoLoginParam.getUsername(), userInfoLoginParam.getPassword());
+    public CommonResult<?> login(SysUserLoginParam userInfoLoginParam, HttpServletRequest request) throws LoginException {
+        return bendanSysUserService.login(userInfoLoginParam.getUsername(), userInfoLoginParam.getPassword(), request);
     }
 
     @Operation(summary = "根据用户名获取通用用户信息")

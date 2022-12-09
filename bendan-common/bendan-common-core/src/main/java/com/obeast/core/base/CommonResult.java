@@ -2,7 +2,7 @@ package com.obeast.core.base;
 
 
 
-import com.obeast.core.constant.ResultCode;
+import com.obeast.core.constant.WebResultEnum;
 
 import java.util.Optional;
 
@@ -68,7 +68,7 @@ public class CommonResult<T> {
      * @param data 获取的数据
      */
     public static <T> CommonResult<T> success(T data) {
-        return new CommonResult<>(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), data, true);
+        return new CommonResult<>(WebResultEnum.SUCCESS.getCode(), WebResultEnum.SUCCESS.getMessage(), data, true);
     }
 
     /**
@@ -78,7 +78,7 @@ public class CommonResult<T> {
      * @param  message 提示信息
      */
     public static <T> CommonResult<T> success(T data, String message) {
-        return new CommonResult<>(ResultCode.SUCCESS.getCode(), message, data, true);
+        return new CommonResult<>(WebResultEnum.SUCCESS.getCode(), message, data, true);
     }
 
     /**
@@ -106,7 +106,7 @@ public class CommonResult<T> {
      * @param data 返回数据
      */
     public static <T> CommonResult<T> error(String message, T data) {
-        return new CommonResult<>(ResultCode.FAILURE.getCode(), message, data, false);
+        return new CommonResult<>(WebResultEnum.FAILURE.getCode(), message, data, false);
     }
 
     /**
@@ -114,28 +114,28 @@ public class CommonResult<T> {
      * @param message 提示信息
      */
     public static <T> CommonResult<T> error(String message) {
-        return new CommonResult<>(ResultCode.FAILURE.getCode(), message, null, false);
+        return new CommonResult<>(WebResultEnum.FAILURE.getCode(), message, null, false);
     }
 
     /**
      * 失败返回结果
      */
     public static <T> CommonResult<T> error() {
-        return error(ResultCode.FAILURE);
+        return error(WebResultEnum.FAILURE);
     }
 
     /**
      * 远程失败返回结果
      */
     public static <T> CommonResult<T> remoteFailed() {
-        return error(ResultCode.REQ_REJECT);
+        return error(WebResultEnum.REQ_REJECT);
     }
 
     /**
      * 参数验证失败返回结果
      */
     public static <T> CommonResult<T> validateFailed() {
-        return error(ResultCode.VALID_CODE_ERROR);
+        return error(WebResultEnum.VALID_CODE_ERROR);
     }
 
     /**
@@ -143,28 +143,28 @@ public class CommonResult<T> {
      * @param message 提示信息
      */
     public static <T> CommonResult<T> validateFailed(String message) {
-        return new CommonResult<T>(ResultCode.VALID_CODE_ERROR.getCode(), message, null, false);
+        return new CommonResult<T>(WebResultEnum.VALID_CODE_ERROR.getCode(), message, null, false);
     }
 
     /**
      * 未登录返回结果
      */
     public static <T> CommonResult<T> unauthorized() {
-        return new CommonResult<>(ResultCode.UN_AUTHORIZED.getCode(), ResultCode.UN_AUTHORIZED.getMessage(), null, false);
+        return new CommonResult<>(WebResultEnum.UN_AUTHORIZED.getCode(), WebResultEnum.UN_AUTHORIZED.getMessage(), null, false);
     }
 
     /**
      * 未登录返回结果
      */
     public static <T> CommonResult<T> unauthorized(String message) {
-        return new CommonResult<>(ResultCode.UN_AUTHORIZED.getCode(), message, null, false);
+        return new CommonResult<>(WebResultEnum.UN_AUTHORIZED.getCode(), message, null, false);
     }
 
     /**
      * 未授权返回结果
      */
     public static <T> CommonResult<T> forbidden(T data) {
-        return new CommonResult<>(ResultCode.REQ_REJECT.getCode(), ResultCode.REQ_REJECT.getMessage(), data, false);
+        return new CommonResult<>(WebResultEnum.REQ_REJECT.getCode(), WebResultEnum.REQ_REJECT.getMessage(), data, false);
     }
 
     public Boolean getSuccess() {

@@ -2,9 +2,8 @@ package com.obeast.gateway.filter;
 
 import cn.hutool.json.JSONUtil;
 import com.obeast.core.base.CommonResult;
-import com.obeast.core.constant.ResultCode;
 import com.obeast.core.constant.BendanResHeaderConstant;
-import com.obeast.core.utils.OAuth2Util;
+import com.obeast.core.constant.WebResultEnum;
 import com.obeast.gateway.config.GatewayConfigProperties;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -12,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -48,43 +46,31 @@ public class BendanRequestGlobalFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-//        ServerHttpRequest serverHttpRequest = exchange.getRequest();
-//        ServerHttpResponse response = exchange.getResponse();
-//        // 跨域放行
-//        if (serverHttpRequest.getMethod() == HttpMethod.OPTIONS) {
-//            response.setStatusCode(HttpStatus.OK);
-//            return Mono.empty();
-//        }
-
-
-        // 1. 清洗请求头中from 参数
-        ServerHttpRequest request = exchange.getRequest().mutate().headers(httpHeaders -> {
-            httpHeaders.put(BendanResHeaderConstant.from,
-                                        Collections.singletonList(BendanResHeaderConstant.bendanValue));
-        }).build();
-
-
-        // 2. 重写StripPrefix
-        addOriginalRequestUrl(exchange, request.getURI());
-        String rawPath = request.getURI().getRawPath();
-        String newPath = "/" + Arrays.stream(StringUtils.tokenizeToStringArray(rawPath, "/")).skip(1L)
-                .collect(Collectors.joining("/"));
-
-        ServerHttpRequest newRequest = request.mutate().path(newPath).build();
-        exchange.getAttributes().put(GATEWAY_REQUEST_URL_ATTR, newRequest.getURI());
-
-        return chain.filter(exchange.mutate().request(newRequest.mutate().build()).build());
+        if (checkOptions(exchange)){
+            return Mono.empty();
+        }
+        ServerHttpRequest request = addHttpHeader(exchange);
+        String path = request.getURI().getRawPath();
+        if (!discharged(path)){
+            String newPath = stripPrefix(exchange, request);
+            ServerHttpRequest newRequest = request.mutate().path(newPath).build();
+            exchange.getAttributes().put(GATEWAY_REQUEST_URL_ATTR, newRequest.getURI());
+            return chain.filter(exchange.mutate().request(newRequest.mutate().build()).build());
+        }
+        return chain.filter(exchange.mutate().request(request.mutate().build()).build());
     }
+
+
 
     /**
      * Description: 放行路径
      * @author wxl
      * Date: 2022/11/25 9:51
      * @param path path
-     * @param ignoreUrls http
      * @return boolean
      */
-    private boolean discharged(String path, List<String> ignoreUrls) {
+    private boolean discharged(String path) {
+        List<String> ignoreUrls = this.gatewayConfigProperties.getIgnoreUrls();
         for (int i = 0; i < ignoreUrls.size(); i++) {
             if (ignoreUrls.contains(path)){
                 return true;
@@ -92,6 +78,60 @@ public class BendanRequestGlobalFilter implements GlobalFilter, Ordered {
         }
         return false;
     }
+
+
+    /**
+     * Description: 检查是否是跨域请求
+     * @author wxl
+     * Date: 2022/12/7 13:08
+     * @param exchange  exchange
+     * @return java.lang.Boolean
+     */
+    private Boolean checkOptions (ServerWebExchange exchange) {
+        ServerHttpRequest serverHttpRequest = exchange.getRequest();
+        ServerHttpResponse response = exchange.getResponse();
+        // 跨域放行
+        if (serverHttpRequest.getMethod() == HttpMethod.OPTIONS) {
+            response.setStatusCode(HttpStatus.OK);
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+
+    /**
+     * Description: 重写路由
+     * @author wxl
+     * Date: 2022/12/7 13:02
+     * @param exchange exchange
+     * @param request  request
+     * @return java.lang.String
+     */
+    private String stripPrefix (ServerWebExchange exchange, ServerHttpRequest request) {
+        // 2. 重写StripPrefix
+        addOriginalRequestUrl(exchange, request.getURI());
+        String rawPath = request.getURI().getRawPath();
+        log.debug("当前请求的路------> {}", rawPath);
+        return  "/" + Arrays
+                .stream(StringUtils.tokenizeToStringArray(rawPath, "/"))
+                .skip(1L)
+                .collect(Collectors.joining("/"));
+
+    }
+
+    /**
+     * Description: 新增请求头中from 参数
+     * @author wxl
+     * Date: 2022/12/7 13:03
+     * @param exchange exchange
+     * @return org.springframework.http.server.reactive.ServerHttpRequest
+     */
+    private ServerHttpRequest addHttpHeader (ServerWebExchange exchange) {
+        return exchange.getRequest().mutate().headers(httpHeaders -> {
+            httpHeaders.put(BendanResHeaderConstant.from,
+                    Collections.singletonList(BendanResHeaderConstant.bendanValue));
+        }).build();
+    }
+
 
 
     /**
@@ -107,7 +147,7 @@ public class BendanRequestGlobalFilter implements GlobalFilter, Ordered {
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, "application/json");
         ServerWebExchange header = exchange.mutate().response(response).build();
 //        响应体
-        String str = JSONUtil.toJsonStr(CommonResult.error(ResultCode.UN_AUTHORIZED, ResultCode.UN_AUTHORIZED.getMessage()));
+        String str = JSONUtil.toJsonStr(CommonResult.error(WebResultEnum.UN_AUTHORIZED, WebResultEnum.UN_AUTHORIZED.getMessage()));
         byte[] bytes = str.getBytes(StandardCharsets.UTF_8);
         return header.getResponse()
                 .writeWith(Flux.just(exchange.getResponse().bufferFactory().wrap(bytes)));

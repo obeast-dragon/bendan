@@ -6,4 +6,9 @@ swagger:
   token-url: ${swagger.gateway}/auth/oauth2/token
   scope: message.read
   services:
-    agri-iot-admin: admin
+    bendan-admin: admin
+
+
+springdoc:
+  swagger-ui:
+    configUrl: /admin/v3/api-docs/swagger-config

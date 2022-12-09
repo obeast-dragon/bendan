@@ -5,6 +5,7 @@ import com.obeast.security.business.service.BendanUserDetailsService;
 import com.obeast.security.resource.BendanBearerTokenExtractor;
 import com.obeast.security.resource.BendanOpaqueTokenIntrospector;
 import com.obeast.security.exceptition.ResourceAuthException;
+import com.obeast.security.resource.PurviewService;
 import com.obeast.security.resource.ResourcesProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -30,6 +31,25 @@ public class ResourceAutoConfig {
 
     private final ObjectMapper objectMapper;
 
+
+    /**
+     * Description: 鉴权bean
+     * @author wxl
+     * Date: 2022/12/7 21:04
+     * @return com.obeast.security.resource.PurviewService
+     */
+    @Bean("pvs")
+    public PurviewService purviewService  () {
+        return new PurviewService();
+    }
+
+    /**
+     * Description: token解析
+     * @author wxl
+     * Date: 2022/12/7 21:04
+     * @param urlProperties   urlProperties
+     * @return com.obeast.security.resource.BendanBearerTokenExtractor
+     */
     @Bean
     public BendanBearerTokenExtractor bendanBearerTokenExtractor  (ResourcesProperties urlProperties) {
         return new BendanBearerTokenExtractor(urlProperties);

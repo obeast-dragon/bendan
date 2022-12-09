@@ -1,7 +1,7 @@
 package com.obeast.auth.support.handler.result.failure;
 
 import com.obeast.core.base.CommonResult;
-import com.obeast.core.constant.ResultCode;
+import com.obeast.core.constant.WebResultEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -39,7 +39,7 @@ public class CustomizeAuthenticationFailureHandler implements AuthenticationFail
         ServletServerHttpResponse httpResponse = new ServletServerHttpResponse(response);
         httpResponse.setStatusCode(HttpStatus.OK);
 
-        CommonResult<OAuth2Error> res = CommonResult.error(ResultCode.PARAM_VALID_ERROR);
+        CommonResult<OAuth2Error> res = CommonResult.error(WebResultEnum.PARAM_VALID_ERROR);
         res.setData(error);
         accessTokenHttpResponseConverter.write(res, null, httpResponse);
     }
