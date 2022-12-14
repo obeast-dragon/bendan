@@ -53,7 +53,7 @@ public abstract class OAuth2BaseAuthenticationConverter<T extends OAuth2BaseAuth
      * @return T
      */
     public abstract T buildConvertToken(Authentication clientPrincipal, Set<String> requestedScopes,
-                                 Map<String, Object> additionalParameters);
+                                        Map<String, Object> additionalParameters);
 
     @Override
     public Authentication convert(HttpServletRequest request) {
@@ -68,7 +68,7 @@ public abstract class OAuth2BaseAuthenticationConverter<T extends OAuth2BaseAuth
         // scope (OPTIONAL)
         String scope = parameters.getFirst(OAuth2ParameterNames.SCOPE);
         if (StringUtils.hasText(scope) && parameters.get(OAuth2ParameterNames.SCOPE).size() != 1) {
-            OAuth2Utils.throwError(
+            OAuth2Utils.throwNullError(
                     OAuth2ErrorCodes.INVALID_REQUEST,
                     OAuth2ParameterNames.SCOPE,
                     OAuth2Utils.ACCESS_TOKEN_REQUEST_ERROR_URI);
@@ -86,7 +86,7 @@ public abstract class OAuth2BaseAuthenticationConverter<T extends OAuth2BaseAuth
         // 获取当前已经认证的客户端信息
         Authentication clientPrincipal = SecurityContextHolder.getContext().getAuthentication();
         if (clientPrincipal == null) {
-            OAuth2Utils.throwError(OAuth2ErrorCodes.INVALID_REQUEST, OAuth2ErrorCodes.INVALID_CLIENT,
+            OAuth2Utils.throwNullError(OAuth2ErrorCodes.INVALID_REQUEST, OAuth2ErrorCodes.INVALID_CLIENT,
                     OAuth2Utils.ACCESS_TOKEN_REQUEST_ERROR_URI);
         }
 

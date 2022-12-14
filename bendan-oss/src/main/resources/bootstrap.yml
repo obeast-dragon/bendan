@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path:
-  port: 18815
+  port: 9003
 spring:
   profiles:
     active: dev

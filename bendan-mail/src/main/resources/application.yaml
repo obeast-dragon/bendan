@@ -18,4 +18,4 @@ project:
   name: Bendan
   author: obeast
 server:
-  port: 9999
+  port: 9002

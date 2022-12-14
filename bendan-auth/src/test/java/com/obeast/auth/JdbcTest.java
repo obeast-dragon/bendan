@@ -41,19 +41,35 @@ public class JdbcTest {
     @Autowired
      CacheManager cacheManager;
 
-    @Test
-    void test(){
-        Cache cache = cacheManager.getCache(UserLoginConstant.USERINFO);
-        JSON json = (JSON) cache.get("admin").get();
-        System.out.println(json);
-
-
-    }
-
-
     /**
      * 创建clientId信息
      */
+
+    @Test
+    public void creatClient() {
+        String agriIot = passwordEncoder.encode("agriIot");
+        RegisteredClient CLIENT_SECRET_BASIC = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId("web")
+                .clientSecret(agriIot)
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.PASSWORD)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                .redirectUri("http://127.0.0.1:8888/authorized")
+                .scope(OidcScopes.OPENID)
+                .scope("message.read")
+                .scope("message.write")
+                .scope("all")
+                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+                .tokenSettings(TokenSettings.builder()
+                        .accessTokenTimeToLive(Duration.ofMinutes(60 * 24 * 7))
+                        .refreshTokenTimeToLive(Duration.ofMinutes(60 * 24 * 30))
+                        .build())
+                .build();
+
+        registeredClientRepository.save(CLIENT_SECRET_BASIC);
+    }
     @Test
     @Disabled
     void testSaveClient() {
@@ -68,9 +84,9 @@ public class JdbcTest {
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .redirectUri("http://127.0.0.1:18812/authorized")
                 .scope(OidcScopes.OPENID)
-                .scope(OauthScopeConstant.READ)
-                .scope(OauthScopeConstant.WRITE)
-                .scope(OauthScopeConstant.ALL)
+//                .scope(OauthScopeConstant.READ)
+//                .scope(OauthScopeConstant.WRITE)
+//                .scope(OauthScopeConstant.ALL)
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .tokenSettings(TokenSettings.builder()
                         .accessTokenTimeToLive(Duration.ofHours(12))

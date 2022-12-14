@@ -1,5 +1,5 @@
 server:
-  port: 18811
+  port: 9000
 
 
 spring:
@@ -7,10 +7,3 @@ spring:
     active: local
   application:
     name: bendan-admin
-  cloud:
-    nacos:
-      discovery:
-        server-addr: http://127.0.0.1:8848
-      config:
-        server-addr: http://127.0.0.1:8848
-        file-extension: yaml

@@ -11,7 +11,7 @@ spring:
     #    host: 175.178.183.32
     host: 10.0.0.41
     # Redis数据库索引（默认为0）
-    database: 9
+    database: 13
     # Redis服务器连接端口
     port: 6379
     # Redis服务器连接密码（默认为空）

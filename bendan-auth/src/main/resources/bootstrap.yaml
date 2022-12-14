@@ -1,15 +1,8 @@
 server:
-  port: 18812
+  port: 9001
 
 spring:
   profiles:
     active: local
   application:
     name: bendan-auth
-  cloud:
-    nacos:
-      discovery:
-        server-addr: http://127.0.0.1:8848
-      config:
-        server-addr: http://127.0.0.1:8848
-        file-extension: yaml

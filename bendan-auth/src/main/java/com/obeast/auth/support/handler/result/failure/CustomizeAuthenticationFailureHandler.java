@@ -2,6 +2,7 @@ package com.obeast.auth.support.handler.result.failure;
 
 import com.obeast.core.base.CommonResult;
 import com.obeast.core.constant.WebResultEnum;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -28,13 +29,14 @@ public class CustomizeAuthenticationFailureHandler implements AuthenticationFail
 
     private final HttpMessageConverter<Object> accessTokenHttpResponseConverter = new MappingJackson2HttpMessageConverter();
 
+
+    @SneakyThrows
     @Override
     public void onAuthenticationFailure(
             HttpServletRequest request,
             HttpServletResponse response,
             AuthenticationException exception) throws IOException, ServletException {
-
-        log.error("custom authentication failure: ", exception);
+        log.info("认证异常: {}", exception.getLocalizedMessage());
         OAuth2Error error = ((OAuth2AuthenticationException) exception).getError();
         ServletServerHttpResponse httpResponse = new ServletServerHttpResponse(response);
         httpResponse.setStatusCode(HttpStatus.OK);

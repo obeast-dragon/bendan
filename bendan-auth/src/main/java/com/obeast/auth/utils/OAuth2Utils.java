@@ -45,8 +45,17 @@ public class OAuth2Utils {
 				&& request.getParameter(PkceParameterNames.CODE_VERIFIER) != null;
 	}
 
-	public void throwError(String errorCode, String parameterName, String errorUri) {
-		OAuth2Error error = new OAuth2Error(errorCode, "OAuth 2.0 Parameter: " + parameterName, errorUri);
+
+	/**
+	 * Description: 检查Oauth2为空参数
+	 * @author wxl
+	 * Date: 2022/12/13 10:53
+	 * @param errorCode  errorCode
+	 * @param parameterName  parameterName
+	 * @param errorUri  errorUri
+	 */
+	public void throwNullError(String errorCode, String parameterName, String errorUri) {
+		OAuth2Error error = new OAuth2Error(errorCode, parameterName + "为空，请检查！"  , errorUri);
 		throw new OAuth2AuthenticationException(error);
 	}
 

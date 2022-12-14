@@ -1,7 +1,21 @@
 spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: http://127.0.0.1:8848
+      config:
+        server-addr: http://127.0.0.1:8848
+        file-extension: yaml
+  mvc:
+    #出现错误时, 直接抛出异常
+    throw-exception-if-no-handler-found: true
+  #不要为我们工程中的资源文件建立映射
+  web:
+    resources:
+      add-mappings: false
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/bendan?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT
+    url: jdbc:mysql://localhost:3306/bendan?serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true
     username: root
     password: mysql1234
     type: com.alibaba.druid.pool.DruidDataSource
@@ -31,13 +45,12 @@ spring:
 
 
 
-
-
   redis:
     # Redis服务器地址
-    host: 175.178.183.32
+    host: 10.0.0.41
+#    host: 175.178.183.32
     # Redis数据库索引（默认为0）
-    database: 1
+    database: 13
     # Redis服务器连接端口
     port: 6379
     # Redis服务器连接密码（默认为空）
@@ -46,13 +59,18 @@ spring:
     timeout: 3000ms
 
 
-#扫描包并打印日志
 mybatis-plus:
-  mapper-locations: classpath:/mapper/admin/*.xml
-
+  #扫描包并打印日志
+  #  mapper-locations: classpath:/mapper/admin/*.xml
   configuration:
-    #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     cache-enabled: true
+  global-config:
+    db-config:
+      # 逻辑已删除值(默认为 2)
+      logic-delete-value: 2
+      # 逻辑未删除值(默认为 0)
+      logic-not-delete-value: 0
 
 #
 ##指定接口包扫描
@@ -64,19 +82,7 @@ mybatis-plus:
 #springdoc.swagger-ui.path: /swagger-ui.html
 #
 
-#---en delete
-#logging:
-#  level:
-#    root: warn
-#    com.obeast: info
-#  file:
-#    name: log/bendan-pro.log
 
-logging:
-  level:
-    com:
-      obeast:
-        debug
 feign:
   client:
     config:
@@ -85,26 +91,32 @@ feign:
         readTimeout: 5000
         loggerLevel: full
 
+logging:
+  level:
+    com:
+      obeast:
+        debug
 
-# swagger 配置
-swagger:
-  enabled: true
-  title: bendan Swagger API
-  gateway: http://${GATEWAY_HOST:127.0.0.1}:${GATEWAY-PORT:18814}
-  token-url: ${swagger.gateway}/auth/oauth2/token
-  scope: message.read
-  services:
-    agri-iot-admin: admin
-
-
+#-----自定义配置
 security:
   resources:
     ignore:
       urls:
         - "/v3/api-docs/**"
         - "/swagger-ui/**"
-        - "/swagger-ui.html"
+        - "/swagger-ui.html/**"
         - "/swagger-resources/**"
-        - "/swagger-config/**"
         - "/favicon.ico"
-        - "/oauth2/token/**"
+        - "/oauth2/token"
+        - "/sysUser/login"
+
+
+# swagger 配置
+swagger:
+  enabled: true
+  title: bendan Swagger API
+  gateway: http://${GATEWAY_HOST:127.0.0.1}:${GATEWAY-PORT:8888}
+  token-url: ${swagger.gateway}/auth/oauth2/token
+  scope: message.read
+  services:
+    agri-iot-admin: admin

@@ -4,14 +4,13 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import com.obeast.auth.support.handler.result.failure.CustomizeAuthenticationFailureHandler;
 import com.obeast.auth.support.handler.result.success.CustomizeAuthenticationSuccessHandler;
-
+import com.obeast.auth.support.handler.result.failure.CustomizeAuthenticationFailureHandler;
 import com.obeast.auth.support.password.OAuth2PasswordAuthenticationConverter;
-import com.obeast.auth.support.password.OAuth2PasswordAuthenticationProvider;
 import com.obeast.auth.utils.Jwks;
 import com.obeast.auth.utils.OAuth2GeneratorUtils;
 import com.obeast.security.resource.BendanUserDetailsService;
+import com.obeast.auth.support.password.OAuth2PasswordAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,8 +32,10 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import java.util.List;
 
 /**
- * @author Joe Grandja
- * @since 0.0.1
+ * @author wxl
+ * Date 2022/12/13 15:09
+ * @version 1.0
+ * Description: 认证配置
  */
 @Configuration(proxyBeanMethods = false)
 @RequiredArgsConstructor
@@ -46,7 +47,7 @@ public class AuthorizationServerConfig {
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain authorizationServerSecurityFilterChain(
             HttpSecurity http,
-            OAuth2PasswordAuthenticationProvider oAuth2PasswordCredentialsAuthenticationProvider,
+            OAuth2PasswordAuthenticationProvider oAuth2PasswordAuthenticationProvider,
             DaoAuthenticationProvider daoAuthenticationProvider
     ) throws Exception {
         /*配置自定义密码 token 、 res*/
@@ -65,7 +66,7 @@ public class AuthorizationServerConfig {
                 .apply(authorizationServerConfigurer);
 
         SecurityFilterChain securityFilterChain = http.formLogin(Customizer.withDefaults()).build();
-        http.authenticationProvider(oAuth2PasswordCredentialsAuthenticationProvider);
+        http.authenticationProvider(oAuth2PasswordAuthenticationProvider);
         http.authenticationProvider(daoAuthenticationProvider);
         return securityFilterChain;
     }

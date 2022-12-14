@@ -9,7 +9,8 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author wxl
@@ -29,14 +30,14 @@ public class OAuth2PasswordAuthenticationConverter extends OAuth2BaseAuthenticat
         // username (REQUIRED)
         String username = parameters.getFirst(OAuth2ParameterNames.USERNAME);
         if (!StringUtils.hasText(username) || parameters.get(OAuth2ParameterNames.USERNAME).size() != 1) {
-            OAuth2Utils.throwError(OAuth2ErrorCodes.INVALID_REQUEST, OAuth2ParameterNames.USERNAME,
+            OAuth2Utils.throwNullError(OAuth2ErrorCodes.INVALID_REQUEST, OAuth2ParameterNames.USERNAME,
                     OAuth2Utils.ACCESS_TOKEN_REQUEST_ERROR_URI);
         }
 
         // password (REQUIRED)
         String password = parameters.getFirst(OAuth2ParameterNames.PASSWORD);
         if (!StringUtils.hasText(password) || parameters.get(OAuth2ParameterNames.PASSWORD).size() != 1) {
-            OAuth2Utils.throwError(OAuth2ErrorCodes.INVALID_REQUEST, OAuth2ParameterNames.PASSWORD,
+            OAuth2Utils.throwNullError(OAuth2ErrorCodes.INVALID_REQUEST, OAuth2ParameterNames.PASSWORD,
                     OAuth2Utils.ACCESS_TOKEN_REQUEST_ERROR_URI);
         }
     }
