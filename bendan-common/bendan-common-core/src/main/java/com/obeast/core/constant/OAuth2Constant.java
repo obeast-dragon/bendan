@@ -1,4 +1,4 @@
-package com.obeast.core.utils;
+package com.obeast.core.constant;
 
 /**
  * @author wxl
@@ -6,7 +6,7 @@ package com.obeast.core.utils;
  * @version 1.0
  * Description: 客户端常量
  */
-public interface OAuth2Util {
+public interface OAuth2Constant {
 
 
     /**
@@ -80,6 +80,22 @@ public interface OAuth2Util {
 
 
         GrantType(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    enum Scope{
+        ALL("all"),
+        READ("message.read"),
+        WRITE("message.write")
+        ;
+        private final String name;
+
+        Scope(String name) {
             this.name = name;
         }
 

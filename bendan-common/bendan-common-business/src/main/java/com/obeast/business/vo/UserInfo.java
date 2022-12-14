@@ -1,14 +1,12 @@
 package com.obeast.business.vo;
 
-import com.obeast.business.entity.BendanSysMenu;
-import com.obeast.business.entity.BendanSysRole;
-import com.obeast.business.entity.BendanSysUser;
+import com.obeast.business.entity.SysRoleEntity;
+import com.obeast.business.entity.SysUserEntity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author wxl
@@ -23,12 +21,12 @@ public class UserInfo  implements Serializable {
     /**
      * 系统用户
      * */
-    private BendanSysUser bendanSysUser;
+    private SysUserEntity sysUserEntity;
 
     /**
      * 用户角色
      * */
-    private List<BendanSysRole> bendanSysRoles;
+    private List<SysRoleEntity> sysRoleEntities;
 
     /**
      * 角色ids
@@ -36,8 +34,8 @@ public class UserInfo  implements Serializable {
     private  List<Long> roleIds;
 
     /**
-     * 用户菜单（权限）
+     * 用户菜单集合（权限）
      * */
-    private Set<BendanSysMenu> bendanSysMenus;
+    private String[] purviewNames;
 
 }

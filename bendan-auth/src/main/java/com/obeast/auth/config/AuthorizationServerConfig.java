@@ -11,7 +11,7 @@ import com.obeast.auth.support.password.OAuth2PasswordAuthenticationConverter;
 import com.obeast.auth.support.password.OAuth2PasswordAuthenticationProvider;
 import com.obeast.auth.utils.Jwks;
 import com.obeast.auth.utils.OAuth2GeneratorUtils;
-import com.obeast.security.business.service.BendanUserDetailsService;
+import com.obeast.security.resource.BendanUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

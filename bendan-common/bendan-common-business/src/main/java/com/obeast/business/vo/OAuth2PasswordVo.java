@@ -6,10 +6,10 @@ import lombok.Data;
  * @author wxl
  * Date 2022/10/28 15:25
  * @version 1.0
- * Description: OAuth2TokenParams
+ * Description: OAuth2PasswordVo
  */
 @Data
-public class OAuth2TokenParams {
+public class OAuth2PasswordVo {
 
     String username;
 
@@ -18,8 +18,4 @@ public class OAuth2TokenParams {
     String grant_type;
 
     String scope;
-
-    String clientId;
-
-    String clientSecret;
 }

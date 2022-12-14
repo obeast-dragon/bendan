@@ -7,19 +7,16 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.obeast.core.base.CommonResult;
-import com.obeast.core.constant.OauthScopeConstant;
 import com.obeast.core.domain.PageObjects;
 import com.obeast.core.utils.PageQueryUtils;
-import com.obeast.business.entity.BendanSysMenu;
-import com.obeast.business.entity.BendanSysRole;
-import com.obeast.business.entity.BendanSysUser;
+import com.obeast.business.entity.SysMenuEntity;
+import com.obeast.business.entity.SysRoleEntity;
+import com.obeast.business.entity.SysUserEntity;
 import com.obeast.security.business.dao.BendanSysRoleDao;
 import com.obeast.security.business.dao.BendanSysUserDao;
 import com.obeast.security.business.service.BendanSysMenuService;
 import com.obeast.security.business.service.BendanSysUserService;
 import com.obeast.security.business.service.remote.OAuth2TokenRemote;
-import com.obeast.business.vo.OAuth2TokenParams;
-import com.obeast.business.vo.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -41,7 +38,7 @@ import java.util.Set;
  */
 @Service
 @RequiredArgsConstructor
-public class BendanSysUserServiceImpl extends ServiceImpl<BendanSysUserDao, BendanSysUser>
+public class BendanSysUserServiceImpl extends ServiceImpl<BendanSysUserDao, SysUserEntity>
         implements BendanSysUserService {
 
     private final BendanSysRoleDao bendanSysRoleDao;
@@ -69,39 +66,39 @@ public class BendanSysUserServiceImpl extends ServiceImpl<BendanSysUserDao, Bend
     }
 
     @Override
-    public void register(BendanSysUser bendanSysUser) throws LoginException {
-        String username = bendanSysUser.getUsername();
+    public void register(SysUserEntity sysUserEntity) throws LoginException {
+        String username = sysUserEntity.getUsername();
         if (username != null) {
             if (this.findByUsername(username) != null){
                 throw new LoginException("用户已经存在");
             }
-            String password = bendanSysUser.getPassword();
+            String password = sysUserEntity.getPassword();
             String encodePassword = encoder.encode(password);
-            bendanSysUser.setPassword(encodePassword);
-            this.save(bendanSysUser);
+            sysUserEntity.setPassword(encodePassword);
+            this.save(sysUserEntity);
         }
     }
 
     @Override
-    public PageObjects<BendanSysUser> queryPage(JSONObject params) {
+    public PageObjects<SysUserEntity> queryPage(JSONObject params) {
         String key = params.getStr("orderField");
-        QueryWrapper<BendanSysUser> queryWrapper = getWrapper();
-        IPage<BendanSysUser> page = this.page(
-                new PageQueryUtils<BendanSysUser>().getPage(params, key, false),
+        QueryWrapper<SysUserEntity> queryWrapper = getWrapper();
+        IPage<SysUserEntity> page = this.page(
+                new PageQueryUtils<SysUserEntity>().getPage(params, key, false),
                 queryWrapper
         );
-        return new PageQueryUtils<>().getPageObjects(page, BendanSysUser.class);
+        return new PageQueryUtils<>().getPageObjects(page, SysUserEntity.class);
     }
 
 
 
     @Override
-    public List<BendanSysUser> queryAll() {
+    public List<SysUserEntity> queryAll() {
         return this.list();
     }
 
     @Override
-    public BendanSysUser queryById(Long userId) {
+    public SysUserEntity queryById(Long userId) {
         if (userId != null) {
             return this.getById(userId);
         }
@@ -112,18 +109,18 @@ public class BendanSysUserServiceImpl extends ServiceImpl<BendanSysUserDao, Bend
     @Override
     public UserInfo findUserInfo(String username) throws LoginException {
         UserInfo userInfo = new UserInfo();
-        BendanSysUser bendanSysUser = this.findByUsername(username);
-        if (bendanSysUser != null) {
-            List<BendanSysRole> bendanSysRoles = bendanSysRoleDao.listRolesByUserId(bendanSysUser.getId());
-            if (bendanSysRoles.isEmpty()){
+        SysUserEntity sysUserEntity = this.findByUsername(username);
+        if (sysUserEntity != null) {
+            List<SysRoleEntity> sysRoleEntities = bendanSysRoleDao.listRolesByUserId(sysUserEntity.getId());
+            if (sysRoleEntities.isEmpty()){
                 throw new LoginException("当前用户没有设置角色");
             }
-            List<Long> roleIds = bendanSysRoles.stream().map(BendanSysRole::getId).toList();
-            Set<BendanSysMenu> menus =  bendanSysMenuService.getMenusByRoleIds(roleIds);
+            List<Long> roleIds = sysRoleEntities.stream().map(SysRoleEntity::getId).toList();
+            Set<SysMenuEntity> menus =  bendanSysMenuService.getMenusByRoleIds(roleIds);
             userInfo
-                    .setBendanSysUser(bendanSysUser)
-                    .setBendanSysMenus(menus)
-                    .setBendanSysRoles(bendanSysRoles)
+                    .setSysUser(sysUserEntity)
+                    .setSysMenus(menus)
+                    .setSysRoles(sysRoleEntities)
                     .setRoleIds(roleIds);
             return userInfo;
         }
@@ -131,10 +128,10 @@ public class BendanSysUserServiceImpl extends ServiceImpl<BendanSysUserDao, Bend
     }
 
     @Override
-    public BendanSysUser findByUsername(String username) {
+    public SysUserEntity findByUsername(String username) {
         if (username != null) {
-            LambdaQueryWrapper<BendanSysUser> wrapper = new LambdaQueryWrapper<>();
-            wrapper.eq(BendanSysUser::getUsername, username);
+            LambdaQueryWrapper<SysUserEntity> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(SysUserEntity::getUsername, username);
             return this.getOne(wrapper);
         }
         return null;
@@ -148,7 +145,7 @@ public class BendanSysUserServiceImpl extends ServiceImpl<BendanSysUserDao, Bend
      * @author obeast-dragon
      * Date 2022-10-11 21:02:40
      */
-    private QueryWrapper<BendanSysUser> getWrapper() {
+    private QueryWrapper<SysUserEntity> getWrapper() {
         return new QueryWrapper<>();
     }
 

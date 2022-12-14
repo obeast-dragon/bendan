@@ -2,11 +2,9 @@ package com.obeast.admin.business.controller;
 
 
 import cn.hutool.json.JSONObject;
-import com.obeast.business.entity.BendanSysUser;
+import com.obeast.business.entity.SysUserEntity;
 
 import com.obeast.security.business.service.BendanSysUserService;
-import com.obeast.business.vo.SysUserLoginParam;
-import com.obeast.business.vo.UserInfo;
 import com.obeast.core.base.CommonResult;
 import com.obeast.core.constant.PageConstant;
 import com.obeast.core.domain.PageObjects;
@@ -67,11 +65,11 @@ public class BendanSysUserController {
             @Parameter(name = PageConstant.ORDER_FIELD, description = "排序字段", in = ParameterIn.QUERY, schema = @Schema(implementation = String.class)),
             @Parameter(name = PageConstant.ORDER, description = "排序方式，可选值(asc、desc)", in = ParameterIn.QUERY, required = true, schema = @Schema(implementation = String.class))
     })
-    public CommonResult<PageObjects<BendanSysUser>> list(@RequestParam JSONObject params) {
+    public CommonResult<PageObjects<SysUserEntity>> list(@RequestParam JSONObject params) {
         if (params.size() == 0) {
             return CommonResult.error("params is null");
         }
-        PageObjects<BendanSysUser> page = bendanSysUserService.queryPage(params);
+        PageObjects<SysUserEntity> page = bendanSysUserService.queryPage(params);
         return CommonResult.success(page, "page");
     }
 
@@ -81,8 +79,8 @@ public class BendanSysUserController {
      */
     @GetMapping("/listAll")
     @Operation(summary = "查询所有")
-    public CommonResult<List<BendanSysUser>> listAll() {
-        List<BendanSysUser> data = bendanSysUserService.queryAll();
+    public CommonResult<List<SysUserEntity>> listAll() {
+        List<SysUserEntity> data = bendanSysUserService.queryAll();
         return CommonResult.success(data, "list");
     }
 
@@ -93,11 +91,11 @@ public class BendanSysUserController {
     @GetMapping("/getOneById/{userId}")
     @Operation(summary = "根据id查询")
     @Parameter(name = "id", description = "id of the entity", in = ParameterIn.PATH, required = true, schema = @Schema(implementation = Long.class))
-    public CommonResult<BendanSysUser> getOneById(@PathVariable("userId") Long userId) {
+    public CommonResult<SysUserEntity> getOneById(@PathVariable("userId") Long userId) {
         if (userId < 0) {
             return CommonResult.error("id is null");
         }
-        BendanSysUser userInfo = bendanSysUserService.queryById(userId);
+        SysUserEntity userInfo = bendanSysUserService.queryById(userId);
         return CommonResult.success(userInfo, "userInfo");
     }
 

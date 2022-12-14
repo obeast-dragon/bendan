@@ -8,7 +8,7 @@ import com.obeast.core.validation.group.AddGroup;
 import com.obeast.core.validation.group.DefaultGroup;
 import com.obeast.core.validation.group.DeleteGroup;
 import com.obeast.core.validation.group.UpdateGroup;
-import com.obeast.business.entity.BendanSysRole;
+import com.obeast.business.entity.SysRoleEntity;
 import com.obeast.security.business.service.BendanSysRoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,7 +18,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -52,11 +51,11 @@ public class BendanSysRoleController {
             @Parameter(name = PageConstant.ORDER_FIELD, description = "排序字段", in = ParameterIn.QUERY, schema = @Schema(implementation = String.class)),
             @Parameter(name = PageConstant.ORDER, description = "排序方式，可选值(asc、desc)", in = ParameterIn.QUERY, required = true, schema = @Schema(implementation = String.class))
     })
-    public CommonResult<PageObjects<BendanSysRole>> list(@RequestParam JSONObject params) {
+    public CommonResult<PageObjects<SysRoleEntity>> list(@RequestParam JSONObject params) {
         if (params.size() == 0) {
             return CommonResult.error("params is null");
         }
-        PageObjects<BendanSysRole> page = bendanSysRoleService.queryPage(params);
+        PageObjects<SysRoleEntity> page = bendanSysRoleService.queryPage(params);
         return CommonResult.success(page, "page");
     }
 
@@ -66,8 +65,8 @@ public class BendanSysRoleController {
      * */
     @GetMapping("/listAll")
     @Operation(summary = "查询所有")
-    public CommonResult<List<BendanSysRole>> listAll() {
-        List<BendanSysRole> data = bendanSysRoleService.queryAll();
+    public CommonResult<List<SysRoleEntity>> listAll() {
+        List<SysRoleEntity> data = bendanSysRoleService.queryAll();
         return CommonResult.success(data, "list");
     }
 
@@ -79,12 +78,12 @@ public class BendanSysRoleController {
     @GetMapping("/getOneById/{id}")
     @Operation(summary = "根据id查询")
     @Parameter(name = "id", description = "id of the entity", in = ParameterIn.PATH, required = true, schema = @Schema(implementation = Long.class))
-    public CommonResult<BendanSysRole> getOneById(@PathVariable("id") Long id){
+    public CommonResult<SysRoleEntity> getOneById(@PathVariable("id") Long id){
         if (id < 0){
             return CommonResult.error("id is null");
         }
-		BendanSysRole bendanSysRole = bendanSysRoleService.queryById(id);
-        return CommonResult.success(bendanSysRole, "bendanSysRole");
+		SysRoleEntity sysRoleEntity = bendanSysRoleService.queryById(id);
+        return CommonResult.success(sysRoleEntity, "bendanSysRole");
     }
 
 
@@ -93,11 +92,11 @@ public class BendanSysRoleController {
      */
     @PostMapping("/save")
     @Operation(summary = "新增")
-    public CommonResult<?> save(@Validated({AddGroup.class, DefaultGroup.class}) @RequestBody BendanSysRole bendanSysRoleentity){
-        if (bendanSysRoleentity == null){
+    public CommonResult<?> save(@Validated({AddGroup.class, DefaultGroup.class}) @RequestBody SysRoleEntity sysRoleentity){
+        if (sysRoleentity == null){
             return CommonResult.error("bendanSysRoleentity must not be null");
         }
-        boolean flag = bendanSysRoleService.add(bendanSysRoleentity);
+        boolean flag = bendanSysRoleService.add(sysRoleentity);
         if (flag) {
             return CommonResult.success("add successfully");
         }else {
@@ -111,7 +110,7 @@ public class BendanSysRoleController {
      */
     @PostMapping("/saveList")
     @Operation(summary = "批量新增")
-    public CommonResult<?> saveList(@Validated({AddGroup.class, DefaultGroup.class}) @RequestBody List<BendanSysRole> data){
+    public CommonResult<?> saveList(@Validated({AddGroup.class, DefaultGroup.class}) @RequestBody List<SysRoleEntity> data){
         if (data.size() == 0) {
             return CommonResult.error("data must not be null");
         }
@@ -130,11 +129,11 @@ public class BendanSysRoleController {
      */
     @PostMapping("/update")
     @Operation(summary = "修改")
-    public CommonResult<?> update(@Validated({UpdateGroup.class, DefaultGroup.class}) @RequestBody BendanSysRole bendanSysRoleentity){
-        if (bendanSysRoleentity == null){
+    public CommonResult<?> update(@Validated({UpdateGroup.class, DefaultGroup.class}) @RequestBody SysRoleEntity sysRoleentity){
+        if (sysRoleentity == null){
             return CommonResult.error("bendanSysRoleentity must not be null");
         }
-        boolean flag = bendanSysRoleService.replace(bendanSysRoleentity);
+        boolean flag = bendanSysRoleService.replace(sysRoleentity);
         if (flag){
             return CommonResult.success("update successfully");
         }else {
@@ -148,7 +147,7 @@ public class BendanSysRoleController {
      */
     @PostMapping("/updateList")
     @Operation(summary = "批量修改")
-    public CommonResult<?>  updateList(@Validated({UpdateGroup.class, DefaultGroup.class}) @RequestBody List<BendanSysRole> data) {
+    public CommonResult<?>  updateList(@Validated({UpdateGroup.class, DefaultGroup.class}) @RequestBody List<SysRoleEntity> data) {
         if (data.size() == 0) {
             return CommonResult.error("data must not be null");
         }

@@ -6,17 +6,23 @@ package com.obeast.core.constant;
  * @version 1.0
  * Description: 用户管理的常量
  */
-public interface UserLoginConstant {
+public interface UserConstant {
+
 
     /**
-     * 二级缓存名字
+     * 用户不存在
      * */
-    String USERINFO = "USERINFO";
+    String USER_NOT_FOUND = "用户不存在";
+
+    /**
+     * 用户已经存在
+     * */
+    String USER_EXIST = "用户已经存在";
     
     /**
      * 用户锁定状态
      * */
-    Integer NORMAL_STATUS = 0;
+    Integer NORMAL_STATUS = 2;
 
 
     /**
@@ -25,10 +31,21 @@ public interface UserLoginConstant {
     String AUTHORIZATION = "token";
 
 
+
+
     /**
      *角色权限前缀
      * */
     String ROLE = "ROLE_";
+    /**
+     * 用户名为空
+     * */
+    String USERNAME_IS_NULL = "用户名为空";
+
+    /**
+     * 密码为空
+     * */
+    String PASSWORD_IS_NULL = "密码为空";
 
 
     enum Type {

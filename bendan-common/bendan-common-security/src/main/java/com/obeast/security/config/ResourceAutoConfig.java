@@ -1,7 +1,7 @@
 package com.obeast.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.obeast.security.business.service.BendanUserDetailsService;
+import com.obeast.security.resource.BendanUserDetailsService;
 import com.obeast.security.resource.BendanBearerTokenExtractor;
 import com.obeast.security.resource.BendanOpaqueTokenIntrospector;
 import com.obeast.security.exceptition.ResourceAuthException;

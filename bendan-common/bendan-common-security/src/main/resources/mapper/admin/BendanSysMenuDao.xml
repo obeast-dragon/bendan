@@ -4,7 +4,7 @@
 <mapper namespace="com.obeast.security.business.dao.BendanSysMenuDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.obeast.business.entity.BendanSysMenu" id="sysMenuMap">
+    <resultMap type="com.obeast.business.entity.SysMenuEntity" id="sysMenuMap">
         <result property="id" column="id"/>
         <result property="parentId" column="parent_id"/>
         <result property="level" column="level"/>
@@ -19,7 +19,7 @@
         <result property="updateId" column="update_by"/>
         <result property="updateTime" column="update_time"/>
     </resultMap>
-    <select id="listMenusByRoleId" resultType="com.obeast.business.entity.BendanSysMenu">
+    <select id="listMenusByRoleId" resultType="com.obeast.business.entity.SysMenuEntity">
         SELECT sm.id,
                sm.parent_id,
                sm.name,

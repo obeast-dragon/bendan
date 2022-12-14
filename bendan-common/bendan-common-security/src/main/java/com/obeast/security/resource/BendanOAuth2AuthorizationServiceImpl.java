@@ -1,6 +1,5 @@
-package com.obeast.security.business.service.impl;
+package com.obeast.security.resource;
 
-import com.obeast.core.constant.UserLoginConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -12,7 +11,6 @@ import org.springframework.security.oauth2.core.OAuth2TokenType;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
-import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.time.temporal.ChronoUnit;

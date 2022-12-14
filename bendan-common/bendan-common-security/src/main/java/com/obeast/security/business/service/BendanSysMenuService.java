@@ -3,7 +3,7 @@ package com.obeast.security.business.service;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.obeast.core.domain.PageObjects;
-import com.obeast.business.entity.BendanSysMenu;
+import com.obeast.business.entity.SysMenuEntity;
 
 import java.util.List;
 import java.util.Set;
@@ -15,7 +15,7 @@ import java.util.Set;
  * @version 1.0
  * Description: 菜单(权限)表
  */
-public interface BendanSysMenuService extends IService<BendanSysMenu> {
+public interface BendanSysMenuService extends IService<SysMenuEntity> {
 
 
     /**
@@ -25,7 +25,7 @@ public interface BendanSysMenuService extends IService<BendanSysMenu> {
      * @param params 分页参数
      * @return PageObjects<SysMenuEntity>
      */
-    PageObjects<BendanSysMenu> queryPage(JSONObject params);
+    PageObjects<SysMenuEntity> queryPage(JSONObject params);
 
 
     /**
@@ -35,7 +35,7 @@ public interface BendanSysMenuService extends IService<BendanSysMenu> {
      * @param id id  of entity
      * @return SysMenuEntity
      */
-     BendanSysMenu queryById(Long id);
+     SysMenuEntity queryById(Long id);
 
 
 
@@ -45,7 +45,7 @@ public interface BendanSysMenuService extends IService<BendanSysMenu> {
      * Date: 2022-11-30 10:42:42
      * @return List<SysMenuEntity>
      */
-    List<BendanSysMenu> queryAll();
+    List<SysMenuEntity> queryAll();
 
 
     /**
@@ -54,7 +54,7 @@ public interface BendanSysMenuService extends IService<BendanSysMenu> {
      * Date: 2022-11-30 10:42:42
      * @return List<SysMenuEntity>
      */
-    List<BendanSysMenu> queryByConditions();
+    List<SysMenuEntity> queryByConditions();
 
 
 
@@ -62,10 +62,10 @@ public interface BendanSysMenuService extends IService<BendanSysMenu> {
      * Description: 新增
      * @author obeast-dragon
      * Date: 2022-11-30 10:42:42
-     * @param bendanSysMenu entity object
+     * @param sysMenuEntity entity object
      * @return boolean
      */
-    boolean add(BendanSysMenu bendanSysMenu);
+    boolean add(SysMenuEntity sysMenuEntity);
 
 
     /**
@@ -75,17 +75,17 @@ public interface BendanSysMenuService extends IService<BendanSysMenu> {
      * @param data entity objects
      * @return boolean
      */
-    boolean addList(List<BendanSysMenu> data);
+    boolean addList(List<SysMenuEntity> data);
 
 
     /**
      * Description: 更新
      * @author obeast-dragon
      * Date: 2022-11-30 10:42:42
-     * @param bendanSysMenu entity object
+     * @param sysMenuEntity entity object
      * @return boolean
      */
-    boolean replace(BendanSysMenu bendanSysMenu);
+    boolean replace(SysMenuEntity sysMenuEntity);
 
 
     /**
@@ -95,7 +95,7 @@ public interface BendanSysMenuService extends IService<BendanSysMenu> {
      * @param data entity objects
      * @return boolean
      */
-    boolean replaceList(List<BendanSysMenu> data);
+    boolean replaceList(List<SysMenuEntity> data);
 
 
     /**
@@ -124,7 +124,7 @@ public interface BendanSysMenuService extends IService<BendanSysMenu> {
      * @param roleIds roleIds
      * @return java.util.Set<com.obeast.business.entity.BendanSysMenu>
      */
-    Set<BendanSysMenu> getMenusByRoleIds(List<Long> roleIds);
+    Set<SysMenuEntity> getMenusByRoleIds(List<Long> roleIds);
 
     /**
      * Description: 根据title获取id

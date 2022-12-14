@@ -3,7 +3,7 @@ package com.obeast.security.business.service;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.obeast.core.domain.PageObjects;
-import com.obeast.business.entity.BendanSysRole;
+import com.obeast.business.entity.SysRoleEntity;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * @version 1.0
  * Description: 角色表
  */
-public interface BendanSysRoleService extends IService<BendanSysRole> {
+public interface BendanSysRoleService extends IService<SysRoleEntity> {
 
 
     /**
@@ -24,7 +24,7 @@ public interface BendanSysRoleService extends IService<BendanSysRole> {
      * @param params 分页参数
      * @return PageObjects<SysRoleEntity>
      */
-    PageObjects<BendanSysRole> queryPage(JSONObject params);
+    PageObjects<SysRoleEntity> queryPage(JSONObject params);
 
 
     /**
@@ -34,7 +34,7 @@ public interface BendanSysRoleService extends IService<BendanSysRole> {
      * @param id id  of entity
      * @return SysRoleEntity
      */
-     BendanSysRole queryById(Long id);
+     SysRoleEntity queryById(Long id);
 
 
 
@@ -44,7 +44,7 @@ public interface BendanSysRoleService extends IService<BendanSysRole> {
      * Date: 2022-11-30 10:42:42
      * @return List<SysRoleEntity>
      */
-    List<BendanSysRole> queryAll();
+    List<SysRoleEntity> queryAll();
 
 
     /**
@@ -53,7 +53,7 @@ public interface BendanSysRoleService extends IService<BendanSysRole> {
      * Date: 2022-11-30 10:42:42
      * @return List<SysRoleEntity>
      */
-    List<BendanSysRole> queryByConditions();
+    List<SysRoleEntity> queryByConditions();
 
 
 
@@ -61,10 +61,10 @@ public interface BendanSysRoleService extends IService<BendanSysRole> {
      * Description: 新增
      * @author obeast-dragon
      * Date: 2022-11-30 10:42:42
-     * @param bendanSysRole entity object
+     * @param sysRoleEntity entity object
      * @return boolean
      */
-    boolean add(BendanSysRole bendanSysRole);
+    boolean add(SysRoleEntity sysRoleEntity);
 
 
     /**
@@ -74,17 +74,17 @@ public interface BendanSysRoleService extends IService<BendanSysRole> {
      * @param data entity objects
      * @return boolean
      */
-    boolean addList(List<BendanSysRole> data);
+    boolean addList(List<SysRoleEntity> data);
 
 
     /**
      * Description: 更新
      * @author obeast-dragon
      * Date: 2022-11-30 10:42:42
-     * @param bendanSysRole entity object
+     * @param sysRoleEntity entity object
      * @return boolean
      */
-    boolean replace(BendanSysRole bendanSysRole);
+    boolean replace(SysRoleEntity sysRoleEntity);
 
 
     /**
@@ -94,7 +94,7 @@ public interface BendanSysRoleService extends IService<BendanSysRole> {
      * @param data entity objects
      * @return boolean
      */
-    boolean replaceList(List<BendanSysRole> data);
+    boolean replaceList(List<SysRoleEntity> data);
 
 
     /**

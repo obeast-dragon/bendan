@@ -2,7 +2,7 @@ package com.obeast.security.business.dao;
 
 
 import com.obeast.core.base.BaseDao;
-import com.obeast.business.entity.BendanSysUser;
+import com.obeast.business.entity.SysUserEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.Mapper;
  * Description: 针对表【bendan_sys_user】的数据库操作Mapper
  */
 @Mapper
-public interface BendanSysUserDao extends BaseDao<BendanSysUser> {
+public interface BendanSysUserDao extends BaseDao<SysUserEntity> {
 }
 
 

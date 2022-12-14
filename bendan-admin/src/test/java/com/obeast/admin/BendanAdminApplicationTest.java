@@ -1,10 +1,9 @@
 package com.obeast.admin;
 
-import com.obeast.business.entity.BendanSysMenu;
-import com.obeast.business.entity.BendanSysUser;
+import com.obeast.business.entity.SysMenuEntity;
+import com.obeast.business.entity.SysUserEntity;
 import com.obeast.security.business.service.BendanSysMenuService;
 import com.obeast.security.business.service.BendanSysUserService;
-import com.obeast.business.vo.OAuth2TokenParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,9 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.security.auth.login.LoginException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author wxl
@@ -271,22 +268,22 @@ public class BendanAdminApplicationTest {
             """;
 
 
-    private static List<BendanSysMenu> getData(String json) throws JSONException {
+    private static List<SysMenuEntity> getData(String json) throws JSONException {
         JSONObject jsonObject = new JSONObject(json);
         JSONArray jsonArray = jsonObject.getJSONArray("data");
-        ArrayList<BendanSysMenu> list = new ArrayList<>();
+        ArrayList<SysMenuEntity> list = new ArrayList<>();
         int level = 0;
         for (int i = 0; i < jsonArray.length(); i++) {
-            BendanSysMenu bendanSysMenu = buildMenu(jsonArray, i, level);
-            list.add(bendanSysMenu);
+            SysMenuEntity sysMenuEntity = buildMenu(jsonArray, i, level);
+            list.add(sysMenuEntity);
         }
         return list;
     }
-    private static List<BendanSysMenu> getChild (JSONObject children) throws JSONException {
-        List<BendanSysMenu> list = new ArrayList<>();
+    private static List<SysMenuEntity> getChild (JSONObject children) throws JSONException {
+        List<SysMenuEntity> list = new ArrayList<>();
         if (children != null){
             JSONObject children2 = children.getJSONObject("children");
-            BendanSysMenu bendanSysMenu = new BendanSysMenu();
+            SysMenuEntity sysMenuEntity = new SysMenuEntity();
 
             if (children2 != null){
                 return getChild(children2);
@@ -294,25 +291,25 @@ public class BendanAdminApplicationTest {
         }
         return list;
     }
-    private static BendanSysMenu buildMenu (JSONArray jsonArray, int i, int level) throws JSONException {
+    private static SysMenuEntity buildMenu (JSONArray jsonArray, int i, int level) throws JSONException {
         JSONObject obj = jsonArray.getJSONObject(i);
         String icon = obj.getString("icon");
         String path = obj.getString("path");
         String title = obj.getString("title");
         String isLink = obj.getString("isLink") == null ? null : obj.getString("isLink");
-        BendanSysMenu bendanSysMenu = new BendanSysMenu();
+        SysMenuEntity sysMenuEntity = new SysMenuEntity();
         JSONObject children = obj.getJSONObject("children");
-        List<BendanSysMenu> childs = getChild(children);
-        bendanSysMenu.setIcon(icon);
-        bendanSysMenu.setPath(path);
-        bendanSysMenu.setName(title);
-        bendanSysMenu.setUrl(isLink);
-        bendanSysMenu.setLevel(level);
-        return bendanSysMenu;
+        List<SysMenuEntity> childs = getChild(children);
+        sysMenuEntity.setIcon(icon);
+        sysMenuEntity.setPath(path);
+        sysMenuEntity.setName(title);
+        sysMenuEntity.setUrl(isLink);
+        sysMenuEntity.setLevel(level);
+        return sysMenuEntity;
     }
 
     public static void main(String[] args) throws JSONException {
-        List<BendanSysMenu> data = getData(json);
+        List<SysMenuEntity> data = getData(json);
         System.out.println(data);
 
     }
@@ -325,7 +322,7 @@ public class BendanAdminApplicationTest {
 
     @Test
     void test() throws LoginException, JSONException {
-        List<BendanSysMenu> data = getData(json);
+        List<SysMenuEntity> data = getData(json);
 //        Long id = bendanSysMenuService.getIdByTitle();
         bendanSysMenuService.saveBatch(data);
     }
@@ -333,11 +330,11 @@ public class BendanAdminApplicationTest {
 
     @Test
     void testSaveUser() throws LoginException {
-        BendanSysUser bendanSysUser = new BendanSysUser();
-        bendanSysUser.setUsername("admin");
-        bendanSysUser.setPassword("password");
-        bendanSysUser.setEmail("obeast.gym@gmail.com");
-        bendanSysUserService.register(bendanSysUser);
+        SysUserEntity sysUserEntity = new SysUserEntity();
+        sysUserEntity.setUsername("admin");
+        sysUserEntity.setPassword("password");
+        sysUserEntity.setEmail("obeast.gym@gmail.com");
+        bendanSysUserService.register(sysUserEntity);
     }
 
     @Test

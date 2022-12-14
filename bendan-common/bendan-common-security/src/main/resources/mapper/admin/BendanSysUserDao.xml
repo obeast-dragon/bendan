@@ -4,7 +4,7 @@
 <mapper namespace="com.obeast.security.business.dao.BendanSysUserDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.obeast.business.entity.BendanSysUser" id="BendanSysUserMap">
+    <resultMap type="com.obeast.business.entity.SysUserEntity" id="BendanSysUserMap">
         <result property="id" column="user_id"/>
         <result property="username" column="username"/>
         <result property="password" column="password"/>

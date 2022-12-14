@@ -2,8 +2,6 @@ package com.obeast.auth;
 
 
 import cn.hutool.json.JSON;
-import com.obeast.core.constant.OauthScopeConstant;
-import com.obeast.core.constant.UserLoginConstant;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

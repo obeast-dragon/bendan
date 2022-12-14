@@ -5,8 +5,7 @@ import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.obeast.core.base.CommonResult;
 import com.obeast.core.domain.PageObjects;
-import com.obeast.business.entity.BendanSysUser;
-import com.obeast.business.vo.UserInfo;
+import com.obeast.business.entity.SysUserEntity;
 
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +18,7 @@ import java.util.List;
  * @version 1.0
  * Description: 针对表【bendan_sys_user】的数据库操作Service
  */
-public interface BendanSysUserService extends IService<BendanSysUser> {
+public interface BendanSysUserService extends IService<SysUserEntity> {
 
 
     /**
@@ -38,9 +37,9 @@ public interface BendanSysUserService extends IService<BendanSysUser> {
      * Description: 注册
      * @author wxl
      * Date: 2022/12/1 18:53
-     * @param bendanSysUser  bendanSysUser
+     * @param sysUserEntity  bendanSysUser
      */
-    void register(BendanSysUser bendanSysUser) throws LoginException;
+    void register(SysUserEntity sysUserEntity) throws LoginException;
 
 //    ----------------------default------------------------------------------
 
@@ -61,7 +60,7 @@ public interface BendanSysUserService extends IService<BendanSysUser> {
      * @param params 分页参数
      * @return PageObjects<UserInfoEntity>
      */
-    PageObjects<BendanSysUser> queryPage(JSONObject params);
+    PageObjects<SysUserEntity> queryPage(JSONObject params);
 
 
 
@@ -71,7 +70,7 @@ public interface BendanSysUserService extends IService<BendanSysUser> {
      * Date: 2022/11/30 10:26
      * @return java.util.List<com.obeast.admin.business.entity.UserInfoEntity>
      */
-    List<BendanSysUser> queryAll();
+    List<SysUserEntity> queryAll();
 
 
     /**
@@ -81,7 +80,7 @@ public interface BendanSysUserService extends IService<BendanSysUser> {
      * @param userId   userId
      * @return com.obeast.admin.business.entity.BendanSysUser
      */
-    BendanSysUser queryById(Long userId);
+    SysUserEntity queryById(Long userId);
 
 
     /**
@@ -91,7 +90,7 @@ public interface BendanSysUserService extends IService<BendanSysUser> {
      * @param username  username
      * @return com.obeast.business.entity.BendanSysUser
      */
-    BendanSysUser findByUsername(String username);
+    SysUserEntity findByUsername(String username);
 
 
 }

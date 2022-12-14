@@ -1,5 +1,5 @@
-com.obeast.security.business.service.impl.BendanUserDetailsServiceImpl
-com.obeast.security.business.service.impl.BendanOAuth2AuthorizationServiceImpl
+com.obeast.security.resource.BendanUserDetailsServiceImpl
+com.obeast.security.resource.BendanOAuth2AuthorizationServiceImpl
 com.obeast.security.config.ResourceAutoConfig
 
 #business

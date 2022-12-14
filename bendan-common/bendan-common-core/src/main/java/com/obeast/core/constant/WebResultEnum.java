@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Getter
 public enum WebResultEnum implements IErrorCode {
-
     /**
      * 操作成功 200
      */
@@ -60,7 +59,7 @@ public enum WebResultEnum implements IErrorCode {
     /**
      * 请求未授权 401
      */
-    UN_AUTHORIZED(HttpServletResponse.SC_UNAUTHORIZED, "未授权,请登录", "unauthorized"),
+    UN_AUTHORIZED(HttpServletResponse.SC_UNAUTHORIZED, "未授权,请登录!!!", "unauthorized"),
 
     /**
      * 请求被拒绝 403
@@ -71,7 +70,7 @@ public enum WebResultEnum implements IErrorCode {
     /**
      * 404 没找到请求
      */
-    NOT_FOUND(HttpServletResponse.SC_NOT_FOUND, "404 没找到请求", "Not found"),
+    NOT_FOUND(HttpServletResponse.SC_NOT_FOUND, "404 没找到请求路径", "Not found"),
 
 
     /**

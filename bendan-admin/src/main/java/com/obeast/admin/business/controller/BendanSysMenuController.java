@@ -8,7 +8,7 @@ import com.obeast.core.validation.group.AddGroup;
 import com.obeast.core.validation.group.DefaultGroup;
 import com.obeast.core.validation.group.DeleteGroup;
 import com.obeast.core.validation.group.UpdateGroup;
-import com.obeast.business.entity.BendanSysMenu;
+import com.obeast.business.entity.SysMenuEntity;
 import com.obeast.security.business.service.BendanSysMenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,7 +18,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -53,11 +52,11 @@ public class BendanSysMenuController {
             @Parameter(name = PageConstant.ORDER_FIELD, description = "排序字段", in = ParameterIn.QUERY, schema = @Schema(implementation = String.class)),
             @Parameter(name = PageConstant.ORDER, description = "排序方式，可选值(asc、desc)", in = ParameterIn.QUERY, required = true, schema = @Schema(implementation = String.class))
     })
-    public CommonResult<PageObjects<BendanSysMenu>> list(@RequestParam JSONObject params) {
+    public CommonResult<PageObjects<SysMenuEntity>> list(@RequestParam JSONObject params) {
         if (params.size() == 0) {
             return CommonResult.error("params is null");
         }
-        PageObjects<BendanSysMenu> page = bendanSysMenuService.queryPage(params);
+        PageObjects<SysMenuEntity> page = bendanSysMenuService.queryPage(params);
         return CommonResult.success(page, "page");
     }
 
@@ -67,8 +66,8 @@ public class BendanSysMenuController {
      * */
     @GetMapping("/listAll")
     @Operation(summary = "查询所有")
-    public CommonResult<List<BendanSysMenu>> listAll() {
-        List<BendanSysMenu> data = bendanSysMenuService.queryAll();
+    public CommonResult<List<SysMenuEntity>> listAll() {
+        List<SysMenuEntity> data = bendanSysMenuService.queryAll();
         return CommonResult.success(data, "list");
     }
 
@@ -80,12 +79,12 @@ public class BendanSysMenuController {
     @GetMapping("/getOneById/{id}")
     @Operation(summary = "根据id查询")
     @Parameter(name = "id", description = "id of the entity", in = ParameterIn.PATH, required = true, schema = @Schema(implementation = Long.class))
-    public CommonResult<BendanSysMenu> getOneById(@PathVariable("id") Long id){
+    public CommonResult<SysMenuEntity> getOneById(@PathVariable("id") Long id){
         if (id < 0){
             return CommonResult.error("id is null");
         }
-		BendanSysMenu bendanSysMenu = bendanSysMenuService.queryById(id);
-        return CommonResult.success(bendanSysMenu, "bendanSysMenu");
+		SysMenuEntity sysMenuEntity = bendanSysMenuService.queryById(id);
+        return CommonResult.success(sysMenuEntity, "bendanSysMenu");
     }
 
 
@@ -94,33 +93,15 @@ public class BendanSysMenuController {
      */
     @PostMapping("/save")
     @Operation(summary = "新增")
-    public CommonResult<?> save(@Validated({AddGroup.class, DefaultGroup.class}) @RequestBody BendanSysMenu bendanSysMenu){
-        if (bendanSysMenu == null){
+    public CommonResult<?> save(@Validated({AddGroup.class, DefaultGroup.class}) @RequestBody SysMenuEntity sysMenuEntity){
+        if (sysMenuEntity == null){
             return CommonResult.error("bendanSysMenu must not be null");
         }
-        boolean flag = bendanSysMenuService.add(bendanSysMenu);
+        boolean flag = bendanSysMenuService.add(sysMenuEntity);
         if (flag) {
             return CommonResult.success("add successfully");
         }else {
             return CommonResult.error("add failed");
-        }
-    }
-
-
-    /**
-     * 批量新增
-     */
-    @PostMapping("/saveList")
-    @Operation(summary = "批量新增")
-    public CommonResult<?> saveList(@Validated({AddGroup.class, DefaultGroup.class}) @RequestBody List<BendanSysMenu> data){
-        if (data.size() == 0) {
-            return CommonResult.error("data must not be null");
-        }
-        boolean flag = bendanSysMenuService.addList(data);
-        if (flag) {
-            return CommonResult.success("adds successfully");
-        }else {
-            return CommonResult.error("adds failed");
         }
     }
 
@@ -131,11 +112,11 @@ public class BendanSysMenuController {
      */
     @PostMapping("/update")
     @Operation(summary = "修改")
-    public CommonResult<?> update(@Validated({UpdateGroup.class, DefaultGroup.class}) @RequestBody BendanSysMenu bendanSysMenuentity){
-        if (bendanSysMenuentity == null){
+    public CommonResult<?> update(@Validated({UpdateGroup.class, DefaultGroup.class}) @RequestBody SysMenuEntity sysMenuentity){
+        if (sysMenuentity == null){
             return CommonResult.error("bendanSysMenuentity must not be null");
         }
-        boolean flag = bendanSysMenuService.replace(bendanSysMenuentity);
+        boolean flag = bendanSysMenuService.replace(sysMenuentity);
         if (flag){
             return CommonResult.success("update successfully");
         }else {
@@ -144,22 +125,7 @@ public class BendanSysMenuController {
     }
 
 
-    /**
-     * 批量修改
-     */
-    @PostMapping("/updateList")
-    @Operation(summary = "批量修改")
-    public CommonResult<?>  updateList(@Validated({UpdateGroup.class, DefaultGroup.class}) @RequestBody List<BendanSysMenu> data) {
-        if (data.size() == 0) {
-            return CommonResult.error("data must not be null");
-        }
-        boolean flag = bendanSysMenuService.replaceList(data);
-        if (flag){
-            return CommonResult.success("updates successfully");
-        }else {
-            return CommonResult.error("Updates failed");
-        }
-    }
+
 
 
     /**
@@ -177,25 +143,6 @@ public class BendanSysMenuController {
             return CommonResult.success("Delete successfully");
         }else {
             return CommonResult.error("Delete failed");
-        }
-    }
-
-
-    /**
-     * 批量删除
-     */
-    @Operation(summary = "批量删除")
-    @Parameter(name = "ids", description = "id数组", required = true, in = ParameterIn.QUERY)
-    @DeleteMapping("/deleteList")
-    public CommonResult<?> deleteList(@Validated({DeleteGroup.class, DefaultGroup.class}) @RequestParam("ids") List<Long> ids) {
-        if (ids.size() == 0) {
-            return CommonResult.error("Delete failed ids is null");
-        }
-        boolean removes = bendanSysMenuService.deleteByIds(ids);
-        if (removes){
-            return CommonResult.success("Deletes successfully");
-        }else {
-            return CommonResult.error("Deletes failed");
         }
     }
 

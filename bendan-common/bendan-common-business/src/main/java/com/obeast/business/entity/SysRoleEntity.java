@@ -1,8 +1,13 @@
 package com.obeast.business.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.obeast.core.validation.group.AddGroup;
+import com.obeast.core.validation.group.UpdateGroup;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.hibernate.validator.constraints.Range;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
@@ -17,7 +22,8 @@ import java.util.Date;
  */
 @Data
 @TableName("bendan_sys_role")
-public class BendanSysRole implements Serializable {
+public class SysRoleEntity implements Serializable {
+
 
 	@Serial
 	@TableField(exist = false)
@@ -28,11 +34,13 @@ public class BendanSysRole implements Serializable {
 	 * id
 	 */
 	@TableId(type = IdType.AUTO)
+	@NotNull(groups = UpdateGroup.class)
 	private Long id;
 
 	/**
 	 * 角色名字
 	 */
+	@NotNull(groups = {AddGroup.class, UpdateGroup.class})
 	private String name;
 
 	/**
@@ -48,28 +56,34 @@ public class BendanSysRole implements Serializable {
 	/**
 	 * 逻辑删除标记(0--正常 1--删除)
 	 */
+	@Range(min = 0,  max = 1, groups = {AddGroup.class, UpdateGroup.class})
 	private Integer del;
 
 	/**
 	 * 创建人
 	 */
-	private String createId;
+	@NotNull(groups = {AddGroup.class})
+	private Long createId;
 
 	/**
 	 * 修改人
 	 */
-	private String updateId;
+	@NotNull(groups = {UpdateGroup.class})
+	private Long updateId;
 
 	/**
 	 * 创建时间
 	 */
+	@Schema(description = "创建时间", hidden = true)
 	@TableField(value = "create_time", fill = FieldFill.INSERT)
 	private Date createTime;
 
 	/**
 	 * 更新时间
 	 */
+	@Schema(description = "更新时间", hidden = true)
 	@TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
 	private Date updateTime;
+
 
 }

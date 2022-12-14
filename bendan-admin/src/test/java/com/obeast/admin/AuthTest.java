@@ -1,7 +1,5 @@
 package com.obeast.admin;
 
-import com.obeast.business.vo.OAuth2TokenParams;
-import com.obeast.core.constant.OauthScopeConstant;
 import com.obeast.security.business.service.remote.OAuth2TokenRemote;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

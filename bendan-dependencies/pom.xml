@@ -25,6 +25,7 @@
         <fastjson2.version>2.0.14</fastjson2.version>
         <easyexcel.version>3.1.1</easyexcel.version>
         <springdoc-openapi-ui.version>1.6.11</springdoc-openapi-ui.version>
+        <swagger.core.version>2.2.0</swagger.core.version>
         <lombok.version>1.18.24</lombok.version>
         <minio.version>8.4.4</minio.version>
         <okhttp.version>4.10.0</okhttp.version>
@@ -86,6 +87,7 @@
                 <artifactId>netty-buffer</artifactId>
                 <version>${netty-all.version}</version>
             </dependency>
+
 
 
             <!-- fastjson2 -->
@@ -151,6 +153,11 @@
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-ui</artifactId>
                 <version>${springdoc-openapi-ui.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.core.version}</version>
             </dependency>
 
             <!--easyexcel-->

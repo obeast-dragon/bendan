@@ -4,7 +4,7 @@
 <mapper namespace="com.obeast.security.business.dao.BendanSysRoleDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.obeast.business.entity.BendanSysRole" id="sysRoleMap">
+    <resultMap type="com.obeast.business.entity.SysRoleEntity" id="sysRoleMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="code" column="code"/>
@@ -16,7 +16,7 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
-    <select id="listRolesByUserId" resultType="com.obeast.business.entity.BendanSysRole">
+    <select id="listRolesByUserId" resultType="com.obeast.business.entity.SysRoleEntity">
         SELECT r.id,
                r.name,
                r.code,
