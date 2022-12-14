@@ -13,15 +13,17 @@ import java.util.Date;
  */
 public class FieldFillConfig implements MetaObjectHandler {
 
-
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.setFieldValByName("createTime", new Date(), metaObject);
-        this.setFieldValByName("updateTime", new Date(), metaObject);
+        this.strictInsertFill(metaObject, "createTime", Date.class, new Date());
+        this.strictInsertFill(metaObject, "updateTime", Date.class, new Date());
+//        this.setFieldValByName("createTime", new Date(), metaObject);
+//        this.setFieldValByName("updateTime", new Date(), metaObject);
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.setFieldValByName("updateTime", new Date(), metaObject);
+        this.strictUpdateFill(metaObject, "updateTime", Date.class, new Date());
+//        this.setFieldValByName("updateTime", new Date(), metaObject);
     }
 }

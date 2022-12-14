@@ -1,7 +1,10 @@
 package com.obeast.security.resource;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.obeast.business.entity.SysUserEntity;
-import com.obeast.security.business.service.BendanSysUserService;
+import com.obeast.business.vo.UserInfo;
+import com.obeast.core.constant.UserConstant;
+import com.obeast.security.business.service.SysUserService;
 import com.obeast.security.business.domain.BendanSecurityUser;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -13,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 
 import javax.security.auth.login.LoginException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -21,7 +25,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class BendanUserDetailsServiceImpl implements BendanUserDetailsService {
 
-    private final BendanSysUserService bendanSysUserService;
+    private final SysUserService sysUserService;
 
     /**
      * 二级缓存
@@ -43,20 +47,26 @@ public class BendanUserDetailsServiceImpl implements BendanUserDetailsService {
     }
 
     private UserDetails getUserDetails(String username) throws LoginException {
-        UserInfo userInfo = Optional.ofNullable(bendanSysUserService.findUserInfo(username)).orElseThrow(() -> new UsernameNotFoundException("用户不存在"));
-        // TODO: 2022/11/30 资源控制
-        SysUserEntity sysUserEntity = userInfo.getSysUser();
-        String[] roles = userInfo.getSysRoles().stream().map(item -> UserLoginConstant.ROLE + item.getName()).toArray(String[]::new);
-        Set<GrantedAuthority> authorities = new HashSet<>(AuthorityUtils.createAuthorityList(roles));
+        UserInfo userInfo = Optional.ofNullable(sysUserService.findUserInfo(username)).orElseThrow(() -> new UsernameNotFoundException("用户不存在"));
+        SysUserEntity sysUserEntity = userInfo.getSysUserEntity();
+        HashSet<String> auth = new HashSet<>();
+        if (ArrayUtil.isNotEmpty(userInfo.getSysRoleEntities())){
+            /*角色*/
+            userInfo.getSysRoleEntities().forEach(role -> auth.add(UserConstant.ROLE + role.getName()));
+
+            /*菜单资源*/
+            auth.addAll(Arrays.asList(userInfo.getPurviewNames()));
+        }
+        Set<GrantedAuthority> authorities = new HashSet<>(AuthorityUtils.createAuthorityList(auth.toArray(new String[0])));
         return new BendanSecurityUser(
                 sysUserEntity.getId(),
                 sysUserEntity.getUsername(),
                 sysUserEntity.getPassword(),
                 sysUserEntity.getEmail(),
-                true,
-                true,
-                true,
-                sysUserEntity.getStatus().equals(UserLoginConstant.NORMAL_STATUS),
+                Boolean.TRUE,
+                Boolean.TRUE,
+                Boolean.TRUE,
+                !sysUserEntity.getStatus().equals(UserConstant.NORMAL_STATUS),
                 authorities
         );
     }

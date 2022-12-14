@@ -10,6 +10,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.obeast.core.constant.SysConstant;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
@@ -38,10 +39,11 @@ import java.time.format.DateTimeFormatter;
 @AutoConfigureBefore(RedisAutoConfiguration.class)
 public class RedisConfig {
 
+
     /**
-     * 过期时间
-     * */
-    private final Duration TIME_TO_LIVE = Duration.ofMinutes(10);
+     * 过期时间 不能用天
+     */
+    private final Duration TIME_TO_LIVE = SysConstant.REDIS_EXPIRED;
 
 
 

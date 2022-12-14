@@ -18,7 +18,7 @@ import java.util.Set;
  * Description: 菜单(权限)表
  */
 @Mapper
-public interface BendanSysMenuDao extends BaseDao<SysMenuEntity> {
+public interface SysMenuDao extends BaseDao<SysMenuEntity> {
     /**
      * Description: 根据roleId查询权限集合
      * @author wxl

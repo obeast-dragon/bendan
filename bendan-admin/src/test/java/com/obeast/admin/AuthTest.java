@@ -1,6 +1,6 @@
 package com.obeast.admin;
 
-import com.obeast.security.business.service.remote.OAuth2TokenRemote;
+import com.obeast.security.business.service.remote.OAuth2TokenEndpoint;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,17 +15,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class AuthTest {
 
     @Autowired
-    private OAuth2TokenRemote oAuth2TokenRemote;
+    private OAuth2TokenEndpoint oAuth2TokenEndpoint;
 
     @Test
     public void test () {
-        String header = "Basic d2ViOmJlbmRhbg==";
-        OAuth2TokenParams oAuth2Params = new OAuth2TokenParams();
-        oAuth2Params.setGrant_type("password");
-        oAuth2Params.setUsername("admin");
-        oAuth2Params.setPassword("password");
-        oAuth2Params.setScope(OauthScopeConstant.ALL);
-        System.out.println(oAuth2TokenRemote.getAccessToken(header, oAuth2Params));
 
     }
 }

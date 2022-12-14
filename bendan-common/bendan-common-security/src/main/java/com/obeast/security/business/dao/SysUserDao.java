@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.Mapper;
  * Description: 针对表【bendan_sys_user】的数据库操作Mapper
  */
 @Mapper
-public interface BendanSysUserDao extends BaseDao<SysUserEntity> {
+public interface SysUserDao extends BaseDao<SysUserEntity> {
 }
 
 

@@ -18,7 +18,7 @@ import java.util.List;
  * Description: 角色表
  */
 @Mapper
-public interface BendanSysRoleDao extends BaseDao<SysRoleEntity> {
+public interface SysRoleDao extends BaseDao<SysRoleEntity> {
     /**
      * Description: 查询角色s by userId
      * @author wxl

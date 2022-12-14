@@ -2,8 +2,8 @@ package com.obeast.admin;
 
 import com.obeast.business.entity.SysMenuEntity;
 import com.obeast.business.entity.SysUserEntity;
-import com.obeast.security.business.service.BendanSysMenuService;
-import com.obeast.security.business.service.BendanSysUserService;
+import com.obeast.security.business.service.SysMenuService;
+import com.obeast.security.business.service.SysUserService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -303,7 +303,6 @@ public class BendanAdminApplicationTest {
         sysMenuEntity.setIcon(icon);
         sysMenuEntity.setPath(path);
         sysMenuEntity.setName(title);
-        sysMenuEntity.setUrl(isLink);
         sysMenuEntity.setLevel(level);
         return sysMenuEntity;
     }
@@ -315,16 +314,16 @@ public class BendanAdminApplicationTest {
     }
 
     @Autowired
-    BendanSysUserService bendanSysUserService;
+    SysUserService sysUserService;
 
     @Autowired
-    BendanSysMenuService bendanSysMenuService;
+    SysMenuService sysMenuService;
 
     @Test
     void test() throws LoginException, JSONException {
         List<SysMenuEntity> data = getData(json);
 //        Long id = bendanSysMenuService.getIdByTitle();
-        bendanSysMenuService.saveBatch(data);
+        sysMenuService.saveBatch(data);
     }
 
 
@@ -334,7 +333,6 @@ public class BendanAdminApplicationTest {
         sysUserEntity.setUsername("admin");
         sysUserEntity.setPassword("password");
         sysUserEntity.setEmail("obeast.gym@gmail.com");
-        bendanSysUserService.register(sysUserEntity);
     }
 
     @Test

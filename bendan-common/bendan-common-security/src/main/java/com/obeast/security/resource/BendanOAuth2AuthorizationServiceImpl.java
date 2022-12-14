@@ -1,5 +1,6 @@
 package com.obeast.security.resource;
 
+import com.obeast.core.constant.SysConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -13,11 +14,9 @@ import org.springframework.security.oauth2.server.authorization.OAuth2Authorizat
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.util.Assert;
 
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author wxl
@@ -44,51 +43,53 @@ public class BendanOAuth2AuthorizationServiceImpl implements OAuth2Authorization
                     createRedisKey(OAuth2ParameterNames.STATE, state),
                     authorization,
                     TIMEOUT,
-                    TimeUnit.MINUTES
+                    SysConstant.REDIS_UNIT
             );
         }
+//        授权码token
         if (isCodeNonNull(authorization)) {
             OAuth2Authorization.Token<OAuth2AuthorizationCode> authorizationCode = authorization
                     .getToken(OAuth2AuthorizationCode.class);
             OAuth2AuthorizationCode authorizationCodeToken = authorizationCode.getToken();
-            long between = ChronoUnit.MINUTES.between(authorizationCodeToken.getIssuedAt(),
+            long between = SysConstant.TOKEN_UNIT.between(authorizationCodeToken.getIssuedAt(),
                     authorizationCodeToken.getExpiresAt());
             redisTemplate.setValueSerializer(RedisSerializer.java());
             redisTemplate.opsForValue().set(
                     createRedisKey(OAuth2ParameterNames.CODE, authorizationCodeToken.getTokenValue()),
                     authorization,
                     between,
-                    TimeUnit.MINUTES
+                    SysConstant.REDIS_UNIT
             );
 
         }
+//        刷新token
         if (isRefreshTokenNonNull(authorization)) {
             OAuth2RefreshToken refreshToken = authorization.getRefreshToken().getToken();
-            long between = ChronoUnit.SECONDS.between(refreshToken.getIssuedAt(), refreshToken.getExpiresAt());
+            long between = SysConstant.TOKEN_UNIT.between(refreshToken.getIssuedAt(), refreshToken.getExpiresAt());
             redisTemplate.setValueSerializer(RedisSerializer.java());
             redisTemplate.opsForValue().set(
                     createRedisKey(OAuth2ParameterNames.REFRESH_TOKEN, refreshToken.getTokenValue()),
-                    authorization,
+                    authorization
+                    ,
                     between,
-                    TimeUnit.SECONDS
+                    SysConstant.REDIS_UNIT
             );
         }
-
+//      access token
         if (isAccessTokenNonNull(authorization)) {
             OAuth2AccessToken accessToken = authorization.getAccessToken().getToken();
-            long between = ChronoUnit.SECONDS.between(accessToken.getIssuedAt(), accessToken.getExpiresAt());
+            long between = SysConstant.TOKEN_UNIT.between(accessToken.getIssuedAt(), accessToken.getExpiresAt());
+
             redisTemplate.setValueSerializer(RedisSerializer.java());
             redisTemplate.opsForValue().set(
                     createRedisKey(OAuth2ParameterNames.ACCESS_TOKEN, accessToken.getTokenValue()),
-                    authorization,
+                    authorization
+                    ,
                     between,
-                    TimeUnit.SECONDS
+                    SysConstant.REDIS_UNIT
             );
         }
-
-
     }
-
     @Override
     public void remove(OAuth2Authorization authorization) {
         Assert.notNull(authorization, "authorization cannot be null");
@@ -143,7 +144,7 @@ public class BendanOAuth2AuthorizationServiceImpl implements OAuth2Authorization
      * Date: 2022/10/31 17:02
      */
     private String createRedisKey(String type, String value) {
-        return String.format("%s::%s::%s", UserLoginConstant.AUTHORIZATION, type, value);
+        return String.format("%s::%s::%s", SysConstant.TOKEN, type, value);
     }
 
     /**

@@ -2,7 +2,7 @@ package com.obeast.admin;
 
 
 import com.obeast.security.annotation.EnableBendanResourceServer;
-import com.obeast.security.business.service.remote.OAuth2TokenRemote;
+import com.obeast.security.business.service.remote.OAuth2TokenEndpoint;
 import com.obeast.swagger.annotation.EnableBendanSwagger;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -17,7 +17,7 @@ import org.springframework.context.ConfigurableApplicationContext;
  * @version 1.0
  * Description:
  */
-@EnableFeignClients(basePackageClasses = OAuth2TokenRemote.class)
+@EnableFeignClients(basePackageClasses = OAuth2TokenEndpoint.class)
 @EnableBendanSwagger
 @EnableDiscoveryClient
 @EnableBendanResourceServer

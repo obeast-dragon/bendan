@@ -2,6 +2,7 @@ package com.obeast.core.constant;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author wxl
@@ -63,4 +64,10 @@ public interface SysConstant {
      * redis 过期时间
      * */
     Duration REDIS_EXPIRED = Duration.ofMinutes(24 * 60 * 30);
+
+
+    /**
+     * redis 单位
+     * */
+    TimeUnit REDIS_UNIT = TimeUnit.HOURS;
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.obeast.security.business.dao.BendanSysMenuDao">
+<mapper namespace="com.obeast.security.business.dao.SysMenuDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.obeast.business.entity.SysMenuEntity" id="sysMenuMap">
@@ -9,7 +9,7 @@
         <result property="parentId" column="parent_id"/>
         <result property="level" column="level"/>
         <result property="name" column="name"/>
-        <result property="url" column="url"/>
+        <result property="purviewName" column="purview_name"/>
         <result property="icon" column="icon"/>
         <result property="path" column="path"/>
         <result property="sort" column="sort"/>
@@ -23,8 +23,8 @@
         SELECT sm.id,
                sm.parent_id,
                sm.name,
-               sm.url,
                sm.icon,
+               sm.purview_name,
                sm.path,
                sm.sort,
                sm.status,

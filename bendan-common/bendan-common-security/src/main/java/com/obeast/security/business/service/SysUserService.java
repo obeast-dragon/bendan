@@ -3,12 +3,15 @@ package com.obeast.security.business.service;
 
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.obeast.business.dto.SysUserDTO;
+import com.obeast.business.vo.UserInfo;
 import com.obeast.core.base.CommonResult;
 import com.obeast.core.domain.PageObjects;
 import com.obeast.business.entity.SysUserEntity;
 
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 
@@ -18,7 +21,8 @@ import java.util.List;
  * @version 1.0
  * Description: 针对表【bendan_sys_user】的数据库操作Service
  */
-public interface BendanSysUserService extends IService<SysUserEntity> {
+public interface SysUserService extends IService<SysUserEntity> {
+
 
 
     /**
@@ -26,20 +30,32 @@ public interface BendanSysUserService extends IService<SysUserEntity> {
      *
      * @param username username
      * @param password password
-     * @param request request
+     * @param request  request
+     * @param response response
      * @return com.obeast.core.base.CommonResult<?>
      * @author wxl
      * Date: 2022/11/30 9:56
      */
-    CommonResult<?> login(String username, String password, HttpServletRequest request) throws LoginException;
+    CommonResult<?> login(String username, String password, HttpServletRequest request, HttpServletResponse response) throws LoginException;
+
 
     /**
-     * Description: 注册
+     * Description: 创建用户
      * @author wxl
-     * Date: 2022/12/1 18:53
-     * @param sysUserEntity  bendanSysUser
+     * Date: 2022/12/8 15:38
+     * @param sysUserDto registerSysUserParam
+     * @return java.lang.Boolean
      */
-    void register(SysUserEntity sysUserEntity) throws LoginException;
+    Boolean createUser(SysUserDTO sysUserDto) ;
+
+    /**
+     * Description: 新增用户不分配角色
+     *
+     * @param sysUser agriIotSysUser
+     * @author wxl
+     * Date: 2022/12/7 16:39
+     */
+    Boolean addUser(SysUserEntity sysUser) throws LoginException;
 
 //    ----------------------default------------------------------------------
 
@@ -52,6 +68,8 @@ public interface BendanSysUserService extends IService<SysUserEntity> {
      * @return UserInfo
      */
     UserInfo findUserInfo(String username) throws LoginException;
+
+
 
     /**
      * Description: 分页查询
@@ -92,5 +110,59 @@ public interface BendanSysUserService extends IService<SysUserEntity> {
      */
     SysUserEntity findByUsername(String username);
 
+
+    /**
+     * Description: 更新用户
+     * @author wxl
+     * Date: 2022/12/9 15:25
+     * @param sysUserDto  sysUserUpdateParam
+     * @return java.lang.Boolean
+     */
+    Boolean updateUser(SysUserDTO sysUserDto);
+
+
+    /**
+     * Description: 判断用户是否存在 username
+     * @author wxl
+     * Date: 2022/12/10 23:16
+     * @param username  username
+     * @return java.lang.Boolean
+     */
+    Boolean isUserExistByName(String username);
+
+    /**
+     * Description: 逻辑删除
+     * @author wxl
+     * Date: 2022/12/12 15:53
+     * @param userId    userId
+     * @return java.lang.Boolean
+     */
+    Boolean logicDel(Long userId);
+
+    /**
+     * Description: 判断用户是否存在 id
+     * @author wxl
+     * Date: 2022/12/11 0:23
+     * @param id  id
+     * @return java.lang.Boolean
+     */
+    Boolean isUserExistById(Long id);
+
+    /**
+     * Description: 删除用户
+     * @author wxl
+     * Date: 2022/12/11 20:35
+     * @param userId  userId
+     * @return java.lang.Boolean
+     */
+    Boolean delUser(Long userId);
+
+    /**
+     * Description: 登出
+     * @author wxl
+     * Date: 2022/12/12 11:05
+     * @param request    request
+     */
+    Boolean logout(HttpServletRequest request);
 
 }

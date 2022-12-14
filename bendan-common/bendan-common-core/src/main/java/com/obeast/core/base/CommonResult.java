@@ -89,7 +89,14 @@ public class CommonResult<T> {
         return new CommonResult<>(errorCode.getCode(), errorCode.getMessage(), null, false);
     }
 
-
+    /**
+     * 失败返回结果
+     * @param code 错误码
+     * @param message 错误信息
+     */
+    public static <T> CommonResult<T> error(int code, String message) {
+        return new CommonResult<>(code, message, null, false);
+    }
 
     /**
      * 失败返回结果
