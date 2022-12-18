@@ -12,9 +12,9 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * @author wxl
+ * Date 2022/12/14 17:55
  * @version 1.0
- * @description:
- * @date 2022/7/6 18:13
+ * Description: md5工具类
  */
 @Slf4j
 public final class Md5Utils {

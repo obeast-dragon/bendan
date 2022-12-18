@@ -4,6 +4,6 @@ server:
   port: 9003
 spring:
   profiles:
-    active: dev
+    active: local
   application:
     name: bendan-oss

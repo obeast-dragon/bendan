@@ -17,20 +17,20 @@ spring:
       #配置路由
       routes:
         - id: auth-route
-          uri: lb://agri-iot-auth
+          uri: lb://bendan-auth
           order: 2
           predicates:
             - Path=/auth/**
 
         - id: admin-route
-          uri: lb://agri-iot-admin
+          uri: lb://bendan-admin
           order: 3
           predicates:
             - Path=/admin/**
 
         # swagger路由转发配置
         - id: openapi
-          uri: lb://agri-iot-admin
+          uri: lb://bendan-admin
           order: 4
           predicates:
             - Path=/v3/api-docs/**

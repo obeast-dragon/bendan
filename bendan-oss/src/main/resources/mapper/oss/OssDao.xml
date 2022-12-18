@@ -4,7 +4,7 @@
 <mapper namespace="com.obeast.oss.dao.OssDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.obeast.oss.entity.OssEntity" id="ossMap">
+    <resultMap type="com.obeast.business.entity.OssEntity" id="ossMap">
         <result property="id" column="id"/>
         <result property="md5FileName" column="md5_file_name"/>
         <result property="url" column="url"/>

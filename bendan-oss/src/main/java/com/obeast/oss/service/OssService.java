@@ -1,9 +1,9 @@
 package com.obeast.oss.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.obeast.business.entity.OssEntity;
 import com.obeast.oss.domain.MergeShardArgs;
 import com.obeast.oss.domain.ResponseEntry;
-import com.obeast.oss.entity.OssEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 

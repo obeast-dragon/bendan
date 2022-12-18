@@ -25,9 +25,9 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author wxl
- * @description:
- * @version: v1.0
- * @since 2022-05-03 13:04
+ * Date 2022/12/14 17:55
+ * @version 1.0
+ * Description: minio 模板
  */
 @Slf4j
 @AllArgsConstructor

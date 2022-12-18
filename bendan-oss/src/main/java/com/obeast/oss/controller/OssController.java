@@ -3,9 +3,9 @@ package com.obeast.oss.controller;
 
 import cn.hutool.json.JSONException;
 import cn.hutool.json.JSONObject;
+import com.obeast.business.entity.OssEntity;
 import com.obeast.core.base.CommonResult;
 import com.obeast.oss.domain.ResponseEntry;
-import com.obeast.oss.entity.OssEntity;
 import com.obeast.oss.enumration.ShardFileStatusCode;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.SneakyThrows;
@@ -47,7 +47,7 @@ public class OssController {
      * Date: 2022/9/21 16:04
      * @param multipartFile files
      * @param request request
-     * @return com.obeast.oss.base.R<com.obeast.oss.entity.OssEntity>
+     * @return com.obeast.oss.base.R<com.obeast.business.entity.OssEntity>
      */
     @SneakyThrows
     @PostMapping(value = "/shardFile")
@@ -91,7 +91,7 @@ public class OssController {
      * @date 2022/7/21 9:58
      **/
     @GetMapping(value = "/stopStatus")
-    public CommonResult setStopStatus(@RequestHeader String Authorization, @RequestParam("flag") Integer flag, @RequestParam("userUuid") String userUuid) {
+    public CommonResult<?> setStopStatus(@RequestHeader String Authorization, @RequestParam("flag") Integer flag, @RequestParam("userUuid") String userUuid) {
         /*
           1 -> true 上传
           0 -> false 暂停
@@ -112,10 +112,12 @@ public class OssController {
 
 
     /**
-     * @description: 获取实现上传进度
+     * Description: 获取实现上传进度
      * @author wxl
-     * @date 2022/7/21 10:24
-     **/
+     * Date: 2022/12/14 17:53
+     * @param userUuid       UUID of the user
+     * @return com.obeast.core.base.CommonResult<cn.hutool.json.JSONObject>
+     */
     @GetMapping(value = "/percent")
     public CommonResult<JSONObject> getUploadPercent(@RequestParam("userUuid") String userUuid) {
 

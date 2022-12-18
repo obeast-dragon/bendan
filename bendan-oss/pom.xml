@@ -22,7 +22,7 @@
 
         <dependency>
             <groupId>com.obeast</groupId>
-            <artifactId>bendan-common-core</artifactId>
+            <artifactId>bendan-common-business</artifactId>
         </dependency>
 
 

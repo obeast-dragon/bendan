@@ -1,6 +1,7 @@
 package com.obeast.oss.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.obeast.business.entity.OssEntity;
 import com.obeast.oss.config.MinioConfig;
 import com.obeast.oss.domain.MergeShardArgs;
 import com.obeast.oss.domain.MinioTemplateResult;
@@ -25,7 +26,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import com.obeast.oss.dao.OssDao;
-import com.obeast.oss.entity.OssEntity;
 import com.obeast.oss.service.OssService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;

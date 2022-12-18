@@ -1,7 +1,7 @@
 package com.obeast.oss.dao;
 
+import com.obeast.business.entity.OssEntity;
 import com.obeast.core.base.BaseDao;
-import com.obeast.oss.entity.OssEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 

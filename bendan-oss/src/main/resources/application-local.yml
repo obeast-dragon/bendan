@@ -7,9 +7,9 @@ spring:
         server-addr: http://127.0.0.1:8848
         file-extension: yaml
   datasource:
-    url: jdbc:mysql://10.0.0.43:3306/bendan?serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true
+    url: jdbc:mysql://127.0.0.1:3306/bendan?serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true
     username: root
-    password: wit123456
+    password: mysql1234
 
     druid:
       initial-size: 5 #连接池初始化大小
@@ -36,12 +36,11 @@ spring:
 
 
 
-
 minio:
   externalAccess: http://175.178.183.32:42713
   endpoint: http://175.178.183.32:9000
-  accessKey: admin
-  secretKey: 12345678
+  accessKey: minioroot
+  secretKey: minioroot
   bucketName: bendan
 
 
@@ -49,5 +48,5 @@ logging:
   level:
     root: info
     com:
-      worlteink:
+      obeast:
         debug
