@@ -10,6 +10,7 @@
         <module>bendan-oss</module>
         <module>bendan-mail</module>
         <module>bendan-dependencies</module>
+        <module>bendan-chat</module>
     </modules>
 
     <groupId>com.obeast</groupId>
