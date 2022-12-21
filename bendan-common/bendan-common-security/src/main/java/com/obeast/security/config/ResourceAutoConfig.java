@@ -39,7 +39,7 @@ public class ResourceAutoConfig {
      * @return com.obeast.security.resource.PurviewService
      */
     @Bean("pvs")
-    public PurviewService purviewService  () {
+    public PurviewService purviewService () {
         return new PurviewService();
     }
 

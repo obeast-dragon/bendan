@@ -22,7 +22,7 @@ public class PurviewService {
      * @param permissions 权限
      * @return {boolean}
      */
-    public boolean hasPermission(String... permissions) {
+    public boolean hasPurview(String... permissions) {
         if (ArrayUtil.isEmpty(permissions)) {
             return false;
         }
