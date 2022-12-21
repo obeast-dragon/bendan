@@ -58,13 +58,14 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity>
 
     @Override
     public PageObjects<SysRoleEntity> queryPage(JSONObject params) {
-        String key =  params.getStr("orderField");
-        QueryWrapper<SysRoleEntity> queryWrapper = Wrappers.query();
-        IPage<SysRoleEntity> page = this.page(
-                new PageQueryUtils<SysRoleEntity>().getPage(params, key, false),
-                queryWrapper
-        );
-        return new PageQueryUtils<>().getPageObjects(page, SysRoleEntity.class);
+//        String key =  params.getStr("orderField");
+//        QueryWrapper<SysRoleEntity> queryWrapper = Wrappers.query();
+//        IPage<SysRoleEntity> page = this.page(
+//                new PageQueryUtils<SysRoleEntity>().getPage(params, key, false),
+//                queryWrapper
+//        );
+//        return new PageQueryUtils<>().getPageObjects(page, SysRoleEntity.class);
+        return null;
     }
 
 

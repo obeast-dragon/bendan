@@ -1,9 +1,9 @@
 package com.obeast.security.business.service;
 
 
-import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.obeast.business.dto.SysUserDTO;
+import com.obeast.core.domain.PageParams;
 import com.obeast.business.vo.UserInfo;
 import com.obeast.core.base.CommonResult;
 import com.obeast.core.domain.PageObjects;
@@ -75,10 +75,10 @@ public interface SysUserService extends IService<SysUserEntity> {
      * Description: 分页查询
      * @author obeast-dragon
      * Date: 2022-10-11 21:02:40
-     * @param params 分页参数
+     * @param pageParams 分页参数
      * @return PageObjects<UserInfoEntity>
      */
-    PageObjects<SysUserEntity> queryPage(JSONObject params);
+    PageObjects<SysUserEntity> queryPage(PageParams pageParams);
 
 
 

@@ -4,19 +4,18 @@ package com.obeast.security.business.service.impl;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSON;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.nimbusds.jose.util.IntegerUtils;
 import com.obeast.business.dto.SysUserDTO;
 import com.obeast.business.entity.SysMenuEntity;
 import com.obeast.business.entity.SysRoleEntity;
 import com.obeast.business.entity.SysUserEntity;
 import com.obeast.business.vo.OAuth2PasswordVo;
+import com.obeast.core.domain.PageParams;
 import com.obeast.business.vo.UserInfo;
 import com.obeast.core.base.CommonResult;
 import com.obeast.core.constant.*;
@@ -25,7 +24,6 @@ import com.obeast.core.exception.BendanException;
 import com.obeast.core.utils.CookieUtil;
 import com.obeast.core.utils.PageQueryUtils;
 import com.obeast.security.business.dao.SysUserDao;
-import com.obeast.security.business.domain.OAuth2TokenRes;
 import com.obeast.security.business.service.SysMenuService;
 import com.obeast.security.business.service.SysRoleService;
 import com.obeast.security.business.service.SysUserService;
@@ -44,7 +42,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -128,12 +125,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity>
     }
 
     @Override
-    public PageObjects<SysUserEntity> queryPage(JSONObject params) {
-        String orderField = params.getStr("orderField");
-        Assert.notNull(orderField, "key cannot be null");
+    public PageObjects<SysUserEntity> queryPage(PageParams pageParams) {
         QueryWrapper<SysUserEntity> queryWrapper = Wrappers.query();
         IPage<SysUserEntity> page = this.page(
-                new PageQueryUtils<SysUserEntity>().getPage(params, orderField, false),
+                new PageQueryUtils<SysUserEntity>().getPage(pageParams),
                 queryWrapper
         );
         return new PageQueryUtils<>().getPageObjects(page, SysUserEntity.class);

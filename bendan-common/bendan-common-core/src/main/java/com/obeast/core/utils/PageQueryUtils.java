@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.obeast.core.constant.PageConstant;
 import com.obeast.core.domain.PageObjects;
+import com.obeast.core.domain.PageParams;
 import com.obeast.core.xss.SQLFilter;
 
 import java.util.List;
@@ -39,7 +40,14 @@ public class PageQueryUtils<T> {
      * @param params -> page : v; limit : v 分页参数
      * @param defaultOrderField 排序字段
      **/
-    public IPage<T> getPage(Map<String, Object> params, String defaultOrderField,  boolean isAsc) {
+    /**
+     * Description: 分页方法
+     * @author wxl
+     * Date: 2022/12/21 15:12
+     * @param pageParams 分页参数
+     * @return com.baomidou.mybatisplus.core.metadata.IPage<T>
+     */
+    public IPage<T> getPage(PageParams pageParams) {
         long curPage = 1;
         long limit = 10;
 
@@ -54,43 +62,31 @@ public class PageQueryUtils<T> {
 //        }
 
 //        接口用
-        if (params.get(PageConstant.CUR) != null) {
-            curPage = Long.parseLong((String) params.get(PageConstant.CUR));
+        if (pageParams.getCur() != null) {
+            curPage = pageParams.getCur();
         }
-        if (params.get(PageConstant.LIMIT) != null) {
-            limit = Long.parseLong((String) params.get(PageConstant.LIMIT));
+        if (pageParams.getLimit() != null) {
+            limit = pageParams.getLimit();
         }
 
         //分页对象
         Page<T> page = new Page<>(curPage, limit);
 
-        //分页参数
-        params.put(PageConstant.PAGE, page);
-
         //排序字段
         //防止SQL注入（因为sidx、order是通过拼接SQL实现排序的，会有SQL注入风险）
-        String orderField = SQLFilter.sqlInject((String) params.get(PageConstant.ORDER_FIELD));
-        String order = (String) params.get(PageConstant.ORDER);
-
-        //前端字段排序
-        if (StringUtils.isNotBlank(orderField) && StringUtils.isNotBlank(order)) {
-            if (PageConstant.ASC.equalsIgnoreCase(order)) {
-                return page.addOrder(OrderItem.asc(orderField));
-            } else {
-                return page.addOrder(OrderItem.desc(orderField));
-            }
-        }
+        String orderField = SQLFilter.sqlInject(pageParams.getOrderField());
+        Boolean order = pageParams.getOrder();
 
         //没有排序字段，则不排序
-        if (StringUtils.isBlank(defaultOrderField)) {
+        if (StringUtils.isBlank(orderField)) {
             return page;
         }
 
         //默认排序
-        if (isAsc) {
-            page.addOrder(OrderItem.asc(defaultOrderField));
+        if (order) {
+            page.addOrder(OrderItem.asc(orderField));
         } else {
-            page.addOrder(OrderItem.desc(defaultOrderField));
+            page.addOrder(OrderItem.desc(orderField));
         }
 
         return page;

@@ -2,19 +2,18 @@ package com.obeast.admin.business.controller;
 
 
 import cn.hutool.json.JSONObject;
+import com.obeast.core.domain.PageParams;
 import com.obeast.security.business.service.SysUserService;
 import com.obeast.business.dto.SysUserDTO;
 import com.obeast.business.entity.SysUserEntity;
 import com.obeast.business.vo.SysUserLoginParam;
 import com.obeast.business.vo.UserInfo;
 import com.obeast.core.base.CommonResult;
-import com.obeast.core.constant.PageConstant;
 import com.obeast.core.domain.PageObjects;
 import com.obeast.core.validation.group.AddGroup;
 import com.obeast.core.validation.group.UpdateGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -68,14 +67,8 @@ public class SysUserController {
      */
     @GetMapping("/listPage")
     @Operation(summary = "分页查询")
-    @Parameters({
-            @Parameter(name = PageConstant.CUR, description = "当前页码，从1开始", in = ParameterIn.QUERY, required = true, schema = @Schema(implementation = Integer.class)),
-            @Parameter(name = PageConstant.LIMIT, description = "每页显示记录数", in = ParameterIn.QUERY, required = true, schema = @Schema(implementation = Integer.class)),
-            @Parameter(name = PageConstant.ORDER_FIELD, description = "排序字段", in = ParameterIn.QUERY, schema = @Schema(implementation = String.class)),
-            @Parameter(name = PageConstant.ORDER, description = "排序方式，可选值(asc、desc)", in = ParameterIn.QUERY, required = true, schema = @Schema(implementation = String.class))
-    })
-    public PageObjects<SysUserEntity> page(@RequestParam JSONObject params) {
-        return sysUserService.queryPage(params);
+    public PageObjects<SysUserEntity> page(PageParams pageParams) {
+        return sysUserService.queryPage(pageParams);
     }
 
 

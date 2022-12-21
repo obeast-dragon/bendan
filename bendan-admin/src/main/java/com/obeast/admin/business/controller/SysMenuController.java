@@ -33,23 +33,6 @@ public class SysMenuController {
 
     private final SysMenuService sysMenuService;
 
-
-
-    @GetMapping("/auth/buttons")
-    public JSONObject button () {
-        String jsonStr = """
-                {
-                 "useHooks": {
-                    "add": true,
-                    "delete": true
-                 }
-                 }
-                """;
-        JSONObject obj = JSONUtil.parseObj(jsonStr);
-        return obj;
-    }
-
-
     /**
      * 根据角色id查询
      */

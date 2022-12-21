@@ -181,14 +181,14 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenuEntity>
 
     @Override
     public PageObjects<SysMenuEntity> queryPage(JSONObject params) {
-        String key = params.getStr("orderField");
-        QueryWrapper<SysMenuEntity> queryWrapper = Wrappers.query();
-
-        IPage<SysMenuEntity> page = this.page(
-                new PageQueryUtils<SysMenuEntity>().getPage(params, key, false),
-                queryWrapper
-        );
-        return new PageQueryUtils<>().getPageObjects(page, SysMenuEntity.class);
+//        String key = params.getStr("orderField");
+//        QueryWrapper<SysMenuEntity> queryWrapper = Wrappers.query();
+//        IPage<SysMenuEntity> page = this.page(
+//                new PageQueryUtils<SysMenuEntity>().getPage(params),
+//                queryWrapper
+//        );
+//        return new PageQueryUtils<>().getPageObjects(page, SysMenuEntity.class);
+        return null;
     }
 
     @Override
