@@ -1,9 +1,10 @@
 package com.obeast.security.resource;
 
+import com.obeast.core.constant.OAuth2Constant;
 import com.obeast.core.constant.SysConstant;
-import com.obeast.core.utils.CookieUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.server.resource.BearerTokenError;
 import org.springframework.security.oauth2.server.resource.BearerTokenErrors;
@@ -13,7 +14,6 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,12 +53,13 @@ public class BendanBearerTokenExtractor implements BearerTokenResolver {
      * @return java.lang.String
      */
     private String resolveFromAuthorizationHeader(HttpServletRequest request) {
-        Map<String, String> mapCookie = CookieUtil.getMapCookie(request.getCookies());
-        String authorization = mapCookie.get(SysConstant.TOKEN);
+//        Map<String, String> mapCookie = CookieUtil.getMapCookie(request.getCookies());
+//        String authorization = mapCookie.get(SysConstant.TOKEN);
+        String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authorization == null){
             throw new InvalidBearerTokenException(null);
         }
-        authorization = SysConstant.BEARER + authorization;
+//        authorization = SysConstant.BEARER + authorization;
         Matcher matcher = authorizationPattern.matcher(authorization);
         if (!matcher.matches()) {
             BearerTokenError error = BearerTokenErrors.invalidToken("Bearer token is malformed");

@@ -2,6 +2,7 @@ package com.obeast.business.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.obeast.core.validation.group.AddGroup;
 import com.obeast.core.validation.group.UpdateGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -61,6 +62,7 @@ public class SysMenuEntity implements Serializable {
 	 */
 	@NotNull(groups = {AddGroup.class, UpdateGroup.class})
 	@Schema(description = "菜单名")
+	@JsonProperty("title")
 	private String name;
 
 	/**

@@ -1,5 +1,8 @@
 package com.obeast.admin.business.controller;
 
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import com.obeast.core.base.CommonResult;
 import com.obeast.security.business.service.SysMenuService;
 import com.obeast.business.dto.SysMenuDTO;
 import com.obeast.business.entity.SysMenuEntity;
@@ -29,6 +32,22 @@ import java.util.List;
 public class SysMenuController {
 
     private final SysMenuService sysMenuService;
+
+
+
+    @GetMapping("/auth/buttons")
+    public JSONObject button () {
+        String jsonStr = """
+                {
+                 "useHooks": {
+                    "add": true,
+                    "delete": true
+                 }
+                 }
+                """;
+        JSONObject obj = JSONUtil.parseObj(jsonStr);
+        return obj;
+    }
 
 
     /**

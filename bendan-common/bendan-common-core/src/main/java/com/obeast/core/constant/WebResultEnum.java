@@ -52,7 +52,7 @@ public enum WebResultEnum implements IErrorCode {
     PARAM_VALID_ERROR(HttpServletResponse.SC_BAD_REQUEST, "参数校验失败", "Params valid fail"),
 
     /**
-     * 参数校验失败 400
+     * 验证码错误 400
      */
     VALID_CODE_ERROR(HttpServletResponse.SC_BAD_REQUEST, "验证码错误", "Params valid fail"),
 
@@ -60,6 +60,11 @@ public enum WebResultEnum implements IErrorCode {
      * 请求未授权 401
      */
     UN_AUTHORIZED(HttpServletResponse.SC_UNAUTHORIZED, "未授权,请登录!!!", "unauthorized"),
+
+    /**
+     * 请求未授权 401
+     */
+    UN_AUTHORIZED_EXCEPTION(HttpServletResponse.SC_UNAUTHORIZED, "认证异常,请重新登录!!!", "unauthorized exception"),
 
     /**
      * 请求被拒绝 403

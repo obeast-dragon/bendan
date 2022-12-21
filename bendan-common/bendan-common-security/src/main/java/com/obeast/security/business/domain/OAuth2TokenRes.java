@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 
+import java.io.Serializable;
+
 
 /**
  * @author wxl
@@ -14,7 +16,7 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenRespon
  */
 @Data
 @Accessors(chain = true)
-public class OAuth2TokenRes {
+public class OAuth2TokenRes implements Serializable {
 
     private OAuth2AccessTokenResponse oauth2AccessTokenResponse;
 

@@ -74,7 +74,7 @@ public class SysUserController {
             @Parameter(name = PageConstant.ORDER_FIELD, description = "排序字段", in = ParameterIn.QUERY, schema = @Schema(implementation = String.class)),
             @Parameter(name = PageConstant.ORDER, description = "排序方式，可选值(asc、desc)", in = ParameterIn.QUERY, required = true, schema = @Schema(implementation = String.class))
     })
-    public PageObjects<SysUserEntity> list(@RequestParam JSONObject params) {
+    public PageObjects<SysUserEntity> page(@RequestParam JSONObject params) {
         return sysUserService.queryPage(params);
     }
 

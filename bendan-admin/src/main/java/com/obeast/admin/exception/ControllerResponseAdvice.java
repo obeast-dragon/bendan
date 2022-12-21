@@ -28,7 +28,7 @@ import java.io.IOException;
  * @version 1.0
  * Description: 全局接口返回值处理
  */
-@RestControllerAdvice(basePackages = {"com.worldintek.admin.business.controller"})
+@RestControllerAdvice(basePackages = {"com.obeast.admin.business.controller"})
 public class ControllerResponseAdvice implements ResponseBodyAdvice<Object> {
 
 

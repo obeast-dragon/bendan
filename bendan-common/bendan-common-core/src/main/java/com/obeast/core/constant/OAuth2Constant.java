@@ -8,13 +8,6 @@ package com.obeast.core.constant;
  */
 public interface OAuth2Constant {
 
-
-    /**
-     * 默认登录URL
-     */
-    String LOGIN_URL = "/userinfo/login";
-
-
     /**
      * access_token
      * */
@@ -33,7 +26,12 @@ public interface OAuth2Constant {
     /**
      * redis 存储 token 名字
      * */
-    String AUTHORIZATION = "token";
+    String TOKEN = "token";
+
+    /**
+     *  AUTHORIZATION header
+     * */
+    String AUTHORIZATION = "Authorization";
 
     enum Type {
         MIN_APP("min-app"),
@@ -115,6 +113,6 @@ public interface OAuth2Constant {
      * Date: 2022/10/31 17:02
      */
     static String createRedisKey(String type, String value) {
-        return String.format("%s::%s::%s", AUTHORIZATION, type, value);
+        return String.format("%s::%s::%s", TOKEN, type, value);
     }
 }

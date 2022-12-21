@@ -296,10 +296,7 @@ public class BendanAdminApplicationTest {
         String icon = obj.getString("icon");
         String path = obj.getString("path");
         String title = obj.getString("title");
-        String isLink = obj.getString("isLink") == null ? null : obj.getString("isLink");
         SysMenuEntity sysMenuEntity = new SysMenuEntity();
-        JSONObject children = obj.getJSONObject("children");
-        List<SysMenuEntity> childs = getChild(children);
         sysMenuEntity.setIcon(icon);
         sysMenuEntity.setPath(path);
         sysMenuEntity.setName(title);
@@ -309,7 +306,6 @@ public class BendanAdminApplicationTest {
 
     public static void main(String[] args) throws JSONException {
         List<SysMenuEntity> data = getData(json);
-        System.out.println(data);
 
     }
 

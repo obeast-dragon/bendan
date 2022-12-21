@@ -4,11 +4,14 @@ package com.obeast.security.business.service.impl;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSON;
 import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.nimbusds.jose.util.IntegerUtils;
 import com.obeast.business.dto.SysUserDTO;
 import com.obeast.business.entity.SysMenuEntity;
 import com.obeast.business.entity.SysRoleEntity;
@@ -22,6 +25,7 @@ import com.obeast.core.exception.BendanException;
 import com.obeast.core.utils.CookieUtil;
 import com.obeast.core.utils.PageQueryUtils;
 import com.obeast.security.business.dao.SysUserDao;
+import com.obeast.security.business.domain.OAuth2TokenRes;
 import com.obeast.security.business.service.SysMenuService;
 import com.obeast.security.business.service.SysRoleService;
 import com.obeast.security.business.service.SysUserService;
@@ -90,48 +94,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity>
                 }
             }
             CommonResult<?> res = OAuth2TokenEndpoint.authPassword(header, oAuth2Params);
-            JSONObject data = CommonResult.getOptionalData(res).map(JSONObject::new).orElseThrow(() -> {
+            if (!res.getSuccess()){
+                return res;
+            }
+            Object commonResult = CommonResult.getOptionalData(res).orElseThrow(() -> {
                 throw new BendanException(SysConstant.LOGIN_FAILED);
             });
-            JSONObject oAuth2AccessTokenResponse = data.getJSONObject("oauth2AccessTokenResponse");
-            String accessToken = getAccessToken(oAuth2AccessTokenResponse);
-            Long accessTokenExpiresIn = getAccessTokenExpiresIn(data);
-            Cookie cookie1 = new Cookie(SysConstant.TOKEN, accessToken);
-            cookie1.setPath(SysConstant.COOKIE);
-            cookie1.setMaxAge(Math.toIntExact(accessTokenExpiresIn));
-            // TODO: 2022/12/13 设置httpOnly如果项目是部署在一个单独的服务器上
-            response.addCookie(cookie1);
-            return CommonResult.success(SysConstant.LOGIN_SUCCESS);
+            JSONObject data = JSONUtil.parseObj(commonResult);
+            return CommonResult.success(data);
 
         } catch (Exception e) {
             log.error(SysConstant.LOGIN_FAILED + "  ", e);
             return CommonResult.error(WebResultEnum.FAILURE);
         }
-    }
-
-    /**
-     * Description: 获取过期时间
-     * @author wxl
-     * Date: 2022/12/14 10:02
-     * @param data  data
-     * @return java.lang.Long
-     */
-    private Long getAccessTokenExpiresIn(JSONObject data) {
-        return data.getLong("accessTokenExpiresIn");
-    }
-
-
-    /**
-     * Description: 获取Access token
-     *
-     * @param jsonObject jsonObject
-     * @return java.lang.String
-     * @author wxl
-     * Date: 2022/12/13 14:35
-     */
-    private String getAccessToken(JSONObject jsonObject) {
-        JSONObject accessToken = jsonObject.getJSONObject("accessToken");
-        return  accessToken.getStr("tokenValue");
     }
 
 

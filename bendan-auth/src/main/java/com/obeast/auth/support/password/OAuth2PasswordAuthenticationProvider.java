@@ -91,7 +91,7 @@ public class OAuth2PasswordAuthenticationProvider extends OAuth2BaseAuthenticati
     private UserDetails verifyUserDetails(String username, String password) throws AuthenticationException {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
         if (userDetails == null) {
-            log.error("找不到用户: {}", username);
+            log.debug("找不到用户: {}", username);
             throw new InternalAuthenticationServiceException(
                     "UserDetailsService returned null, which is an interface contract violation");
         }
@@ -108,8 +108,8 @@ public class OAuth2PasswordAuthenticationProvider extends OAuth2BaseAuthenticati
             throw new AccountExpiredException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.expired", "User account has expired"));
         }
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-            log.error("密码不匹配: {}", password);
-            log.error("密码不匹配: {}", userDetails.getPassword());
+            log.debug("密码不匹配: {}", password);
+            log.debug("密码不匹配: {}", userDetails.getPassword());
             throw new BadCredentialsException("Bad credentials");
         }
         return userDetails;

@@ -18,16 +18,23 @@ public class CommonResult<T> {
 
     private Integer code;
 
-    private String message;
+    private String msg;
 
     private T data;
+
+    public interface Success {
+        int successCode = 200;
+        String successMsg = "操作成功！";
+
+        Boolean success = Boolean.TRUE;
+    }
 
     public CommonResult() {
     }
 
-    protected CommonResult(Integer code, String message, T data, Boolean isSuccess) {
+    protected CommonResult(Integer code, String msg, T data, Boolean isSuccess) {
         this.code = code;
-        this.message = message;
+        this.msg = msg;
         this.data = data;
         this.success = isSuccess;
     }
@@ -40,9 +47,9 @@ public class CommonResult<T> {
      **/
     public static <T> CommonResult<T> success() {
         CommonResult<T> commonResult = new CommonResult<>();
-        commonResult.setSuccess(true);
-        commonResult.setCode(200);
-        commonResult.setMessage("operation successfully");
+        commonResult.setSuccess(Success.success);
+        commonResult.setCode(Success.successCode);
+        commonResult.setMsg(Success.successMsg);
         return commonResult;
     }
 
@@ -58,7 +65,7 @@ public class CommonResult<T> {
         CommonResult<T> commonResult = new CommonResult<>();
         commonResult.setSuccess(true);
         commonResult.setCode(200);
-        commonResult.setMessage(message);
+        commonResult.setMsg(message);
         return commonResult;
     }
 
@@ -190,12 +197,12 @@ public class CommonResult<T> {
         this.code = code;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     public T getData() {
