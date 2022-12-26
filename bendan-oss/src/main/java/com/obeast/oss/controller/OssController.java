@@ -5,9 +5,10 @@ import cn.hutool.json.JSONException;
 import cn.hutool.json.JSONObject;
 import com.obeast.business.entity.OssEntity;
 import com.obeast.core.base.CommonResult;
-import com.obeast.oss.domain.ResponseEntry;
+import com.obeast.oss.domain.FlyweightRes;
 import com.obeast.oss.enumration.ShardFileStatusCode;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +34,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/oss")
 @Tag(name = "Oss接口")
+@RequiredArgsConstructor
 public class OssController {
 
-    @Autowired
-    private OssService ossService;
+    private final OssService ossService;
 
-    @Autowired
-    private ResponseEntry res;
+    private final FlyweightRes res;
 
     /**
      * Description: 分片上传
@@ -69,7 +69,7 @@ public class OssController {
                 OssEntity ossEntity;
                 log.info("文件大小为{}", multipartFile.getSize());
                 if (multipartFile.getSize() < 5242880L) {
-                    ossEntity = ossService.upload(multipartFile, userUuid, res, 0);
+                    ossEntity = ossService.uploadMiniFile(multipartFile, userUuid, res, 0);
                 } else {
                     ossEntity = ossService.uploadShard(multipartFile, res, filenameExtension, userUuid);
 
@@ -84,12 +84,16 @@ public class OssController {
     }
 
 
+
     /**
-     * @param flag file stop status
-     * @description: setStopStatus
+     * Description: file stop status
      * @author wxl
-     * @date 2022/7/21 9:58
-     **/
+     * Date: 2022/12/26 21:05
+     * @param Authorization     the authorization
+     * @param flag  the flag
+     * @param userUuid      the user
+     * @return com.obeast.core.base.CommonResult<?>
+     */
     @GetMapping(value = "/stopStatus")
     public CommonResult<?> setStopStatus(@RequestHeader String Authorization, @RequestParam("flag") Integer flag, @RequestParam("userUuid") String userUuid) {
         /*

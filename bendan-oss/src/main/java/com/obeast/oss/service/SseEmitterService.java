@@ -1,6 +1,6 @@
 package com.obeast.oss.service;
 
-import com.obeast.oss.domain.ResponseEntry;
+import com.obeast.oss.domain.FlyweightRes;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /**
@@ -47,9 +47,9 @@ public interface SseEmitterService {
      * @author wxl
      * Date: 2022/9/21 15:34
      * @param clientId client Id
-     * @param responseEntry response entry
+     * @param flyweightRes response entry
      */
-    void sendResMapToOneClient(String clientId, ResponseEntry responseEntry);
+    void sendResMapToOneClient(String clientId, FlyweightRes flyweightRes);
 
     /**
      * 关闭连接

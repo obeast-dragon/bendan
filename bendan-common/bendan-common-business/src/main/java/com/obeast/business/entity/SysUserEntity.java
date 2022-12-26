@@ -91,7 +91,7 @@ public class SysUserEntity implements Serializable {
 
 
     /**
-     * 状态状态（0-正常  1-锁定  2-删除）
+     * 状态（0-正常  1-锁定  2-删除）
      */
     @NotNull(groups = {UpdateGroup.class})
     @Range(min = 0, max = 2)

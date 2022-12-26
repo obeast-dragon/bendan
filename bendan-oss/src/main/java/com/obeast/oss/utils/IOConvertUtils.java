@@ -7,9 +7,9 @@ import java.io.OutputStream;
 
 /**
  * @author wxl
+ * Date 2022/12/26 21:00
  * @version 1.0
- * @description: IO转换工具类
- * @date 2022/7/6 18:15
+ * Description: IO转换工具类
  */
 public class IOConvertUtils {
 

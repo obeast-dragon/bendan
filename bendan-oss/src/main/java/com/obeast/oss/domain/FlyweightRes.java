@@ -10,14 +10,14 @@ import java.util.Map;
 
 /**
  * @author wxl
+ * Date 2022/12/26 20:56
  * @version 1.0
- * @description: 分片文件全局共享信息
- * @date 2022/7/6 18:37
+ * Description: 分片文件全局共享信息
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Component
-public class ResponseEntry extends HashMap<String, Map<String, Object>> implements Serializable {
+public class FlyweightRes extends HashMap<String, Map<String, Object>> implements Serializable {
 
 
 }

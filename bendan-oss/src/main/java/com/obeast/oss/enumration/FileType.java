@@ -1,5 +1,11 @@
 package com.obeast.oss.enumration;
 
+/**
+ * @author wxl
+ * Date 2022/12/26 20:58
+ * @version 1.0
+ * Description: FileType
+ */
 public enum FileType {
     Image(1, " 图片"),
     Attachment(2, "附件"),

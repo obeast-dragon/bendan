@@ -3,7 +3,7 @@ package com.obeast.oss.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.obeast.business.entity.OssEntity;
 import com.obeast.oss.domain.MergeShardArgs;
-import com.obeast.oss.domain.ResponseEntry;
+import com.obeast.oss.domain.FlyweightRes;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -23,14 +23,14 @@ public interface OssService extends IService<OssEntity> {
      * @param fileType 文件类型
      * @param userUuid user id
      */
-    OssEntity uploadShard(MultipartFile file, ResponseEntry res, String fileType, String userUuid);
+    OssEntity uploadShard(MultipartFile file, FlyweightRes res, String fileType, String userUuid);
 
     /**
      * 文件合并
      *
      * @param mergeShardArgs 合并参数
      */
-    OssEntity mergeShard(MergeShardArgs mergeShardArgs, String userUuid, ResponseEntry res);
+    OssEntity mergeShard(MergeShardArgs mergeShardArgs, String userUuid, FlyweightRes res);
 
 
     /**
@@ -54,7 +54,7 @@ public interface OssService extends IService<OssEntity> {
      * @param voiceTimeSize 声音的长度
      * @return OssEntity
      **/
-    OssEntity upload(MultipartFile multipartFile, String userUuid, ResponseEntry res, int voiceTimeSize) throws Exception;
+    OssEntity uploadMiniFile(MultipartFile multipartFile, String userUuid, FlyweightRes res, int voiceTimeSize) throws Exception;
 
 
     /**

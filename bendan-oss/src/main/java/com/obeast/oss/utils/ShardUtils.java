@@ -12,9 +12,9 @@ import java.util.List;
 
 /**
  * @author wxl
+ * Date 2022/12/26 21:00
  * @version 1.0
- * @description: 文件分片工具类
- * @date 2022/7/6 18:16
+ * Description: 文件分片工具类
  */
 @Slf4j
 public class ShardUtils {

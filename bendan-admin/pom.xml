@@ -62,7 +62,6 @@
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
-            <version>${LoadBalancer-caffeine.version}</version>
         </dependency>
 
         <!-- druid-spring-boot-starter -->
@@ -76,7 +75,6 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
-
 
     </dependencies>
 

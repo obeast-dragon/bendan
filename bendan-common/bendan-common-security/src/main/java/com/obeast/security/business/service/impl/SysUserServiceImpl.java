@@ -31,6 +31,8 @@ import com.obeast.security.business.service.remote.OAuth2TokenEndpoint;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -151,6 +153,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity>
     public UserInfo findUserInfo(String username) {
         UserInfo userInfo = new UserInfo();
         SysUserEntity sysUserEntity = this.findByUsername(username);
+        if (ObjectUtil.isNull(sysUserEntity)){
+            throw new BadCredentialsException("用户不存在");
+        }
         /*获取角色列表*/
         List<SysRoleEntity> sysRoleEntities = sysRoleService.listRolesByUserId(sysUserEntity.getId());
         Assert.isTrue(ArrayUtil.isNotEmpty(sysRoleEntities), () -> {

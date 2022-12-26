@@ -5,11 +5,12 @@ import com.obeast.business.entity.OssEntity;
 import com.obeast.oss.config.MinioConfig;
 import com.obeast.oss.domain.MergeShardArgs;
 import com.obeast.oss.domain.MinioTemplateResult;
-import com.obeast.oss.domain.ResponseEntry;
+import com.obeast.oss.domain.FlyweightRes;
 import com.obeast.oss.enumration.ShardFileStatusCode;
 import com.obeast.oss.service.SseEmitterService;
 import com.obeast.oss.template.MinioTemplate;
 import com.obeast.oss.utils.ShardUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,21 +40,16 @@ import org.springframework.web.multipart.MultipartFile;
  * Description:
  */
 @Service("ossService")
+@RequiredArgsConstructor
 public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements OssService {
 
+    private final MinioTemplate minioTemplate;
 
-    @Autowired
-    private MinioTemplate minioTemplate;
+    private final MinioConfig minioConfig;
 
-    @Autowired
-    private MinioConfig minioConfig;
+    private final OssDao ossDao;
 
-
-    @Autowired
-    OssDao ossDao;
-
-    @Autowired
-    SseEmitterService sseEmitterService;
+    private final SseEmitterService sseEmitterService;
 
     private static final Logger log = LoggerFactory.getLogger(OssServiceImpl.class);
 
@@ -85,7 +81,7 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
      **/
     @SneakyThrows
     @Override
-    public OssEntity uploadShard(MultipartFile file, ResponseEntry res, String fileType, String userUuid) {
+    public OssEntity uploadShard(MultipartFile file, FlyweightRes res, String fileType, String userUuid) {
         executorService = createThreadPool(8);
         // 上传过程中出现异常，状态码设置为50000
         boolean stopStatus = true;
@@ -213,7 +209,7 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
      **/
     @Transactional
     @Override
-    public OssEntity mergeShard(MergeShardArgs mergeShardArgs, String userUuid, ResponseEntry res) {
+    public OssEntity mergeShard(MergeShardArgs mergeShardArgs, String userUuid, FlyweightRes res) {
         Integer shardCount = mergeShardArgs.getShardCount();
         String fileName = (String) res.get(userUuid).get("fileName");
         String md5 = mergeShardArgs.getMd5();
@@ -292,7 +288,7 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
      * date 2022/7/22 22:48
      **/
     @Override
-    public OssEntity upload(MultipartFile multipartFile, String userUuid, ResponseEntry res, int voiceTimeSize) throws Exception {
+    public OssEntity uploadMiniFile(MultipartFile multipartFile, String userUuid, FlyweightRes res, int voiceTimeSize) throws Exception {
         if (multipartFile == null) {
             throw new Exception(ShardFileStatusCode.FAILURE.getMessage());
         }
@@ -371,7 +367,7 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
      * @author wxl
      * date 2022/7/20 23:54
      **/
-    private void uploadJob(long shardCount, List<InputStream> inputStreams, ResponseEntry res, Boolean stopStatus, String md5BucketName, String fileName, String userUuid) throws InterruptedException {
+    private void uploadJob(long shardCount, List<InputStream> inputStreams, FlyweightRes res, Boolean stopStatus, String md5BucketName, String fileName, String userUuid) throws InterruptedException {
         CountDownLatch countDownLatch = new CountDownLatch((int) shardCount);
         if (shardCount > 10000) {
             throw new RuntimeException("Total parts count should not exceed 10000");
@@ -426,7 +422,7 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
         /**
          * 返回给前端的res
          */
-        private final ResponseEntry res;
+        private final FlyweightRes res;
 
         /**
          * 计数等待线程执行完成
@@ -458,7 +454,7 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
          */
         private final SseEmitterService sseEmitterService;
 
-        public BranchThread(InputStream inputStream, String md5BucketName, Integer curIndex, ResponseEntry res, CountDownLatch countDownLatch, long shardCount, boolean stopStatus, String userUuid, MinioTemplate minioTemplate, SseEmitterService sseEmitterService) {
+        public BranchThread(InputStream inputStream, String md5BucketName, Integer curIndex, FlyweightRes res, CountDownLatch countDownLatch, long shardCount, boolean stopStatus, String userUuid, MinioTemplate minioTemplate, SseEmitterService sseEmitterService) {
             this.inputStream = inputStream;
             this.md5BucketName = md5BucketName;
             this.curIndex = curIndex;

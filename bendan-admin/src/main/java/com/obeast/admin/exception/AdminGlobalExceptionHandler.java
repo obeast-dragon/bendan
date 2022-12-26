@@ -3,6 +3,7 @@ package com.obeast.admin.exception;
 import com.obeast.core.base.CommonResult;
 import com.obeast.core.constant.WebResultEnum;
 import com.obeast.core.exception.BendanException;
+import feign.FeignException;
 import feign.RetryableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,8 +60,8 @@ public class AdminGlobalExceptionHandler {
      * @return com.worldintek.core.base.CommonResult<?>
      */
 
-  @ExceptionHandler(RetryableException.class)
-    public CommonResult<?> retryableException(RetryableException e) throws Exception {
+  @ExceptionHandler({RetryableException.class, FeignException.class})
+    public CommonResult<?> retryableException(Exception e) throws Exception {
         log.error("远程调用异常---------------->{}", e.getMessage());
         return CommonResult.error(e.getMessage());
     }
