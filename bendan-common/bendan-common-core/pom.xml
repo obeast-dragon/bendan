@@ -68,6 +68,14 @@
             <artifactId>swagger-annotations</artifactId>
         </dependency>
 
+
+        <!-- rabbit-mq -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

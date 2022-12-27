@@ -16,6 +16,7 @@
         <module>bendan-common-business</module>
         <module>bendan-common-security</module>
         <module>bendan-common-swagger</module>
+        <module>bendan-common-mybatis</module>
     </modules>
 
     <name>bendan-common</name>
