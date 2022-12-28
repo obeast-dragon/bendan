@@ -28,9 +28,21 @@ spring:
           predicates:
             - Path=/admin/**
 
+        - id: oss-route
+          uri: lb://bendan-oss
+          order: 4
+          predicates:
+            - Path=/oss/**
+
+        - id: chat-route
+          uri: lb://bendan-chat
+          order: 5
+          predicates:
+            - Path=/chat/**
+
         # swagger路由转发配置
         - id: openapi
           uri: lb://bendan-admin
-          order: 4
+          order: 10
           predicates:
             - Path=/v3/api-docs/**

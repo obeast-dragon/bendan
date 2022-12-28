@@ -28,20 +28,20 @@ public class WebSocketChannelInHandler extends SimpleChannelInboundHandler<TextW
         BaseMsg baseMsg = JSONUtil.toBean(text, BaseMsg.class);
         //新连接
         if (baseMsg.getCode().equals(CodeStrategyContext.NEW_CONNECTION)){
-            log.info("新连接handle------------->NEW_CONNECTION");
+            log.debug("新连接handle------------->NEW_CONNECTION");
             baseMsg = JSONUtil.toBean(text, ConnectMsg.class);
         }
         //心跳
         else if (baseMsg.getCode().equals(CodeStrategyContext.HEARD)){
-            log.info("心跳handle---------------->HEARD");
+            log.debug("心跳handle---------------->HEARD");
             baseMsg = JSONUtil.toBean(text, HeardMsg.class);
         }
         //消息
         else if (baseMsg.getCode().equals(CodeStrategyContext.SEND_MSG)) {
-            log.info("文本handle---------------->SEND_MESSAGE");
+            log.debug("文本handle---------------->SEND_MESSAGE");
             baseMsg = JSONUtil.toBean(text, ChatMsg.class);
         }
-        log.info("------------------->往下传递");
+        log.debug("------------------->往下传递");
         ctx.fireChannelRead(baseMsg);
 
     }

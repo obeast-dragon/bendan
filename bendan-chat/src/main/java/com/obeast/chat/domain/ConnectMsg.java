@@ -7,9 +7,9 @@ import lombok.EqualsAndHashCode;
 
 /**
  * @author wxl
+ * Date 2022/12/27 22:26
  * @version 1.0
- * @description: 新连接消息
- * @date 2022/7/19 11:36
+ * Description: 新连接消息
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

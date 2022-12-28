@@ -4,6 +4,10 @@ package com.obeast.security.business.dao;
 import com.obeast.core.base.BaseDao;
 import com.obeast.business.entity.SysUserEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * @author wxl
@@ -13,6 +17,9 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface SysUserDao extends BaseDao<SysUserEntity> {
+
+    @Select("select distinct COALESCE(userB_id, userA_id) as `friends` from friend_rel where userA_id = #{userId} or userB_id = #{userId}")
+    List<Long> getFriends(@Param("userId") Long userId);
 }
 
 

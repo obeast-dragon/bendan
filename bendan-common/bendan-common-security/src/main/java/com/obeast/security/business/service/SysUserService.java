@@ -3,6 +3,7 @@ package com.obeast.security.business.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.obeast.business.dto.SysUserDTO;
+import com.obeast.business.vo.ChatUserVo;
 import com.obeast.core.domain.PageParams;
 import com.obeast.business.vo.UserInfo;
 import com.obeast.core.base.CommonResult;
@@ -24,6 +25,14 @@ import java.util.List;
 public interface SysUserService extends IService<SysUserEntity> {
 
 
+    /**
+     * Description: 获取好友详情
+     * @author wxl
+     * Date: 2022/12/27 23:48
+     * @param username username
+     * @return java.util.List<com.obeast.business.entity.SysUserEntity>
+     */
+    List<ChatUserVo> getFriendInfos(String username);
 
     /**
      * Description: 登录
@@ -111,6 +120,14 @@ public interface SysUserService extends IService<SysUserEntity> {
     SysUserEntity findByUsername(String username);
 
 
+    /**
+     * Description: 获取id
+     * @author wxl
+     * Date: 2022/12/28 21:50
+     * @param username username
+     * @return java.lang.Long
+     */
+    Long getIdByUsername(String username);
     /**
      * Description: 更新用户
      * @author wxl

@@ -20,10 +20,10 @@ public interface ChatRecordService extends IService<ChatRecordEntity> {
     * @author wxl
     * Date: 2022/12/27 12:36
     * @param pageParams parameters
-    * @param uuid uuid
+    * @param userId userId
     * @return com.obeast.core.domain.PageObjects<com.worldintek.chat.entity.ChatRecordEntity>
     */
-    PageObjects<ChatRecordEntity> queryPage(PageParams pageParams, String uuid);
+    PageObjects<ChatRecordEntity> queryPage(PageParams pageParams, Long userId);
 
 
 }

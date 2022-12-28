@@ -3,9 +3,7 @@ package com.obeast.chat.listener;
 import cn.hutool.json.JSONUtil;
 
 import com.obeast.chat.domain.ChatChannelGroup;
-import com.obeast.chat.domain.ChatMsg;
-import com.obeast.chat.vo.ChatMsgVo;
-import com.obeast.core.utils.RabbitMQUtils;
+import com.obeast.chat.entity.ChatRecordEntity;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -16,7 +14,6 @@ import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 
 
 /**
@@ -50,21 +47,15 @@ public class WsQueueListener {
 //    }
 
     @RabbitHandler
-    public void wsChatMsg(ChatMsg chatMsg, com.rabbitmq.client.Channel channelMq,
+    public void wsChatMsg(ChatRecordEntity chatMsg, com.rabbitmq.client.Channel channelMq,
                           @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
         log.info("RabbitHandler is listening");
         //根据toId查询userUuid
-        String toUuid = chatMsg.getToUuid();
+        Long toUuid = chatMsg.getToId();
         io.netty.channel.Channel channel = channelGroup.getChannel(toUuid);
         if (channel != null) {
-            ChatMsgVo chatMsgVo = new ChatMsgVo();
-            chatMsgVo.setFromUuid(chatMsg.getFromUuid());
-            chatMsgVo.setToUuid(chatMsg.getToUuid());
-            chatMsgVo.setContent(chatMsg.getContent());
-            chatMsgVo.setSendType(chatMsg.getSendType());
-            chatMsgVo.setSendTime(new Date());
-            log.info("转发的数据为："+ chatMsg);
-            TextWebSocketFrame resp = new TextWebSocketFrame(JSONUtil.toJsonStr(chatMsgVo));
+            log.debug("转发的数据为："+ chatMsg);
+            TextWebSocketFrame resp = new TextWebSocketFrame(JSONUtil.toJsonStr(chatMsg));
             channel.writeAndFlush(resp);
             RabbitMQUtils.askMessage(channelMq, tag, log);
         }else {

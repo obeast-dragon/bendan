@@ -38,32 +38,32 @@ public class ChatMsgHandler extends SimpleChannelInboundHandler<ChatMsg> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ChatMsg msg) throws Exception {
 
-        log.info("ChatTextMsgHandler客户端发送文本的聊天消息：" + msg.getContent());
-        String fromUuid = msg.getFromUuid();
-        String toUuid = msg.getToUuid();
+        log.debug("ChatTextMsgHandler客户端发送文本的聊天消息：" + msg.getContent());
+        Long fromUuid = msg.getFromId();
+        Long toUuid = msg.getToId();
         if (!msg.getContent().equals("")){
             //      消息入DB库
             String content = msg.getContent();
             ChatRecordEntity chatRecordEntity = new ChatRecordEntity();
-            chatRecordEntity.setFromUuid(fromUuid);
-            chatRecordEntity.setToUuid(toUuid);
+            chatRecordEntity.setFromId(fromUuid);
+            chatRecordEntity.setToId(toUuid);
             chatRecordEntity.setContent(content);
             chatRecordEntity.setSendType(msg.getSendType());
             chatRecordEntity.setSendTime(new Date());
             chatRecordService.save(chatRecordEntity);
             //查询toId是否存在
             Channel channel = chatChannelGroup.getChannel(toUuid);
-            log.info("-------------------------------->消息已经入DB库");
+            log.debug("-------------------------------->消息已经入DB库");
             try {
                 if (channel.isOpen()) {
                     //对方在线，才做rabbitMq转发
-                    log.info("channel is open is ok");
-                    log.info("对方在线通过RabbitMq发送");
+                    log.debug("channel is open is ok");
+                    log.debug("对方在线通过RabbitMq发送");
                     //通过rabbitmq转发出去
-                    rabbitTemplate.convertAndSend("ws_exchange", "", msg);
+                    rabbitTemplate.convertAndSend("ws_exchange", "", chatRecordEntity);
                 }
             }catch (Exception e){
-                log.info("对方不在线----------------->do nothing");
+                log.debug("对方不在线----------------->do nothing");
             }
         }else {
             log.warn("message is null");

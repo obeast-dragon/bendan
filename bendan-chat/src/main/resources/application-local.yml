@@ -1,3 +1,4 @@
+
 spring:
   cloud:
     nacos:
@@ -6,18 +7,11 @@ spring:
       config:
         server-addr: http://127.0.0.1:8848
         file-extension: yaml
-  mvc:
-    #出现错误时, 直接抛出异常
-    throw-exception-if-no-handler-found: true
-  #不要为我们工程中的资源文件建立映射
-  web:
-    resources:
-      add-mappings: false
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/bendan?serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true
+    url: jdbc:mysql://127.0.0.1:3306/bendan?serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true
     username: root
     password: mysql1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 
     druid:
@@ -32,7 +26,7 @@ spring:
       maxWait: 60000
       timeBetweenEvictionRunsMillis: 60000
       minEvictableIdleTimeMillis: 300000
-      validationQuery: SELECT 1
+      validationQuery: SELECT 1 FROM DUAL
       testWhileIdle: true
       testOnBorrow: false
       testOnReturn: false
@@ -44,58 +38,40 @@ spring:
       connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
 
 
-
   redis:
-    # Redis服务器地址
-#    host: 10.0.0.41
+    host: 175.178.183.32 # Redis服务器地址
+    database: 13 # Redis数据库索引（默认为0）
+    port: 6379 # Redis服务器连接端口
+    password:  # Redis服务器连接密码（默认为空）
+    timeout: 3000ms # 连接超时时间（毫秒）
+
+  rabbitmq:
     host: 175.178.183.32
-    # Redis数据库索引（默认为0）
-    database: 13
-    # Redis服务器连接端口
-    port: 6379
-    # Redis服务器连接密码（默认为空）
-    password:
-    # 连接超时时间（毫秒）
-    timeout: 3000ms
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /plant
+    listener:
+      simple:
+        acknowledge-mode: manual # 手动应答
+        concurrency: 5 # 消费端最小并发数
+        max-concurrency: 10 # 消费端最大并发数
+        prefetch: 5 # 一次请求中预处理的消息数量
+    cache:
+      channel:
+        size: 50 # 缓存的channel数量
 
-
-mybatis-plus:
-  #扫描包并打印日志
-  #  mapper-locations: classpath:/mapper/admin/*.xml
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    cache-enabled: true
-  global-config:
-    db-config:
-      # 逻辑已删除值(默认为 2)
-      logic-delete-value: 2
-      # 逻辑未删除值(默认为 0)
-      logic-not-delete-value: 0
-
-#
-##指定接口包扫描
-#springdoc.packagesToScan: com.obeast.bendan.controller
-##或者指定访问接口路径扫描
-##springdoc.pathsToMatch=/hs/**, /hsType/**
-#
-## swagger-ui custom path
-#springdoc.swagger-ui.path: /swagger-ui.html
-#
-
-
-feign:
-  client:
-    config:
-      default:
-        connectTimeout: 5000
-        readTimeout: 5000
-        loggerLevel: full
+netty:
+  host: 127.0.0.1
+  port: 9991
 
 logging:
   level:
+    root: info
     com:
       obeast:
         debug
+
 
 #-----自定义配置
 security:
@@ -120,3 +96,4 @@ swagger:
   scope: message.read
   services:
     bendan-admin: admin
+    bendan-chat: chat

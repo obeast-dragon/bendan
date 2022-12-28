@@ -2,6 +2,7 @@ package com.obeast.admin;
 
 import com.obeast.business.entity.SysMenuEntity;
 import com.obeast.business.entity.SysUserEntity;
+import com.obeast.security.business.dao.SysUserDao;
 import com.obeast.security.business.service.SysMenuService;
 import com.obeast.security.business.service.SysUserService;
 import org.json.JSONArray;
@@ -24,6 +25,13 @@ import java.util.List;
  */
 @SpringBootTest
 public class BendanAdminApplicationTest {
+    @Autowired
+    SysUserService sysUserDao;
+    @Test
+    void test11 () {
+        System.out.println("------------------------------->"+sysUserDao.getFriendInfos("admin"));
+    }
+
     private static final String json = """
             {
                 "code": 200,

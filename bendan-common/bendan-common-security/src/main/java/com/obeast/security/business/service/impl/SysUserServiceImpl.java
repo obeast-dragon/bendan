@@ -14,6 +14,7 @@ import com.obeast.business.dto.SysUserDTO;
 import com.obeast.business.entity.SysMenuEntity;
 import com.obeast.business.entity.SysRoleEntity;
 import com.obeast.business.entity.SysUserEntity;
+import com.obeast.business.vo.ChatUserVo;
 import com.obeast.business.vo.OAuth2PasswordVo;
 import com.obeast.core.domain.PageParams;
 import com.obeast.business.vo.UserInfo;
@@ -30,6 +31,7 @@ import com.obeast.security.business.service.SysUserService;
 import com.obeast.security.business.service.remote.OAuth2TokenEndpoint;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -69,8 +71,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity>
 
     private final OAuth2AuthorizationService oAuth2AuthorizationService;
 
+    private final SysUserDao sysUserDao;
+
     private static final PasswordEncoder ENCODER = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
+
+    @Override
+    public List<ChatUserVo> getFriendInfos(String username) {
+        Long userId = this.getIdByUsername(username);
+        List<Long> friends = sysUserDao.getFriends(userId).stream().filter(item -> !item.equals(userId)).toList();
+        return this.listByIds(friends).stream().map(item -> {
+            ChatUserVo chatUserVo = new ChatUserVo();
+            BeanUtils.copyProperties(item, chatUserVo);
+            return chatUserVo;
+        }).toList();
+    }
 
     @Override
     public CommonResult<?> login(String username, String password, HttpServletRequest request, HttpServletResponse response) throws BendanException {
@@ -88,12 +103,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity>
             String token = mapCookie.get(SysConstant.TOKEN);
             if (StrUtil.isNotEmpty(token)) {
                 OAuth2Authorization oAuth2Authorization = oAuth2AuthorizationService.findByToken(token, OAuth2TokenType.ACCESS_TOKEN);
-                if (ObjectUtil.isNotEmpty(oAuth2Authorization)){
+                if (ObjectUtil.isNotEmpty(oAuth2Authorization)) {
                     return CommonResult.success(SysConstant.LOGIN_SUCCESS);
                 }
             }
             CommonResult<?> res = OAuth2TokenEndpoint.authPassword(header, oAuth2Params);
-            if (!res.getSuccess()){
+            if (!res.getSuccess()) {
                 return res;
             }
             Object commonResult = CommonResult.getOptionalData(res).orElseThrow(() -> {
@@ -153,7 +168,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity>
     public UserInfo findUserInfo(String username) {
         UserInfo userInfo = new UserInfo();
         SysUserEntity sysUserEntity = this.findByUsername(username);
-        if (ObjectUtil.isNull(sysUserEntity)){
+        if (ObjectUtil.isNull(sysUserEntity)) {
             throw new BadCredentialsException("用户不存在");
         }
         /*获取角色列表*/
@@ -228,11 +243,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity>
     }
 
     @Override
+    public Long getIdByUsername(String username) {
+        Assert.notNull(username, "username cannot be null");
+        SysUserEntity userEntity = this.findByUsername(username);
+        Assert.notNull(userEntity, "用户不存在");
+        return userEntity.getId();
+    }
+
+    @Override
     public SysUserEntity findByUsername(String username) {
         Assert.notNull(username, "username cannot be null");
         return this.getOne(Wrappers.<SysUserEntity>lambdaQuery()
                 .eq(SysUserEntity::getUsername, username));
     }
+
+
 
     @Override
     public Boolean isUserExistByName(String username) {

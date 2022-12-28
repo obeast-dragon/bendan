@@ -24,7 +24,7 @@ public class ConnectMsgHandler extends SimpleChannelInboundHandler<ConnectMsg> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ConnectMsg msg) throws Exception {
-        if (msg.getFromUuid() == null) {
+        if (msg.getFromId() == null) {
             ctx.close();
             log.error("-------------->uuid为空请检查");
             return;
@@ -33,9 +33,9 @@ public class ConnectMsgHandler extends SimpleChannelInboundHandler<ConnectMsg> {
             log.info("-------------->用户通道不存在请检查");
             throw new Exception("用户通道不存在请检查");
         }
-        log.info("用户{}建立新的连接------>{}" , msg.getFromUuid(), ctx.channel());
+        log.info("用户{}建立新的连接------>{}" , msg.getFromId(), ctx.channel());
         //记录当前连接的用户id以及线程对象
-        chatChannelGroup.addChannel(msg.getFromUuid(), ctx.channel());
-        log.info("-------------->用户{}保存到线程组了" , msg.getFromUuid());
+        chatChannelGroup.addChannel(msg.getFromId(), ctx.channel());
+        log.info("-------------->用户{}保存到线程组了" , msg.getFromId());
     }
 }

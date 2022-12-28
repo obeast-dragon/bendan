@@ -1,10 +1,11 @@
 package com.obeast.chat.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.obeast.chat.entity.ChatRecordEntity;
-import com.obeast.chat.mapper.ChatRecordMapper;
+import com.obeast.chat.dao.ChatRecordDao;
 import com.obeast.chat.service.ChatRecordService;
 import com.obeast.core.domain.PageObjects;
 import com.obeast.core.domain.PageParams;
@@ -20,18 +21,19 @@ import org.springframework.util.Assert;
  * Description: 聊天记录模拟表
  */
 @Service
-public class ChatRecordServiceImpl extends ServiceImpl<ChatRecordMapper, ChatRecordEntity> implements ChatRecordService {
+public class ChatRecordServiceImpl extends ServiceImpl<ChatRecordDao, ChatRecordEntity> implements ChatRecordService {
 
     @Override
-    public PageObjects<ChatRecordEntity> queryPage(PageParams pageParams, String uuid) {
-        Assert.isNull(uuid, "uuid cannot be null");
-        QueryWrapper<ChatRecordEntity> queryWrapper = new QueryWrapper<ChatRecordEntity>()
-                .eq("from_uuid", uuid)
+    public PageObjects<ChatRecordEntity> queryPage(PageParams pageParams, Long userId) {
+        Assert.notNull(userId, "userId cannot be null");
+        LambdaQueryWrapper<ChatRecordEntity> wrapper = Wrappers.lambdaQuery();
+        wrapper
+                .eq(ChatRecordEntity::getFromId, userId)
                 .or()
-                .eq("to_uuid", uuid);
-        IPage<ChatRecordEntity> page = this.baseMapper.selectPage(
+                .eq(ChatRecordEntity::getToId, userId);
+        IPage<ChatRecordEntity> page = this.page(
                 new PageQueryUtils<ChatRecordEntity>().getPage(pageParams),
-                queryWrapper
+                wrapper
         );
         return new PageQueryUtils<>().getPageObjects(page, ChatRecordEntity.class);
     }

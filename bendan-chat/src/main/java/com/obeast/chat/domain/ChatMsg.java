@@ -16,13 +16,13 @@ public class ChatMsg extends BaseMsg {
     /**
      * fromId 来自谁的ID
      * */
-    private String fromUuid;
+    private Long fromId;
 
 
     /**
      * toId 去向谁的的ID
      * */
-    private String toUuid;
+    private Long toId;
 
     /**
      * content 内容

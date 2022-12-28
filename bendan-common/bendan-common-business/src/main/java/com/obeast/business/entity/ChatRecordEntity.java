@@ -1,6 +1,9 @@
-package com.obeast.chat.entity;
+package com.obeast.business.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serial;
@@ -9,9 +12,9 @@ import java.util.Date;
 
 /**
  * @author wxl
- * Date 2022/12/27 14:17
+ * Date 2022/12/28 21:30
  * @version 1.0
- * Description: 聊天记录模拟表
+ * Description:  聊天记录
  */
 @TableName(value ="bendan_chat_record")
 @Data
@@ -27,16 +30,16 @@ public class ChatRecordEntity implements Serializable {
     private Long id;
 
     /**
-     * 用户id
+     * 自己id
      */
 
-    private Long fromId;
+    private Long fromUuid;
 
     /**
-     * 专家id
+     * 用户id
 
      */
-    private Long toId;
+    private Long toUuid;
 
     /**
      * 发送内容
@@ -51,12 +54,11 @@ public class ChatRecordEntity implements Serializable {
     /**
      * 发送时长
      */
-    private Long sendTimeLength;
+    private Date sendTimeLength;
 
     /**
      * 发送时间
      */
     private Date sendTime;
-
 
 }

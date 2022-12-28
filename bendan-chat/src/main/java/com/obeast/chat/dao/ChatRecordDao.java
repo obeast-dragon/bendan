@@ -1,4 +1,4 @@
-package com.obeast.chat.mapper;
+package com.obeast.chat.dao;
 
 import com.obeast.chat.entity.ChatRecordEntity;
 import com.obeast.core.base.BaseDao;
@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
  * Description: 聊天记录模拟表
  */
 @Mapper
-public interface ChatRecordMapper extends BaseDao<ChatRecordEntity> {
+public interface ChatRecordDao extends BaseDao<ChatRecordEntity> {
 
 
 }

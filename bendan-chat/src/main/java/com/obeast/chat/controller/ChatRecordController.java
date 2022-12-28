@@ -5,6 +5,8 @@ import com.obeast.chat.service.ChatRecordService;
 import com.obeast.core.base.CommonResult;
 import com.obeast.core.domain.PageObjects;
 import com.obeast.core.domain.PageParams;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/chatRecord")
+@Tag(name = "聊天记录接口")
 @RequiredArgsConstructor
 public class ChatRecordController {
 
@@ -25,10 +28,10 @@ public class ChatRecordController {
     /**
      * 查询聊天记录
      */
+    @Operation(summary = "查询聊天记录")
     @GetMapping("/listRecord")
-    public CommonResult<PageObjects<ChatRecordEntity>> page(PageParams pageParams, String uuid ) {
-        PageObjects<ChatRecordEntity> page = chatRecordService.queryPage(pageParams, uuid);
-        return CommonResult.success(page, "page");
+    public PageObjects<ChatRecordEntity> page(PageParams pageParams, Long userId ) {
+        return chatRecordService.queryPage(pageParams, userId);
     }
 
 }

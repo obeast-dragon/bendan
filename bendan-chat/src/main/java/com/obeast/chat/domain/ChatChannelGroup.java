@@ -21,40 +21,40 @@ public class ChatChannelGroup {
      * key 设备id
      * channel 连接通道
      * */
-    public final Map<String, Channel> connects = new ConcurrentHashMap<>();
+    public final Map<Long, Channel> connects = new ConcurrentHashMap<>();
 
     /**
      * Description: 添加
      * @author wxl
      * Date: 2022/12/27 13:06
-     * @param userUuid  uuid
+     * @param userId  userId
      * @param channel channel
      */
-    public void addChannel(String userUuid, Channel channel) {
-        log.info("{}用户建立通道", userUuid);
-        connects.put(userUuid, channel);
+    public void addChannel(Long userId, Channel channel) {
+        log.debug("{}用户建立通道", userId);
+        connects.put(userId, channel);
     }
 
     /**
-     * @description: 查
+     * Description: 查
      * @author wxl
-     * @date 2022/7/19 13:54
-     * @param userUuid 设备id
-     * @return channel 通道
-     **/
-    public Channel getChannel(String userUuid) {
-        return connects.get(userUuid);
+     * Date: 2022/12/28 22:53
+     * @param userId userId
+     * @return io.netty.channel.Channel
+     */
+    public Channel getChannel(Long userId) {
+        return connects.get(userId);
     }
 
     /**
-     * @description: 删除
+     * Description: 删除
      * @author wxl
-     * @date 2022/7/19 13:56
-     * @param userUuid 设备id
+     * Date: 2022/12/28 22:53
+     * @param userId userId
      * @return boolean
-     **/
-    public boolean removeChannel(String userUuid) {
-        return connects.remove(userUuid) != null;
+     */
+    public boolean removeChannel(Long userId) {
+        return connects.remove(userId) != null;
     }
 
 

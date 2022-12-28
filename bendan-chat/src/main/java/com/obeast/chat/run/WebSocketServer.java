@@ -1,4 +1,4 @@
-package com.obeast.chat;
+package com.obeast.chat.run;
 
 
 import com.obeast.chat.service.ChatRecordService;
@@ -12,6 +12,7 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.timeout.ReadTimeoutHandler;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,9 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0
  * Description: websocket 服务器
  */
-@Component
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class WebSocketServer implements CommandLineRunner {
 
     @Value("${netty.host}")
@@ -37,14 +39,11 @@ public class WebSocketServer implements CommandLineRunner {
     @Value("${netty.port}")
     private Integer PORT;
 
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
+    private final RabbitTemplate rabbitTemplate;
 
-    @Autowired
-    private ChatRecordService chatRecordService;
+    private final ChatRecordService chatRecordService;
 
-    @Autowired
-    private ChatChannelGroup chatChannelGroup;
+    private final ChatChannelGroup chatChannelGroup;
 
     @Override
     public void run(String... args) throws Exception {

@@ -1,4 +1,4 @@
-package com.obeast.core.utils;
+package com.obeast.chat.listener;
 import com.rabbitmq.client.Channel;
 import org.slf4j.Logger;
 
