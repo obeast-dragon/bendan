@@ -1,6 +1,7 @@
 package com.obeast.chat.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.io.Serial;
@@ -23,6 +24,7 @@ public class ChatRecordEntity implements Serializable {
     /**
      *
      */
+    @JsonIgnore
     @TableId(type = IdType.AUTO)
     private Long id;
 
@@ -41,7 +43,7 @@ public class ChatRecordEntity implements Serializable {
     /**
      * 发送内容
      */
-    private String content;
+    private String sendContent;
 
     /**
      * 发送类型【0文本，1图片，2语言，3视频】

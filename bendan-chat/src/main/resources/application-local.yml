@@ -68,9 +68,9 @@ netty:
 logging:
   level:
     root: info
-    com:
-      obeast:
-        debug
+#    com:
+#      obeast:
+#        info
 
 
 #-----自定义配置

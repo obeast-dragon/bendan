@@ -27,11 +27,16 @@ public class ChatMsg extends BaseMsg {
     /**
      * content 内容
      * */
-    private String content;
+    private String sendContent;
 
     /**
      * 消息类型
      * */
     private Integer sendType;
+
+    /**
+     * 消息类型
+     * */
+    private Long sendTimeLength;
 
 }

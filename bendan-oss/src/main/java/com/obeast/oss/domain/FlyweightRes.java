@@ -17,7 +17,7 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Component
-public class FlyweightRes extends HashMap<String, Map<String, Object>> implements Serializable {
+public class FlyweightRes extends HashMap<Long, Map<String, Object>> implements Serializable {
 
 
 }

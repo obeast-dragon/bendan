@@ -18,9 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 public class HeardMsgHandler extends SimpleChannelInboundHandler<HeardMsg> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HeardMsg msg) throws Exception {
-        log.info("-------------------->收到客户端的心跳:" + msg.getCode());
+        log.debug("-------------------->收到客户端的心跳:" + msg.getCode());
         //响应心跳
         ctx.writeAndFlush(new TextWebSocketFrame(CodeStrategyContext.HEARD.toString()));
-        log.info("-------------------->响应心跳");
+        log.debug("-------------------->响应心跳");
     }
 }

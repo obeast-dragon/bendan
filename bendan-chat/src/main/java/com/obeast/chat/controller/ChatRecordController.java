@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * Description:
  */
 @RestController
-@RequestMapping("/chatRecord")
+@RequestMapping("/record")
 @Tag(name = "聊天记录接口")
 @RequiredArgsConstructor
 public class ChatRecordController {
@@ -30,8 +30,9 @@ public class ChatRecordController {
      */
     @Operation(summary = "查询聊天记录")
     @GetMapping("/listRecord")
-    public PageObjects<ChatRecordEntity> page(PageParams pageParams, Long userId ) {
-        return chatRecordService.queryPage(pageParams, userId);
+    public CommonResult<PageObjects<ChatRecordEntity>> page(PageParams pageParams, Long userId, Long toId) {
+        PageObjects<ChatRecordEntity> page = chatRecordService.queryPage(pageParams, userId, toId);
+        return CommonResult.success(page);
     }
 
 }

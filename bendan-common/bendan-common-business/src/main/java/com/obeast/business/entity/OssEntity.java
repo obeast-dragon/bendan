@@ -34,7 +34,7 @@ public class OssEntity implements Serializable {
 	/**
 	 * md5文件名
 	 */
-	private String md5FileName;
+	private String fileName;
 
 	/**
 	 * 文件的路径

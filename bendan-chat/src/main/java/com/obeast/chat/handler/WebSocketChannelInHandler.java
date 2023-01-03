@@ -48,15 +48,15 @@ public class WebSocketChannelInHandler extends SimpleChannelInboundHandler<TextW
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
-        log.info("--------------------->新客户端连接√");
+        log.debug("--------------------->新客户端连接√");
     }
 
 
     @Override
     public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
-        log.info("------------------------------>客户端开始关闭连接");
+        log.debug("------------------------------>客户端开始关闭连接");
         ctx.close();
-        log.info("------------------------------>客户端关闭连接成功");
+        log.debug("------------------------------>客户端关闭连接成功");
 
     }
 

@@ -1,7 +1,10 @@
 package com.obeast.oss.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.obeast.business.entity.OssEntity;
+import com.obeast.core.base.CommonResult;
 import com.obeast.oss.config.MinioConfig;
 import com.obeast.oss.domain.MergeShardArgs;
 import com.obeast.oss.domain.MinioTemplateResult;
@@ -9,18 +12,15 @@ import com.obeast.oss.domain.FlyweightRes;
 import com.obeast.oss.enumration.ShardFileStatusCode;
 import com.obeast.oss.service.SseEmitterService;
 import com.obeast.oss.template.MinioTemplate;
-import com.obeast.oss.utils.ShardUtils;
+import com.obeast.oss.utils.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.*;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -30,6 +30,7 @@ import com.obeast.oss.dao.OssDao;
 import com.obeast.oss.service.OssService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -50,6 +51,8 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
     private final OssDao ossDao;
 
     private final SseEmitterService sseEmitterService;
+
+    private final FlyweightRes res;
 
     private static final Logger log = LoggerFactory.getLogger(OssServiceImpl.class);
 
@@ -80,23 +83,22 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
      * date 2022/7/20 23:51
      **/
     @SneakyThrows
-    @Override
-    public OssEntity uploadShard(MultipartFile file, FlyweightRes res, String fileType, String userUuid) {
+    private OssEntity uploadShard(MultipartFile file, FlyweightRes res, String fileType, Long userId) {
         executorService = createThreadPool(8);
         // 上传过程中出现异常，状态码设置为50000
         boolean stopStatus = true;
         if (file == null) {
-            res.get(userUuid).put("status", ShardFileStatusCode.FAILURE);
+            res.get(userId).put("status", ShardFileStatusCode.FAILURE);
             throw new Exception(ShardFileStatusCode.FAILURE.getMessage());
         }
         Long fileSize = file.getSize();
-        String md5BucketName = userUuid + "-" + StrUtil.uuid();
+        String md5BucketName = userId + "-" + StrUtil.uuid();
         String fileName = file.getOriginalFilename();
-        res.get(userUuid).put("md5BucketName", md5BucketName);
+        res.get(userId).put("md5BucketName", md5BucketName);
         //分片大小
         long shardSize = 5 * 1024 * 1024L;
         //开始分片
-        List<InputStream> inputStreams = ShardUtils.splitMultipartFileInputStreams(file,fileName, shardSize);
+        List<InputStream> inputStreams = FileUploadUtil.splitMultipartFileInputStreams(file,fileName, shardSize);
         long shardCount = inputStreams.size(); //总片数
         //封装合并参数
         MergeShardArgs mergeShardArgs = new MergeShardArgs((int) shardCount, fileName, md5BucketName, fileType, fileSize);
@@ -107,13 +109,13 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
             try {
                 //创建临时桶
                 minioTemplate.makeBucket(md5BucketName);
-                uploadJob(shardCount, inputStreams, res, stopStatus, md5BucketName, fileName, userUuid);
+                uploadJob(shardCount, inputStreams, res, stopStatus, md5BucketName, fileName, userId);
                 //开始合并
-                OssEntity OssEntity = mergeShard(mergeShardArgs, userUuid, res);
+                OssEntity OssEntity = mergeShard(mergeShardArgs, userId, res);
                 //上传完成清空当前用户数据
-                res.get(userUuid).clear();
-                log.info("文件上传成功 {} ", file.getOriginalFilename());
-                res.get(userUuid).put("status", ShardFileStatusCode.ALL_CHUNK_SUCCESS.getCode());
+                res.get(userId).clear();
+               log.debug("文件上传成功 {} ", file.getOriginalFilename());
+                res.get(userId).put("status", ShardFileStatusCode.ALL_CHUNK_SUCCESS.getCode());
                 return OssEntity;
             } catch (Exception e) {
                 log.error("分片合并失败：{}", e.getMessage());
@@ -131,9 +133,9 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
           */
         else if (fileExists && !bucketExists) {
             //1、存在DB minio == null
-            ossDao.delete(new QueryWrapper<OssEntity>()
-                    .eq("md5_file_name", md5BucketName)
-            );
+            LambdaQueryWrapper<OssEntity> wrapper = Wrappers.<OssEntity>lambdaQuery()
+                    .eq(OssEntity::getFileName, md5BucketName);
+            ossDao.delete(wrapper);
             throw new Exception("请重新上传文件");
 
         } else if (!fileExists) {
@@ -145,29 +147,29 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
             //临时桶在; 断点上传
             if (objectNames.size() == shardCount) {
                 //设置百分比
-                res.get(userUuid).put("uploadPercent", 100);
-                log.info("uploadPercent:{}", 100);
+                res.get(userId).put("uploadPercent", 100);
+               log.debug("uploadPercent:{}", 100);
                 //设置上传文件大小
-                res.get(userUuid).put("uploadSize", fileSize);
+                res.get(userId).put("uploadSize", fileSize);
                 //没有合并: 合并秒传
-                OssEntity = mergeShard(mergeShardArgs, userUuid, res);
-                log.info("uploadSize：{}", fileSize);
-                log.info("{} 秒传成功", fileName);
+                OssEntity = mergeShard(mergeShardArgs, userId, res);
+               log.debug("uploadSize：{}", fileSize);
+               log.debug("{} 秒传成功", fileName);
                 //上传完成清空当前用户数据
-                res.get(userUuid).clear();
+                res.get(userId).clear();
             } else {
                 //断点上传
-                log.info("开始断点上传>>>>>>");
+               log.debug("开始断点上传>>>>>>");
                 List<String> containStr = containList(objectNames, shardCount);
-                log.info("上传过的分片:" + containStr);
+               log.debug("上传过的分片:" + containStr);
                 CountDownLatch countDownLatch = new CountDownLatch(containStr.size());
                 try {
-                    log.info("开始断点分片上传:" + fileName);
+                   log.debug("开始断点分片上传:" + fileName);
                     for (String s : containStr) {
-                        stopStatus = (boolean) res.get("userUuid").get("stopStatus");
+                        stopStatus = (boolean) res.get("userId").get("stopStatus");
                         if (stopStatus) {
                             int c = Integer.parseInt(s);
-                            executorService.execute(new BranchThread(inputStreams.get(c - 1), md5BucketName, c, res, countDownLatch, shardCount, stopStatus, userUuid, minioTemplate, sseEmitterService));
+                            executorService.execute(new BranchThread(inputStreams.get(c - 1), md5BucketName, c, res, countDownLatch, shardCount, stopStatus, userId, minioTemplate, sseEmitterService));
                         } else {
                             executorService.shutdown();
                             break;
@@ -181,15 +183,15 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
                     executorService.shutdown();
                 }
                 countDownLatch.await();
-                log.info("所有分片上传完成");
-                res.get(userUuid).put("status", ShardFileStatusCode.ALL_CHUNK_UPLOAD_SUCCESS.getCode());
+               log.debug("所有分片上传完成");
+                res.get(userId).put("status", ShardFileStatusCode.ALL_CHUNK_UPLOAD_SUCCESS.getCode());
 
-                OssEntity = mergeShard(mergeShardArgs, userUuid, res);
-                log.info("文件上传成功：{} ", fileName);
+                OssEntity = mergeShard(mergeShardArgs, userId, res);
+               log.debug("文件上传成功：{} ", fileName);
                 //上传完成清空当前用户数据
-                res.get(userUuid).clear();
+                res.get(userId).clear();
             }
-            res.get(userUuid).put("status", ShardFileStatusCode.ALL_CHUNK_MERGE_SUCCESS.getCode());
+            res.get(userId).put("status", ShardFileStatusCode.ALL_CHUNK_MERGE_SUCCESS.getCode());
             return OssEntity;
 
         } else {
@@ -199,19 +201,11 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
         }
     }
 
-    /**
-     * @param mergeShardArgs 合并文件参数实体
-     * @param userUuid       user id
-     * @return OssEntity
-     * description:
-     * @author wxl
-     * date 2022/7/22 22:49
-     **/
     @Transactional
     @Override
-    public OssEntity mergeShard(MergeShardArgs mergeShardArgs, String userUuid, FlyweightRes res) {
+    public OssEntity mergeShard(MergeShardArgs mergeShardArgs, Long userId, FlyweightRes res) {
         Integer shardCount = mergeShardArgs.getShardCount();
-        String fileName = (String) res.get(userUuid).get("fileName");
+        String fileName = (String) res.get(userId).get("fileName");
         String md5 = mergeShardArgs.getMd5();
         try {
             List<String> objectNameList = minioTemplate.listObjectNames(md5);
@@ -224,23 +218,23 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
                 // 开始合并请求
                 String targetBucketName = minioConfig.getBucketName();
                 //拼接合并之后的文件名称
-                String objectName = userUuid + "-" + fileName;
+                String objectName = userId + "-" + fileName;
                 //合并
                 minioTemplate.composeObject(md5, targetBucketName, objectName);
 
-                log.info("桶：{} 中的分片文件，已经在桶：{},文件 {} 合并成功", md5, targetBucketName, objectName);
+               log.debug("桶：{} 中的分片文件，已经在桶：{},文件 {} 合并成功", md5, targetBucketName, objectName);
                 String url = minioTemplate.getPresignedObjectUrl(targetBucketName, objectName);
                 // 合并成功之后删除对应的临时桶
                 minioTemplate.removeBucket(md5, true);
-                log.info("删除桶 {} 成功", md5);
+               log.debug("删除桶 {} 成功", md5);
                 // 存入DB中
                 OssEntity OssEntity = new OssEntity();
-                OssEntity.setMd5FileName(md5);
+                OssEntity.setFileName(md5);
                 OssEntity.setUrl(url);
                 OssEntity.setCreateTime(new Date());
                 OssEntity.setUpdateTime(new Date());
                 ossDao.insert(OssEntity);
-                log.info("文件合并成{}并存入DB", OssEntity);
+               log.debug("文件合并成{}并存入DB", OssEntity);
                 return OssEntity;
             }
         } catch (Exception e) {
@@ -251,14 +245,7 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
 
     }
 
-    /**
-     * 根据文件大小和文件的md5校验文件是否存在
-     * 暂时使用Redis实现，后续需要存入数据库
-     * 实现秒传接口
-     *
-     * @param md5 文件的md5
-     * @return 操作是否成功
-     */
+
     @SneakyThrows
     @Override
     public boolean isFileExists(String md5) {
@@ -266,10 +253,10 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
             log.error("参数md5为空");
             throw new Exception("参数md5为空");
         }
+        LambdaQueryWrapper<OssEntity> wrapper = Wrappers.<OssEntity>lambdaQuery()
+                .eq(OssEntity::getFileName, md5);
         // 查询
-        OssEntity OssEntity = ossDao.selectOne(new QueryWrapper<OssEntity>()
-                .eq("md5_file_name", md5)
-        );
+        OssEntity OssEntity = ossDao.selectOne(wrapper);
         /*
           文件不存在 false
           文件存在 true
@@ -280,47 +267,78 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
 
     /**
      * @param multipartFile file
-     * @param userUuid      user id
+     * @param userId      user id
      * @param voiceTimeSize 声音的长度
      * @return OssEntity
      * description: 小文件上传 0-5MB
      * @author wxl
      * date 2022/7/22 22:48
      **/
-    @Override
-    public OssEntity uploadMiniFile(MultipartFile multipartFile, String userUuid, FlyweightRes res, int voiceTimeSize) throws Exception {
+    private OssEntity uploadMiniFile(MultipartFile multipartFile, Long userId, FlyweightRes res, int voiceTimeSize) throws Exception {
         if (multipartFile == null) {
             throw new Exception(ShardFileStatusCode.FAILURE.getMessage());
         }
-        if (userUuid == null) {
+        if (userId == null) {
             throw new Exception(ShardFileStatusCode.FILE_IS_NULL.getMessage());
         }
-        log.info(multipartFile.getName());
-        String fileName = (String) res.get(userUuid).get("fileName");
+       log.debug(multipartFile.getName());
+        String fileName = (String) res.get(userId).get("fileName");
         String targetBucketName = minioConfig.getBucketName();
         String targetName;
         if (voiceTimeSize <= 0) {
-            targetName = userUuid + "-" + fileName;
+            targetName = userId + "-" + fileName;
         } else {
-            targetName = userUuid + "-" + voiceTimeSize + "-" + fileName;
+            targetName = userId + "-" + voiceTimeSize + "-" + fileName;
         }
         if (isFileExists(targetName)) {
             log.warn("File is exist already");
             throw new Exception("File is exist already");
         } else {
             MinioTemplateResult result = minioTemplate.putSimpleObject(multipartFile.getInputStream(), targetBucketName, targetName);
-            log.info("小文件上传成功");
+           log.debug("小文件上传成功");
             String url = minioTemplate.getPresignedObjectUrl(targetBucketName, result.getOriginalFileName());
             OssEntity OssEntity = new OssEntity();
-            OssEntity.setMd5FileName(result.getOriginalFileName());
+            OssEntity.setFileName(result.getOriginalFileName());
             OssEntity.setUrl(url);
             OssEntity.setCreateTime(new Date());
             OssEntity.setUpdateTime(new Date());
             ossDao.insert(OssEntity);
-            log.info("小文件插入DB");
+            log.debug("小文件插入DB");
             return OssEntity;
         }
 
+    }
+
+
+    @Override
+    public CommonResult<OssEntity> uploadFile(MultipartFile file, Long userId) {
+        try {
+            if (file != null && userId != null) {
+                String fileName = file.getOriginalFilename() != null
+                        ? file.getOriginalFilename()
+                        : file.getName();
+                String filenameExtension = StringUtils.getFilenameExtension(fileName);
+
+                Map<String, Object> map = res.computeIfAbsent(userId, k -> new HashMap<>());
+                map.put("stopStatus", true);
+                map.put("fileName", fileName);
+                map.put("fileSize", file.getSize());
+
+                OssEntity ossEntity;
+                log.debug("文件大小为{}", file.getSize());
+                if (file.getSize() < 5242880L) {
+                    ossEntity = this.uploadMiniFile(file, userId, res, 0);
+                } else {
+                    ossEntity = this.uploadShard(file, res, filenameExtension, userId);
+
+                }
+                return CommonResult.success(ossEntity, ShardFileStatusCode.ALL_CHUNK_SUCCESS.getMessage());
+            } else {
+                return CommonResult.error(ShardFileStatusCode.FILE_IS_NULL.getMessage() + "或者" + ShardFileStatusCode.UUID_IS_NULL);
+            }
+        } catch (Exception e) {
+            return CommonResult.error(e.getMessage());
+        }
     }
 
     /**
@@ -367,19 +385,19 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
      * @author wxl
      * date 2022/7/20 23:54
      **/
-    private void uploadJob(long shardCount, List<InputStream> inputStreams, FlyweightRes res, Boolean stopStatus, String md5BucketName, String fileName, String userUuid) throws InterruptedException {
+    private void uploadJob(long shardCount, List<InputStream> inputStreams, FlyweightRes res, Boolean stopStatus, String md5BucketName, String fileName, Long userId) throws InterruptedException {
         CountDownLatch countDownLatch = new CountDownLatch((int) shardCount);
         if (shardCount > 10000) {
             throw new RuntimeException("Total parts count should not exceed 10000");
         }
-        log.info("文件分得总片数：" + shardCount);
+       log.debug("文件分得总片数：" + shardCount);
         try {
-            log.info("开始分片上传:" + fileName);
+           log.debug("开始分片上传:" + fileName);
             for (int i = 0; i < shardCount; i++) {
 
-                stopStatus = (Boolean) res.get(userUuid).get("stopStatus");
+                stopStatus = (Boolean) res.get(userId).get("stopStatus");
                 if (stopStatus) {
-                    executorService.execute(new BranchThread(inputStreams.get(i), md5BucketName, i + 1, res, countDownLatch, shardCount, stopStatus, userUuid, minioTemplate, sseEmitterService));
+                    executorService.execute(new BranchThread(inputStreams.get(i), md5BucketName, i + 1, res, countDownLatch, shardCount, stopStatus, userId, minioTemplate, sseEmitterService));
                 } else {
                     executorService.shutdown();
                     break;
@@ -391,11 +409,11 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
             //关闭线程池
             executorService.shutdown();
         }
-        log.info(">>>>>>>>>>等待分片上传");
+       log.debug(">>>>>>>>>>等待分片上传");
         countDownLatch.await();
 
-        log.info(">>>>>>>>>>所有分片上传完成");
-        res.get(userUuid).put("status", ShardFileStatusCode.ALL_CHUNK_UPLOAD_SUCCESS.getCode());
+       log.debug(">>>>>>>>>>所有分片上传完成");
+        res.get(userId).put("status", ShardFileStatusCode.ALL_CHUNK_UPLOAD_SUCCESS.getCode());
     }
 
     /**
@@ -442,7 +460,7 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
         /**
          * 用户id
          */
-        private final String userUuid;
+        private final Long userId;
 
 
         /**
@@ -454,7 +472,7 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
          */
         private final SseEmitterService sseEmitterService;
 
-        public BranchThread(InputStream inputStream, String md5BucketName, Integer curIndex, FlyweightRes res, CountDownLatch countDownLatch, long shardCount, boolean stopStatus, String userUuid, MinioTemplate minioTemplate, SseEmitterService sseEmitterService) {
+        public BranchThread(InputStream inputStream, String md5BucketName, Integer curIndex, FlyweightRes res, CountDownLatch countDownLatch, long shardCount, boolean stopStatus, Long userId, MinioTemplate minioTemplate, SseEmitterService sseEmitterService) {
             this.inputStream = inputStream;
             this.md5BucketName = md5BucketName;
             this.curIndex = curIndex;
@@ -462,7 +480,7 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
             this.countDownLatch = countDownLatch;
             this.shardCount = shardCount;
             this.stopStatus = stopStatus;
-            this.userUuid = userUuid;
+            this.userId = userId;
             this.minioTemplate = minioTemplate;
             this.sseEmitterService = sseEmitterService;
         }
@@ -476,14 +494,14 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
                     Long uploadPercent = ((curIndex * 100) / shardCount);
                     String curIndexName = String.valueOf(curIndex);
                     //设置百分比
-                    res.get(userUuid).put("uploadPercent", uploadPercent);
-                    log.info("uploadPercent:{}", uploadPercent);
+                    res.get(userId).put("uploadPercent", uploadPercent);
+                   log.debug("uploadPercent:{}", uploadPercent);
                     //设置上传文件大小
-                    res.get(userUuid).put("uploadSize", inputStream.available());
-                    log.info("uploadSize：{}", inputStream.available());
-//                    sseEmitterService.sendResMapToOneClient(userUuid, res);
+                    res.get(userId).put("uploadSize", inputStream.available());
+                   log.debug("uploadSize：{}", inputStream.available());
+//                    sseEmitterService.sendResMapToOneClient(userId, res);
                     MinioTemplateResult minioTemplateResult = minioTemplate.putChunkObject(inputStream, md5BucketName, curIndexName);
-                    log.info("分片上传成功： {}", minioTemplateResult);
+                   log.debug("分片上传成功： {}", minioTemplateResult);
                 } else {
                     executorService.shutdown();
                 }

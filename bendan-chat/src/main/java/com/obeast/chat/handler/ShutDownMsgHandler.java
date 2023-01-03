@@ -23,9 +23,9 @@ public class ShutDownMsgHandler extends SimpleChannelInboundHandler<ShutDownMsg>
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ShutDownMsg msg) throws Exception {
-        log.info("------------------------------>客户端开始关闭连接");
+        log.debug("------------------------------>客户端开始关闭连接");
         chatChannelGroup.removeChannel(msg.getFromId());
 //        ctx.close();
-        log.info("------------------------------>客户端关闭连接成功");
+        log.debug("------------------------------>客户端关闭连接成功");
     }
 }

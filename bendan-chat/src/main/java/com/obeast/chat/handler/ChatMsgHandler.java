@@ -1,5 +1,6 @@
 package com.obeast.chat.handler;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.obeast.chat.domain.ChatChannelGroup;
 import com.obeast.chat.domain.ChatMsg;
 import com.obeast.chat.entity.ChatRecordEntity;
@@ -9,6 +10,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.util.Assert;
 
 import java.util.Date;
 
@@ -38,18 +40,22 @@ public class ChatMsgHandler extends SimpleChannelInboundHandler<ChatMsg> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ChatMsg msg) throws Exception {
 
-        log.debug("ChatTextMsgHandler客户端发送文本的聊天消息：" + msg.getContent());
+        log.debug("ChatTextMsgHandler客户端发送文本的聊天消息：" + msg.getSendContent());
         Long fromUuid = msg.getFromId();
         Long toUuid = msg.getToId();
-        if (!msg.getContent().equals("")){
+        if (!msg.getSendContent().equals("")){
             //      消息入DB库
-            String content = msg.getContent();
+            String content = msg.getSendContent();
             ChatRecordEntity chatRecordEntity = new ChatRecordEntity();
             chatRecordEntity.setFromId(fromUuid);
             chatRecordEntity.setToId(toUuid);
-            chatRecordEntity.setContent(content);
+            chatRecordEntity.setSendContent(content);
             chatRecordEntity.setSendType(msg.getSendType());
             chatRecordEntity.setSendTime(new Date());
+            Long sendTimeLength = msg.getSendTimeLength();
+            if (ObjectUtil.isNotNull(sendTimeLength)){
+                chatRecordEntity.setSendTimeLength(sendTimeLength);
+            }
             chatRecordService.save(chatRecordEntity);
             //查询toId是否存在
             Channel channel = chatChannelGroup.getChannel(toUuid);

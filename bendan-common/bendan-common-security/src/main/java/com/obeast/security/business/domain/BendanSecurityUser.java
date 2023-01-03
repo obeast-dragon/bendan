@@ -1,5 +1,7 @@
 package com.obeast.security.business.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.User;
@@ -25,11 +27,13 @@ public class BendanSecurityUser extends User implements OAuth2AuthenticatedPrinc
     /**
      * 用户id
      * */
+    @JsonSerialize(using = ToStringSerializer.class)
     private final Long id;
 
     /**
      * 邮箱
      * */
+    @JsonSerialize(using = ToStringSerializer.class)
     private final String email;
 
     public Long getId() {

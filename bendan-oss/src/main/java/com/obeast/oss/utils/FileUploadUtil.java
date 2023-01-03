@@ -17,9 +17,9 @@ import java.util.List;
  * Description: 文件分片工具类
  */
 @Slf4j
-public class ShardUtils {
+public class FileUploadUtil {
 
-    private ShardUtils() {
+    private FileUploadUtil() {
 
     }
 

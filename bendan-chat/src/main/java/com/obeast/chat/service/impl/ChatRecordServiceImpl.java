@@ -24,13 +24,17 @@ import org.springframework.util.Assert;
 public class ChatRecordServiceImpl extends ServiceImpl<ChatRecordDao, ChatRecordEntity> implements ChatRecordService {
 
     @Override
-    public PageObjects<ChatRecordEntity> queryPage(PageParams pageParams, Long userId) {
+    public PageObjects<ChatRecordEntity> queryPage(PageParams pageParams, Long userId, Long toId) {
         Assert.notNull(userId, "userId cannot be null");
         LambdaQueryWrapper<ChatRecordEntity> wrapper = Wrappers.lambdaQuery();
         wrapper
                 .eq(ChatRecordEntity::getFromId, userId)
-                .or()
-                .eq(ChatRecordEntity::getToId, userId);
+                            .and(j -> j.eq(ChatRecordEntity::getToId, toId))
+                .or(i -> {
+                    i .eq(ChatRecordEntity::getFromId, toId)
+                            .and(j -> j.eq(ChatRecordEntity::getToId, userId));
+                })
+        ;
         IPage<ChatRecordEntity> page = this.page(
                 new PageQueryUtils<ChatRecordEntity>().getPage(pageParams),
                 wrapper

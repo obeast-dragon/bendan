@@ -15,6 +15,7 @@ import com.obeast.business.entity.SysMenuEntity;
 import com.obeast.business.entity.SysRoleEntity;
 import com.obeast.business.entity.SysUserEntity;
 import com.obeast.business.vo.ChatUserVo;
+import com.obeast.business.vo.FriendRelsVo;
 import com.obeast.business.vo.OAuth2PasswordVo;
 import com.obeast.core.domain.PageParams;
 import com.obeast.business.vo.UserInfo;
@@ -79,12 +80,25 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity>
     @Override
     public List<ChatUserVo> getFriendInfos(String username) {
         Long userId = this.getIdByUsername(username);
-        List<Long> friends = sysUserDao.getFriends(userId).stream().filter(item -> !item.equals(userId)).toList();
-        return this.listByIds(friends).stream().map(item -> {
+        List<Long> friendsTemp = new ArrayList<>();
+        List<FriendRelsVo> friendRelsVos = sysUserDao.getFriends(userId);
+        for (FriendRelsVo friendRelsVo : friendRelsVos) {
+            Long userB = friendRelsVo.getUserB();
+            Long userA = friendRelsVo.getUserA();
+            if (ObjectUtil.isNotNull(userA)) {
+                friendsTemp.add(userA);
+            }
+            if (ObjectUtil.isNotNull(userA)) {
+                friendsTemp.add(userB);
+            }
+        }
+        List<ChatUserVo> list = friendsTemp.stream().filter(item -> !item.equals(userId)).map(item -> {
             ChatUserVo chatUserVo = new ChatUserVo();
-            BeanUtils.copyProperties(item, chatUserVo);
+            SysUserEntity sysUser = this.getById(item);
+            BeanUtils.copyProperties(sysUser, chatUserVo);
             return chatUserVo;
         }).toList();
+        return list;
     }
 
     @Override
@@ -99,14 +113,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity>
         oAuth2Params.setUsername(username);
         oAuth2Params.setPassword(password);
         try {
-            Map<String, String> mapCookie = CookieUtil.getMapCookie(request.getCookies());
-            String token = mapCookie.get(SysConstant.TOKEN);
-            if (StrUtil.isNotEmpty(token)) {
-                OAuth2Authorization oAuth2Authorization = oAuth2AuthorizationService.findByToken(token, OAuth2TokenType.ACCESS_TOKEN);
-                if (ObjectUtil.isNotEmpty(oAuth2Authorization)) {
-                    return CommonResult.success(SysConstant.LOGIN_SUCCESS);
-                }
-            }
             CommonResult<?> res = OAuth2TokenEndpoint.authPassword(header, oAuth2Params);
             if (!res.getSuccess()) {
                 return res;
@@ -114,7 +120,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity>
             Object commonResult = CommonResult.getOptionalData(res).orElseThrow(() -> {
                 throw new BendanException(SysConstant.LOGIN_FAILED);
             });
+            SysUserEntity sysUser = this.findByUsername(username);
             JSONObject data = JSONUtil.parseObj(commonResult);
+            data.putOpt("userId", sysUser.getId());
             return CommonResult.success(data);
 
         } catch (Exception e) {
@@ -256,7 +264,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity>
         return this.getOne(Wrappers.<SysUserEntity>lambdaQuery()
                 .eq(SysUserEntity::getUsername, username));
     }
-
 
 
     @Override

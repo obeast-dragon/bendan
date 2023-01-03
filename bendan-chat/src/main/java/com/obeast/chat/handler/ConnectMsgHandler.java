@@ -26,16 +26,16 @@ public class ConnectMsgHandler extends SimpleChannelInboundHandler<ConnectMsg> {
     protected void channelRead0(ChannelHandlerContext ctx, ConnectMsg msg) throws Exception {
         if (msg.getFromId() == null) {
             ctx.close();
-            log.error("-------------->uuid为空请检查");
+            log.error("-------------->id为空请检查");
             return;
         }
         if (!ctx.channel().isOpen()){
-            log.info("-------------->用户通道不存在请检查");
+            log.debug("-------------->用户通道不存在请检查");
             throw new Exception("用户通道不存在请检查");
         }
         log.info("用户{}建立新的连接------>{}" , msg.getFromId(), ctx.channel());
         //记录当前连接的用户id以及线程对象
         chatChannelGroup.addChannel(msg.getFromId(), ctx.channel());
-        log.info("-------------->用户{}保存到线程组了" , msg.getFromId());
+        log.debug("-------------->用户{}保存到线程组了" , msg.getFromId());
     }
 }

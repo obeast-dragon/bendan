@@ -33,6 +33,11 @@ public interface OAuth2Constant {
      * */
     String AUTHORIZATION = "Authorization";
 
+    /**
+     * userinfo
+     * */
+    String USERINFO = "userinfo";
+
     enum Type {
         MIN_APP("min-app"),
         WEB_BROWSER("web-browser"),
