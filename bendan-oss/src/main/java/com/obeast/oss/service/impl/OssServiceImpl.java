@@ -323,16 +323,15 @@ public class OssServiceImpl extends ServiceImpl<OssDao, OssEntity> implements Os
                 map.put("stopStatus", true);
                 map.put("fileName", fileName);
                 map.put("fileSize", file.getSize());
-
                 OssEntity ossEntity;
-                log.debug("文件大小为{}", file.getSize());
-                if (file.getSize() < 5242880L) {
+                log.debug("文件大小为{}", file.getSize());                if (file.getSize() < 5242880L) {
                     ossEntity = this.uploadMiniFile(file, userId, res, 0);
                 } else {
                     ossEntity = this.uploadShard(file, res, filenameExtension, userId);
 
                 }
                 return CommonResult.success(ossEntity, ShardFileStatusCode.ALL_CHUNK_SUCCESS.getMessage());
+
             } else {
                 return CommonResult.error(ShardFileStatusCode.FILE_IS_NULL.getMessage() + "或者" + ShardFileStatusCode.UUID_IS_NULL);
             }

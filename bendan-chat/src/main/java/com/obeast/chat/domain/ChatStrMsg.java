@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ChatMsg extends BaseMsg {
+public class ChatStrMsg extends BaseMsg {
 
     /**
      * fromId 来自谁的ID
@@ -28,6 +28,13 @@ public class ChatMsg extends BaseMsg {
      * content 内容
      * */
     private String sendContent;
+
+
+    /**
+     * content 内容
+     * */
+    private byte[] sendAudio;
+
 
     /**
      * 消息类型

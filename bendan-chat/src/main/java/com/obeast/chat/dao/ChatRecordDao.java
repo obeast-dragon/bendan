@@ -1,6 +1,6 @@
 package com.obeast.chat.dao;
 
-import com.obeast.chat.entity.ChatRecordEntity;
+import com.obeast.business.entity.ChatRecordEntity;
 import com.obeast.core.base.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 

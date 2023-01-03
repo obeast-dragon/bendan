@@ -35,6 +35,7 @@
         <nimbus-jose-jwt.version>9.24.3</nimbus-jose-jwt.version>
         <oauth2-authorization-server.version>0.3.1</oauth2-authorization-server.version>
         <LoadBalancer-caffeine.version>3.1.1</LoadBalancer-caffeine.version>
+        <com.baidu.aip.version>4.16.12</com.baidu.aip.version>
 
         <!--    plugin    -->
         <git.commit.plugin>4.9.9</git.commit.plugin>
@@ -174,6 +175,12 @@
                 <scope>runtime</scope>
             </dependency>
 
+            <!-- stt 百度 ai       -->
+            <dependency>
+                <groupId>com.baidu.aip</groupId>
+                <artifactId>java-sdk</artifactId>
+                <version>4.16.12</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>

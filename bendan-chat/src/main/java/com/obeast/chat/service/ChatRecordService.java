@@ -1,11 +1,9 @@
 package com.obeast.chat.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.obeast.chat.entity.ChatRecordEntity;
+import com.obeast.business.entity.ChatRecordEntity;
 import com.obeast.core.domain.PageObjects;
 import com.obeast.core.domain.PageParams;
-
-import java.util.Map;
 
 /**
  * @author wxl

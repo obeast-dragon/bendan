@@ -39,7 +39,7 @@ public class WebSocketChannelInHandler extends SimpleChannelInboundHandler<TextW
         //消息
         else if (baseMsg.getCode().equals(CodeStrategyContext.SEND_MSG)) {
             log.debug("文本handle---------------->SEND_MESSAGE");
-            baseMsg = JSONUtil.toBean(text, ChatMsg.class);
+            baseMsg = JSONUtil.toBean(text, ChatStrMsg.class);
         }
         log.debug("------------------->往下传递");
         ctx.fireChannelRead(baseMsg);

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.obeast.chat.entity.ChatRecordEntity;
+import com.obeast.business.entity.ChatRecordEntity;
 import com.obeast.chat.dao.ChatRecordDao;
 import com.obeast.chat.service.ChatRecordService;
 import com.obeast.core.domain.PageObjects;

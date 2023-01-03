@@ -65,15 +65,17 @@ public class WebSocketServer implements CommandLineRunner {
                                 // FullHttpRequestHandler
                                 .addLast(new HttpObjectAggregator(65536))
                                 // webSocket
-                                .addLast(new WebSocketServerProtocolHandler("/"))
+                                .addLast(new WebSocketServerProtocolHandler("/",null, false, Integer.MAX_VALUE))
                                 //客户端n(TimeUnit)后不发消息自动断开
                                 .addLast(new ReadTimeoutHandler(10, TimeUnit.MINUTES))
                                 //WebSocket客服端处理器
                                 .addLast(new WebSocketChannelInHandler())
                                 //关闭连接
                                 .addLast(new ShutDownMsgHandler(chatChannelGroup))
-                                //新建连接处理器
+                                // 新建连接处理器
                                 .addLast(new ConnectMsgHandler(chatChannelGroup))
+                                // 处理二进制
+                                .addLast(new BinaryWebSocketFrameHandler())
                                 //心跳
                                 .addLast(new HeardMsgHandler())
                                 // 文本

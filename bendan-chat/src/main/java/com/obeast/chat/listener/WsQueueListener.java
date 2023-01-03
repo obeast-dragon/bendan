@@ -3,7 +3,7 @@ package com.obeast.chat.listener;
 import cn.hutool.json.JSONUtil;
 
 import com.obeast.chat.domain.ChatChannelGroup;
-import com.obeast.chat.entity.ChatRecordEntity;
+import com.obeast.business.entity.ChatRecordEntity;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -49,10 +49,10 @@ public class WsQueueListener {
     @RabbitHandler
     public void wsChatMsg(ChatRecordEntity chatMsg, com.rabbitmq.client.Channel channelMq,
                           @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
-        log.info("RabbitHandler is listening");
-        //根据toId查询userUuid
-        Long toUuid = chatMsg.getToId();
-        io.netty.channel.Channel channel = channelGroup.getChannel(toUuid);
+        log.debug("Mq 监听到消息");
+        //根据toId查询userId
+        Long toId = chatMsg.getToId();
+        io.netty.channel.Channel channel = channelGroup.getChannel(toId);
         if (channel != null) {
             log.debug("转发的数据为："+ chatMsg);
             TextWebSocketFrame resp = new TextWebSocketFrame(JSONUtil.toJsonStr(chatMsg));

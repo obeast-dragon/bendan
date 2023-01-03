@@ -1,17 +1,20 @@
 package com.obeast.chat.handler;
 
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.obeast.chat.domain.ChatChannelGroup;
-import com.obeast.chat.domain.ChatMsg;
-import com.obeast.chat.entity.ChatRecordEntity;
+import com.obeast.chat.domain.ChatStrMsg;
+import com.obeast.business.entity.ChatRecordEntity;
 import com.obeast.chat.service.ChatRecordService;
+import com.obeast.core.exception.BendanException;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.util.Assert;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 /**
@@ -21,14 +24,13 @@ import java.util.Date;
  * Description: 聊天消息处理器
  */
 @Slf4j
-public class ChatMsgHandler extends SimpleChannelInboundHandler<ChatMsg> {
+public class ChatMsgHandler extends SimpleChannelInboundHandler<ChatStrMsg> {
 
     private final ChatChannelGroup chatChannelGroup;
 
     private final RabbitTemplate rabbitTemplate;
 
     private final ChatRecordService chatRecordService;
-
 
 
     public ChatMsgHandler(ChatChannelGroup chatChannelGroup, RabbitTemplate rabbitTemplate, ChatRecordService chatRecordService) {
@@ -38,41 +40,61 @@ public class ChatMsgHandler extends SimpleChannelInboundHandler<ChatMsg> {
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, ChatMsg msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, ChatStrMsg msg) throws Exception {
 
-        log.debug("ChatTextMsgHandler客户端发送文本的聊天消息：" + msg.getSendContent());
         Long fromUuid = msg.getFromId();
         Long toUuid = msg.getToId();
-        if (!msg.getSendContent().equals("")){
-            //      消息入DB库
-            String content = msg.getSendContent();
-            ChatRecordEntity chatRecordEntity = new ChatRecordEntity();
-            chatRecordEntity.setFromId(fromUuid);
-            chatRecordEntity.setToId(toUuid);
-            chatRecordEntity.setSendContent(content);
-            chatRecordEntity.setSendType(msg.getSendType());
-            chatRecordEntity.setSendTime(new Date());
-            Long sendTimeLength = msg.getSendTimeLength();
-            if (ObjectUtil.isNotNull(sendTimeLength)){
-                chatRecordEntity.setSendTimeLength(sendTimeLength);
-            }
-            chatRecordService.save(chatRecordEntity);
-            //查询toId是否存在
-            Channel channel = chatChannelGroup.getChannel(toUuid);
-            log.debug("-------------------------------->消息已经入DB库");
-            try {
-                if (channel.isOpen()) {
-                    //对方在线，才做rabbitMq转发
-                    log.debug("channel is open is ok");
-                    log.debug("对方在线通过RabbitMq发送");
-                    //通过rabbitmq转发出去
-                    rabbitTemplate.convertAndSend("ws_exchange", "", chatRecordEntity);
-                }
-            }catch (Exception e){
-                log.debug("对方不在线----------------->do nothing");
-            }
-        }else {
-            log.warn("message is null");
+        byte[] sendMsg = this.handlerMsg(msg);
+        //      同步消息入DB库 方便展示
+        ChatRecordEntity chatRecordEntity = new ChatRecordEntity();
+        chatRecordEntity.setFromId(fromUuid);
+        chatRecordEntity.setToId(toUuid);
+        chatRecordEntity.setSendContent(sendMsg);
+        chatRecordEntity.setSendType(msg.getSendType());
+        chatRecordEntity.setSendTime(new Date());
+        Long sendTimeLength = msg.getSendTimeLength();
+        if (ObjectUtil.isNotNull(sendTimeLength)) {
+            chatRecordEntity.setSendTimeLength(sendTimeLength);
         }
+        chatRecordService.save(chatRecordEntity);
+        //查询toId是否存在
+        Channel channel = chatChannelGroup.getChannel(toUuid);
+        log.debug("-------------------------------->消息已经入DB库");
+        try {
+            if (channel.isOpen()) {
+                //对方在线，才做rabbitMq转发
+                log.debug("channel is open is ok");
+                log.debug("对方在线通过RabbitMq发送");
+                //通过rabbitmq转发出去
+                rabbitTemplate.convertAndSend("ws_exchange", "", chatRecordEntity);
+            }
+        } catch (Exception e) {
+            log.debug("对方不在线----------------->do nothing");
+        }
+
+    }
+
+    /**
+     * Description: 处理语音消息和文本消息
+     * @author wxl
+     * Date: 2023/1/3 15:39
+     * @param msg  msg
+     * @return byte[]
+     */
+    private byte[] handlerMsg(ChatStrMsg msg) {
+        String sendContent = msg.getSendContent();
+        byte[] sendAudio = msg.getSendAudio();
+        if (StrUtil.isNotBlank(sendContent)) {
+            log.debug("客户端发送文本的聊天消息:  " + sendContent);
+            return sendContent.getBytes(StandardCharsets.UTF_8);
+        }
+        else {
+            if (ArrayUtil.isNotEmpty(sendAudio)) {
+                log.debug("客户端发送语音的聊天消息");
+                return sendAudio;
+            }
+        }
+        log.error("语音消息和文字消息不能同时发送或者同时为空");
+        throw new BendanException("语音消息和文字消息不能同时发送或者同时为空");
     }
 }
