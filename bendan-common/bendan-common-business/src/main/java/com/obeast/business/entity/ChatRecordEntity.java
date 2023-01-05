@@ -44,8 +44,8 @@ public class ChatRecordEntity implements Serializable {
     /**
      * 发送内容
      */
-    @TableField(value = "send_content", typeHandler = BlobTypeHandler.class)
-    private byte[] sendContent;
+    @TableField(value = "send_content")
+    private String sendContent;
 
 
     /**

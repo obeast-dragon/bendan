@@ -14,7 +14,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-import org.springframework.web.util.pattern.PathPatternParser;
 
 
 /**
@@ -24,7 +23,7 @@ import org.springframework.web.util.pattern.PathPatternParser;
  * Description: 网关配置
  */
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties(GatewayConfigProperties.class)
+@EnableConfigurationProperties(GatewayProperties.class)
 public class GatewayConfig {
 
 
@@ -53,7 +52,7 @@ public class GatewayConfig {
      * Date: 2022/12/9 23:37
      */
     @Bean
-    public BendanRequestGlobalFilter bendanRequestGlobalFilter(GatewayConfigProperties configProperties) {
+    public BendanRequestGlobalFilter bendanRequestGlobalFilter(GatewayProperties configProperties) {
         return new BendanRequestGlobalFilter(configProperties);
     }
 

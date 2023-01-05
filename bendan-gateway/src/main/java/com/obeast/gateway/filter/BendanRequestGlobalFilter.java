@@ -4,7 +4,7 @@ import cn.hutool.json.JSONUtil;
 import com.obeast.core.base.CommonResult;
 import com.obeast.core.constant.BendanResHeaderConstant;
 import com.obeast.core.constant.WebResultEnum;
-import com.obeast.gateway.config.GatewayConfigProperties;
+import com.obeast.gateway.config.GatewayProperties;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,7 @@ public class BendanRequestGlobalFilter implements GlobalFilter, Ordered {
 
     private static final Logger log = LoggerFactory.getLogger(BendanRequestGlobalFilter.class);
 
-    private final GatewayConfigProperties gatewayConfigProperties;
+    private final GatewayProperties gatewayProperties;
 
 
     @Override
@@ -70,7 +70,7 @@ public class BendanRequestGlobalFilter implements GlobalFilter, Ordered {
      * @return boolean
      */
     private boolean discharged(String path) {
-        List<String> ignoreUrls = this.gatewayConfigProperties.getIgnoreUrls();
+        List<String> ignoreUrls = this.gatewayProperties.getIgnoreUrls();
         for (int i = 0; i < ignoreUrls.size(); i++) {
             if (ignoreUrls.contains(path)){
                 return true;

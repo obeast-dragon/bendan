@@ -24,7 +24,6 @@ import java.util.List;
  * @version 1.0
  * Description: swagger
  */
-@AutoConfiguration
 @RequiredArgsConstructor
 @ConditionalOnMissingClass("org.springframework.cloud.gateway.config.GatewayAutoConfiguration")
 public class SwaggerAutoConfig {

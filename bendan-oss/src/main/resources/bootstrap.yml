@@ -1,9 +1,0 @@
-server:
-  servlet:
-    context-path:
-  port: 9003
-spring:
-  profiles:
-    active: local
-  application:
-    name: bendan-oss

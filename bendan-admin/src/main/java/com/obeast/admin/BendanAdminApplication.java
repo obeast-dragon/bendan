@@ -1,10 +1,14 @@
 package com.obeast.admin;
 
 
+import com.obeast.common.oss.annotation.EnableMinioOss;
+import com.obeast.common.oss.annotation.EnableTencentOss;
+import com.obeast.common.stt.annotation.EnableBaiduStt;
 import com.obeast.security.annotation.EnableBendanResourceServer;
 import com.obeast.security.business.service.remote.OAuth2TokenEndpoint;
 import com.obeast.swagger.annotation.EnableBendanSwagger;
 import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.annotation.MapperScans;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -18,10 +22,21 @@ import org.springframework.context.ConfigurableApplicationContext;
  * Description:
  */
 @EnableFeignClients(basePackageClasses = OAuth2TokenEndpoint.class)
+//开启swagger
 @EnableBendanSwagger
 @EnableDiscoveryClient
+//开启资源服务器
 @EnableBendanResourceServer
-@MapperScan("com.obeast.security.business.dao")
+//开启minio oss
+@EnableMinioOss
+//开启tencent oss
+@EnableTencentOss
+//开启 baidu stt
+@EnableBaiduStt
+@MapperScans({
+        @MapperScan("com.obeast.security.business.dao"),
+        @MapperScan("com.obeast.admin.business.dao")
+})
 @SpringBootApplication
 public class BendanAdminApplication {
     public static void main(String[] args) {

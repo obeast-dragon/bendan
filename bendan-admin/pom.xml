@@ -35,6 +35,11 @@
             <artifactId>bendan-common-swagger</artifactId>
         </dependency>
 
+        <!--    common 项目 oss       -->
+        <dependency>
+            <groupId>com.obeast</groupId>
+            <artifactId>bendan-common-oss</artifactId>
+        </dependency>
 
         <!-- 远程调用       -->
         <dependency>

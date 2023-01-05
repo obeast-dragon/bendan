@@ -36,6 +36,7 @@
         <oauth2-authorization-server.version>0.3.1</oauth2-authorization-server.version>
         <LoadBalancer-caffeine.version>3.1.1</LoadBalancer-caffeine.version>
         <com.baidu.aip.version>4.16.12</com.baidu.aip.version>
+        <com.qcloud.version>5.6.125</com.qcloud.version>
 
         <!--    plugin    -->
         <git.commit.plugin>4.9.9</git.commit.plugin>
@@ -72,6 +73,13 @@
             <dependency>
                 <groupId>com.obeast</groupId>
                 <artifactId>bendan-common-swagger</artifactId>
+                <version>${bendan.version}</version>
+            </dependency>
+
+            <!--    common 项目 oss       -->
+            <dependency>
+                <groupId>com.obeast</groupId>
+                <artifactId>bendan-common-oss</artifactId>
                 <version>${bendan.version}</version>
             </dependency>
 
@@ -179,7 +187,14 @@
             <dependency>
                 <groupId>com.baidu.aip</groupId>
                 <artifactId>java-sdk</artifactId>
-                <version>4.16.12</version>
+                <version>${com.baidu.aip.version}</version>
+            </dependency>
+
+            <!--腾讯cos-->
+            <dependency>
+                <groupId>com.qcloud</groupId>
+                <artifactId>cos_api</artifactId>
+                <version>${com.qcloud.version}</version>
             </dependency>
 
         </dependencies>

@@ -3,46 +3,19 @@ server:
 
 spring:
   profiles:
-    active: local
+    active: @profiles.active@
   application:
-    name: bendan-gateway
+    name: @artifactId@
   cloud:
-    gateway:
+    nacos:
       discovery:
-        locator:
-          #使用小写服务名，默认是大写
-          lower-case-service-id: true
-          #开启从注册中心动态创建路由的功能
-          enabled: true
-      #配置路由
-      routes:
-        - id: auth-route
-          uri: lb://bendan-auth
-          order: 2
-          predicates:
-            - Path=/auth/**
+        server-addr: http://127.0.0.1:8848
+      config:
+        server-addr: http://127.0.0.1:8848
+        file-extension: yaml
 
-        - id: admin-route
-          uri: lb://bendan-admin
-          order: 3
-          predicates:
-            - Path=/admin/**
 
-        - id: oss-route
-          uri: lb://bendan-oss
-          order: 4
-          predicates:
-            - Path=/oss/**
-
-        - id: chat-route
-          uri: lb://bendan-chat
-          order: 5
-          predicates:
-            - Path=/chat/**
-
-        # swagger路由转发配置
-        - id: openapi
-          uri: lb://bendan-admin
-          order: 10
-          predicates:
-            - Path=/v3/api-docs/**
+  config:
+    import:
+      #      - optional:nacos:application-@profiles.active@.yml
+      - optional:nacos:${spring.application.name}-@profiles.active@.yml

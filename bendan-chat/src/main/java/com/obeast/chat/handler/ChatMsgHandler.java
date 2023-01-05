@@ -44,7 +44,7 @@ public class ChatMsgHandler extends SimpleChannelInboundHandler<ChatStrMsg> {
 
         Long fromUuid = msg.getFromId();
         Long toUuid = msg.getToId();
-        byte[] sendMsg = this.handlerMsg(msg);
+        String sendMsg = this.handlerMsg(msg);
         //      同步消息入DB库 方便展示
         ChatRecordEntity chatRecordEntity = new ChatRecordEntity();
         chatRecordEntity.setFromId(fromUuid);
@@ -81,20 +81,13 @@ public class ChatMsgHandler extends SimpleChannelInboundHandler<ChatStrMsg> {
      * @param msg  msg
      * @return byte[]
      */
-    private byte[] handlerMsg(ChatStrMsg msg) {
+    private String handlerMsg(ChatStrMsg msg) {
         String sendContent = msg.getSendContent();
-        byte[] sendAudio = msg.getSendAudio();
         if (StrUtil.isNotBlank(sendContent)) {
             log.debug("客户端发送文本的聊天消息:  " + sendContent);
-            return sendContent.getBytes(StandardCharsets.UTF_8);
+            return sendContent;
         }
-        else {
-            if (ArrayUtil.isNotEmpty(sendAudio)) {
-                log.debug("客户端发送语音的聊天消息");
-                return sendAudio;
-            }
-        }
-        log.error("语音消息和文字消息不能同时发送或者同时为空");
-        throw new BendanException("语音消息和文字消息不能同时发送或者同时为空");
+        log.warn("语音消息和文字消息不能同时发送或者同时为空");
+        throw new BendanException("发送消息为空");
     }
 }

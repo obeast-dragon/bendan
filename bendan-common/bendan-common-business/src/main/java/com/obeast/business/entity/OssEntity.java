@@ -37,6 +37,11 @@ public class OssEntity implements Serializable {
 	private String fileName;
 
 	/**
+	 * 用户id
+	 */
+	private Long userId;
+
+	/**
 	 * 文件的路径
 	 */
 	private String url;

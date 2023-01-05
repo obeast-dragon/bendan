@@ -31,12 +31,6 @@ public class ChatStrMsg extends BaseMsg {
 
 
     /**
-     * content 内容
-     * */
-    private byte[] sendAudio;
-
-
-    /**
      * 消息类型
      * */
     private Integer sendType;

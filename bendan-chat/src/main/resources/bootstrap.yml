@@ -1,10 +1,21 @@
 server:
-  servlet:
-    context-path:
   port: 9004
 
 spring:
   profiles:
-    active: local
+    active: @profiles.active@
   application:
-    name: bendan-chat
+    name: @artifactId@
+  cloud:
+    nacos:
+      discovery:
+        server-addr: http://127.0.0.1:8848
+      config:
+        server-addr: http://127.0.0.1:8848
+        file-extension: yaml
+
+
+  config:
+    import:
+      - optional:nacos:application-@profiles.active@.yml
+      - optional:nacos:${spring.application.name}-@profiles.active@.yml
