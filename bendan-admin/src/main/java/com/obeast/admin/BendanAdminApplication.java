@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * @author wxl
@@ -38,6 +39,7 @@ import org.springframework.context.ConfigurableApplicationContext;
         @MapperScan("com.obeast.admin.business.dao")
 })
 @SpringBootApplication
+@EnableAsync
 public class BendanAdminApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext run = SpringApplication.run(BendanAdminApplication.class, args);

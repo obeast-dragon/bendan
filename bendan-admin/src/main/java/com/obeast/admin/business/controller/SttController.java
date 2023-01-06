@@ -1,6 +1,8 @@
 package com.obeast.admin.business.controller;
 
-import com.obeast.admin.business.service.BaiduSttService;
+import com.obeast.common.stt.constant.BaiduSttConstant;
+import com.obeast.common.stt.template.BaiduSttTemplate;
+import com.obeast.core.base.CommonResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -22,11 +25,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SttController {
 
-    private final BaiduSttService baiduSttService;
+    private final BaiduSttTemplate baiduSttTemplate;
 
-    @Operation(summary = "翻译 url 音频文件")
-    @GetMapping("/asr")
-    public JSONArray asr (String url) {
-        return baiduSttService.stt(url);
+    @Operation(summary = "翻译任务")
+    @GetMapping("/atsTask")
+    public CommonResult<JSONObject> atsTask(@RequestParam("url") String url) {
+        JSONArray jsonArray = baiduSttTemplate.atsTaskResult(url);
+        System.err.println(jsonArray);
+        return null;
     }
+
+
+
 }

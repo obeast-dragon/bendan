@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.obeast.admin.business.dao.OssMinioDao;
+import com.obeast.admin.business.dao.OssEntityDao;
 import com.obeast.admin.business.service.OssMinioService;
 import com.obeast.admin.business.service.SseEmitterService;
 import com.obeast.business.entity.OssEntity;
@@ -39,13 +39,13 @@ import java.util.concurrent.*;
  */
 @Service("ossService")
 @RequiredArgsConstructor
-public class OssMinioServiceImpl extends ServiceImpl<OssMinioDao, OssEntity> implements OssMinioService {
+public class OssMinioServiceImpl extends ServiceImpl<OssEntityDao, OssEntity> implements OssMinioService {
 
     private static final Logger log = LoggerFactory.getLogger(OssMinioServiceImpl.class);
 
     private final MinioOssTemplate minioTemplate;
 
-    private final OssMinioDao ossMinioDao;
+    private final OssEntityDao ossEntityDao;
 
     private final SseEmitterService sseEmitterService;
 
@@ -130,7 +130,7 @@ public class OssMinioServiceImpl extends ServiceImpl<OssMinioDao, OssEntity> imp
             //1、存在DB minio == null
             LambdaQueryWrapper<OssEntity> wrapper = Wrappers.<OssEntity>lambdaQuery()
                     .eq(OssEntity::getFileName, md5BucketName);
-            ossMinioDao.delete(wrapper);
+            ossEntityDao.delete(wrapper);
             throw new Exception("请重新上传文件");
 
         } else if (!fileExists) {
@@ -229,7 +229,7 @@ public class OssMinioServiceImpl extends ServiceImpl<OssMinioDao, OssEntity> imp
                 ossEntity.setUserId(userId);
                 ossEntity.setCreateTime(new Date());
                 ossEntity.setUpdateTime(new Date());
-                ossMinioDao.insert(ossEntity);
+                ossEntityDao.insert(ossEntity);
                 log.debug("文件合并成{}并存入DB", ossEntity);
                 return ossEntity;
             }
@@ -252,7 +252,7 @@ public class OssMinioServiceImpl extends ServiceImpl<OssMinioDao, OssEntity> imp
         LambdaQueryWrapper<OssEntity> wrapper = Wrappers.<OssEntity>lambdaQuery()
                 .eq(OssEntity::getFileName, md5);
         // 查询
-        OssEntity OssEntity = ossMinioDao.selectOne(wrapper);
+        OssEntity OssEntity = ossEntityDao.selectOne(wrapper);
         /*
           文件不存在 false
           文件存在 true
@@ -299,7 +299,7 @@ public class OssMinioServiceImpl extends ServiceImpl<OssMinioDao, OssEntity> imp
             ossEntity.setUserId(userId);
             ossEntity.setCreateTime(new Date());
             ossEntity.setUpdateTime(new Date());
-            ossMinioDao.insert(ossEntity);
+            ossEntityDao.insert(ossEntity);
             log.debug("小文件插入DB");
             return ossEntity;
         }

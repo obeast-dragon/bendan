@@ -8,12 +8,13 @@ package com.obeast.common.oss.enumration;
  */
 public enum FileType {
     Image(1, " 图片"),
-    Attachment(2, "附件"),
-    Document(2, "文档"),
-    Excel(2, "Excel"),
-    Video(2, "视频"),
     Audio(2, "音频"),
-    License(2, "证书");
+
+    Video(3, "视频"),
+    Attachment(4, "附件"),
+    Document(5, "文档"),
+    Excel(6, "Excel"),
+    License(7, "证书");
 
     private final Integer code;
     private final String desc;

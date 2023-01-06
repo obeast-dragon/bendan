@@ -10,4 +10,10 @@ public interface FileUploadConstant {
      * 上传边界值 5M
      */
     Long BOUNDARY_VALUE = 5242880L;
+
+
+    /**
+     * 点
+     */
+    String POINT = ".";
 }

@@ -98,9 +98,8 @@ public class TencentOssTemplate {
      * @author wxl
      * Date: 2023/1/4 14:17
      */
-    public String upload(MultipartFile file, Long userId) throws IOException {
+    public String upload(MultipartFile file, Long userId, String key) throws IOException {
         InputStream is = file.getInputStream();
-        String key = file.getOriginalFilename() != null ? file.getOriginalFilename() : file.getName();
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getSize());
         return this.upload(is, key, userId, objectMetadata);

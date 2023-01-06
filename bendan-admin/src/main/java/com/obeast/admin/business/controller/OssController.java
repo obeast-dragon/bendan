@@ -1,23 +1,31 @@
 package com.obeast.admin.business.controller;
 
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.json.JSONException;
 import cn.hutool.json.JSONObject;
+import com.obeast.admin.business.dao.OssEntityDao;
 import com.obeast.admin.business.service.OssMinioService;
 import com.obeast.business.entity.OssEntity;
 import com.obeast.common.oss.domain.FlyweightRes;
+import com.obeast.common.oss.enumration.FileType;
+import com.obeast.common.oss.enumration.FileUploadConstant;
 import com.obeast.common.oss.template.TencentOssTemplate;
+import com.obeast.common.oss.utils.FileUploadUtil;
+import com.obeast.common.stt.constant.BaiduSttConstant;
 import com.obeast.core.base.CommonResult;
-import com.qcloud.cos.model.PutObjectResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -28,7 +36,7 @@ import java.io.*;
  */
 @Slf4j
 @RestController
-@RequestMapping("/file")
+@RequestMapping("/oss")
 @Tag(name = "Oss 接口")
 @RequiredArgsConstructor
 public class OssController {
@@ -38,6 +46,9 @@ public class OssController {
     private final TencentOssTemplate tencentOssTemplate;
 
     private final FlyweightRes res;
+
+    private final OssEntityDao ossEntityDao;
+
 
     /**
      * Description: 文件上传
@@ -50,8 +61,16 @@ public class OssController {
      */
     @Operation(summary = "腾讯上传文件")
     @PostMapping(value = "/uploadTencentFile")
-    public String uploadTencentFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") Long userId) throws IOException {
-        return tencentOssTemplate.upload(file, userId);
+    public String uploadTencentFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") Long userId, @RequestParam("type") int type) throws IOException, ExecutionException, InterruptedException {
+        String fileName;
+        if (type == FileType.Audio.getCode()) {
+            fileName = UUID.randomUUID() + FileUploadConstant.POINT + BaiduSttConstant.FileAsrSuffix.WAV.getName();
+        }else {
+            fileName = file.getOriginalFilename() != null ? file.getOriginalFilename() : file.getName();
+        }
+        String uploadUrl = tencentOssTemplate.upload(file, userId, fileName);
+        ossEntityDao.insertAsync(uploadUrl, userId, tencentOssTemplate.getObjectUrlKey(userId, fileName));
+        return uploadUrl;
     }
 
     /**

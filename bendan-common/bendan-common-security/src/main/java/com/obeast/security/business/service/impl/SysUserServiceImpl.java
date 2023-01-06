@@ -122,6 +122,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity>
             SysUserEntity sysUser = this.findByUsername(username);
             JSONObject data = JSONUtil.parseObj(commonResult);
             data.putOpt("userId", sysUser.getId());
+            data.putOpt("avatar", sysUser.getAvatar());
             return CommonResult.success(data);
 
         } catch (Exception e) {
