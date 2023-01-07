@@ -133,20 +133,22 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity>
 
 
     @Override
-    public Boolean logout(HttpServletRequest request) {
-        Map<String, String> mapCookie = CookieUtil.getMapCookie(request.getCookies());
-        String authorization = mapCookie.get(SysConstant.TOKEN);
+    public CommonResult<?> logout(HttpServletRequest request) {
+//        Map<String, String> mapCookie = CookieUtil.getMapCookie(request.getCookies());
+        String authorization = request.getHeader(OAuth2Constant.AUTHORIZATION);
+//                mapCookie.get(SysConstant.TOKEN);
         if (authorization == null) {
-            return Boolean.TRUE;
+            return CommonResult.success();
         }
         String token = authorization.replace(OAuth2AccessToken.TokenType.BEARER.getValue(), StrUtil.EMPTY).trim();
         OAuth2Authorization oAuth2Authorization = oAuth2AuthorizationService.findByToken(token, OAuth2TokenType.ACCESS_TOKEN);
         if (oAuth2Authorization == null) {
-            return Boolean.TRUE;
+            return CommonResult.success();
         } else {
             oAuth2AuthorizationService.remove(oAuth2Authorization);
         }
-        return Boolean.FALSE;
+        return CommonResult.error();
+
     }
 
     @Override

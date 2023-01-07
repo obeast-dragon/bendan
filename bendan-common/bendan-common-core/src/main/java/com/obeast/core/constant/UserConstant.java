@@ -26,14 +26,6 @@ public interface UserConstant {
 
 
     /**
-     * token 名
-     * */
-    String AUTHORIZATION = "token";
-
-
-
-
-    /**
      *角色权限前缀
      * */
     String ROLE = "ROLE_";

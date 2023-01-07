@@ -18,6 +18,7 @@
         <module>bendan-common-swagger</module>
         <module>bendan-common-mybatis</module>
         <module>bendan-common-oss</module>
+        <module>bendan-common-mail</module>
     </modules>
 
     <name>bendan-common</name>

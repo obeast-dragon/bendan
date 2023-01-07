@@ -48,7 +48,7 @@ public class SysUserController {
 
     @Operation(summary = "登出", hidden = true)
     @DeleteMapping("/logout")
-    public Boolean logout(HttpServletRequest request) {
+    public CommonResult<?> logout(HttpServletRequest request) {
         return sysUserService.logout(request);
     }
 

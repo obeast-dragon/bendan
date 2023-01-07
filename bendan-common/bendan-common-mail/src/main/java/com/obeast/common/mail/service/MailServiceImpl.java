@@ -1,5 +1,6 @@
-package com.obeast.mail.service;
+package com.obeast.common.mail.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.random.RandomGenerator;
 
@@ -19,13 +19,11 @@ import java.util.random.RandomGenerator;
  * Description: 邮箱发送
  */
 @Service("MailService")
+@RequiredArgsConstructor
 public class MailServiceImpl implements MailService {
-    @Autowired
-    TemplateEngine templateEngine;
+    private final TemplateEngine templateEngine;
 
-    @Autowired
-    JavaMailSenderImpl mailSender;
-
+    private final JavaMailSenderImpl mailSender;
 
     @Value("${project.name}")
     String project;

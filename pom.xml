@@ -7,7 +7,6 @@
         <module>bendan-common</module>
         <module>bendan-auth</module>
         <module>bendan-gateway</module>
-        <module>bendan-mail</module>
         <module>bendan-dependencies</module>
         <module>bendan-chat</module>
     </modules>

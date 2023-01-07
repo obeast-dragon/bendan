@@ -180,6 +180,6 @@ public interface SysUserService extends IService<SysUserEntity> {
      * Date: 2022/12/12 11:05
      * @param request    request
      */
-    Boolean logout(HttpServletRequest request);
+    CommonResult<?> logout(HttpServletRequest request);
 
 }

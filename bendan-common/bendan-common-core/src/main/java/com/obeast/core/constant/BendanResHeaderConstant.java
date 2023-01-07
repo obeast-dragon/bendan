@@ -9,20 +9,11 @@ package com.obeast.core.constant;
  */
 public interface BendanResHeaderConstant {
 
-    /**
-     * token前缀
-     * */
-    String bearer = "Bearer";
 
     /**
      * 网关请求头Key
      * */
     String from = "from";
-
-    /**
-     * 认证头名字
-     * */
-    String authorization =  "Authorization";
 
     /**
      * 网关请求头Value gateway

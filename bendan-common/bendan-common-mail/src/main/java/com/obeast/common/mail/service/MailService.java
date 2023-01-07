@@ -1,4 +1,4 @@
-package com.obeast.mail.service;
+package com.obeast.common.mail.service;
 
 
 
